@@ -6,13 +6,14 @@ from configparser import ConfigParser
 import os
 from utils.app_select_button import AppSelectButton
 from PIL import Image, ImageTk
+from utils.load_settings import load_settings
 
 class MainApp(ctk.CTk):
     def __init__(self):
         super().__init__()
         ctk.set_default_color_theme('themes/main_theme.json')
 
-        self.settings = self.load_settings()
+        self.settings = load_settings()
 
         self.title(f"{self.settings['App']['title']}")
         self.geometry(f"{self.settings['MainWindow']['width']}x{self.settings['MainWindow']['height']}")
@@ -33,7 +34,7 @@ class MainApp(ctk.CTk):
         self.footer_frame =ctk.CTkFrame(self, height=header_footer_height, width=int(self.settings['MainWindow']['width']))
         self.footer_frame.grid(column=0, row=2, padx=10, pady=10, sticky='sew')
 
-        self.main_frame = ctk.CTkFrame(self, fg_color="blue", corner_radius=0)
+        self.main_frame = ctk.CTkFrame(self, corner_radius=0)
         self.main_frame.grid(column=0, row=1, padx= 10, sticky="nsew")
 
         self.grid_rowconfigure(0, weight=0)
@@ -52,33 +53,12 @@ class MainApp(ctk.CTk):
         label = ctk.CTkLabel(self.header_frame, image=flipped_unicorn_image, text="")
         label.grid(column=0, row=0, padx=10, pady=10, sticky='e')
 
-        self.file_processing_select_button = AppSelectButton(self.main_frame, text="File Processing")
+        self.file_processing_select_button = AppSelectButton(self.main_frame, command=open_file_processing, text="File Processing")
         self.file_processing_select_button.grid(column=0, row=0, padx=10, pady=10, sticky='ew')
 
+def open_file_processing():
+    subprocess.Popen(["python", "apps/file_processing.py"])
 
-
-
-
-
-
-    def load_settings(self):
-        config = ConfigParser()
-
-        try:
-            config.read("settings.ini")
-
-            for section in config.sections():
-                print(f"[{section}]")
-                for key, value in config.items(section):
-                    print(f"{key} = {value}")
-                print()
-
-        except FileNotFoundError:
-            print("Error opening settings.ini")
-        except Exception as e:
-            print(f" an error occurred: {e}")
-
-        return config
 
 
 if __name__ == "__main__":
