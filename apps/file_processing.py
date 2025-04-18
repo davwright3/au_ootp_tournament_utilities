@@ -1,19 +1,21 @@
 import tkinter as tk
+import sys
+import os
 from pathlib import Path
 from tkinter import ttk
 import customtkinter as ctk
-from utils.load_settings import load_settings
-from utils.file_selector import open_file
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from utils import load_settings as _settings
 
 """The file processing app will be used to take raw data from OOTP Baseball and convert it into a format
     useable by the rest of the applications."""
-
 
 class FileProcessor(tk.Tk):
     def __init__(self):
         super().__init__()
 
-        self.settings = load_settings()
+        self.settings = _settings.load_settings()
 
 
         self.title(f"{self.settings['FileProcessor']['title']}")
