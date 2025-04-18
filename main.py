@@ -1,22 +1,22 @@
-import os
-
 import customtkinter as ctk
 import subprocess
-from configparser import ConfigParser
 import os
 from utils.app_select_button import AppSelectButton
 from PIL import Image, ImageTk
 from utils.load_settings import load_settings
+
+
 
 class MainApp(ctk.CTk):
     def __init__(self):
         super().__init__()
         ctk.set_default_color_theme('themes/main_theme.json')
 
+        #load settings from load_settings utility
         self.settings = load_settings()
-
         self.title(f"{self.settings['App']['title']}")
         self.geometry(f"{self.settings['MainWindow']['width']}x{self.settings['MainWindow']['height']}")
+
 
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
@@ -40,6 +40,16 @@ class MainApp(ctk.CTk):
         self.grid_rowconfigure(0, weight=0)
         self.grid_rowconfigure(1, weight=1)
         self.grid_rowconfigure(2, weight=0)
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_columnconfigure(1, weight=1)
+        self.grid_columnconfigure(2, weight=1)
+
+        self.main_frame.grid_columnconfigure(0, weight=1)
+        self.main_frame.grid_columnconfigure(1, weight=1)
+        self.main_frame.grid_columnconfigure(2, weight=1)
+        self.main_frame.grid_rowconfigure(0, weight=1)
+        self.main_frame.grid_rowconfigure(1, weight=1)
+        self.main_frame.grid_rowconfigure(2, weight=1)
 
         self.main_frame.grid_columnconfigure(0, weight=1)
         self.header_frame.grid_columnconfigure(0, weight=1)
@@ -54,7 +64,7 @@ class MainApp(ctk.CTk):
         label.grid(column=0, row=0, padx=10, pady=10, sticky='e')
 
         self.file_processing_select_button = AppSelectButton(self.main_frame, command=open_file_processing, text="File Processing")
-        self.file_processing_select_button.grid(column=0, row=0, padx=10, pady=10, sticky='ew')
+        self.file_processing_select_button.grid(column=0, row=0, padx=10, pady=10, sticky='nsew')
 
 def open_file_processing():
     subprocess.Popen(["python", "apps/file_processing.py"])
