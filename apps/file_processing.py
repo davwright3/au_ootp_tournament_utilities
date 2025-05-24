@@ -15,23 +15,40 @@ class FileProcessor(tk.Tk):
     def __init__(self):
         super().__init__()
 
+        """Load json settings file"""
         self.settings = _settings.load_settings()
 
+        """Set element heights from the settings"""
+        self.height = int(self.settings['FileProcessor']['height'])
+        self.width = int(self.settings['FileProcessor']['width'])
+        self.frame_width = self.width * .9
 
+        """Title and window size from the settings"""
         self.title(f"{self.settings['FileProcessor']['title']}")
-        self.geometry(f"{self.settings['MainWindow']['width']}x{self.settings['MainWindow']['height']}")
+        self.geometry(f"{self.width}x{self.height}")
+
+        """Variables for grid Configurations"""
+        self.grid_columnconfigure(0, weight=1)
 
         self.rowconfigure(0, weight=0)
-        self.rowconfigure(1, weight=1)
-        self.rowconfigure(2, weight=0)
+        self.rowconfigure(1, weight=0)
+        self.rowconfigure(2, weight=1)
+        self.rowconfigure(3, weight=0)
 
-        header_footer_height = int(int(self.settings['MainWindow']['height']) * .1)
+        header_footer_height = int(int(self.height) * .1)
 
-        self.header_frame = ctk.CTkFrame(self, height=header_footer_height, width=int(self.settings['MainWindow']['width']))
-        self.header_frame.grid(column=0, row=0, padx=10, pady=10, sticky='new')
+        """Set up the frames"""
+        self.header_frame = ctk.CTkFrame(self, height=header_footer_height, width=int(self.frame_width))
+        self.header_frame.grid(column=0, row=0, padx=10, pady=10, sticky='n')
 
-        self.footer_frame =ctk.CTkFrame(self, height=header_footer_height, width=int(self.settings['MainWindow']['width']))
-        self.footer_frame.grid(column=0, row=2, padx=10, pady=10, sticky='sew')
+        self.file_select_frame = ctk.CTkFrame(self, height=header_footer_height, width=int(self.frame_width))
+        self.file_select_frame.grid(column=0, row=1, padx=10, pady=10, sticky='n')
+
+        self.main_frame = ctk.CTkFrame(self, corner_radius=5, width=int(self.frame_width))
+        self.main_frame.grid(column=0, row=2, padx=10, pady=10, sticky='ns')
+
+        self.footer_frame =ctk.CTkFrame(self, height=header_footer_height, width=int(self.frame_width))
+        self.footer_frame.grid(column=0, row=3, padx=10, pady=10, sticky='n')
 
 
 

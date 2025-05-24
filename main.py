@@ -31,11 +31,13 @@ class MainApp(ctk.CTk):
         self.header_frame = ctk.CTkFrame(self, height=header_footer_height, width=int(self.settings['MainWindow']['width']))
         self.header_frame.grid(column=0, row=0, padx=10, pady=10, sticky='new')
 
+        self.main_frame = ctk.CTkFrame(self, corner_radius=5)
+        self.main_frame.grid(column=0, row=1, padx=10, sticky="nsew")
+
         self.footer_frame =ctk.CTkFrame(self, height=header_footer_height, width=int(self.settings['MainWindow']['width']))
         self.footer_frame.grid(column=0, row=2, padx=10, pady=10, sticky='sew')
 
-        self.main_frame = ctk.CTkFrame(self, corner_radius=0)
-        self.main_frame.grid(column=0, row=1, padx= 10, sticky="nsew")
+
 
         self.grid_rowconfigure(0, weight=0)
         self.grid_rowconfigure(1, weight=1)
