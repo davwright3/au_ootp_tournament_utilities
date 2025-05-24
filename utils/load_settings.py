@@ -10,11 +10,11 @@ def load_settings():
     try:
         config.read(ini_path)
 
-        for section in config.sections():
-            print(f"[{section}]")
-            for key, value in config.items(section):
-                print(f"{key} = {value}")
-            print()
+        # for section in config.sections():
+        #     print(f"[{section}]")
+        #     for key, value in config.items(section):
+        #         print(f"{key} = {value}")
+        #     print()
 
     except FileNotFoundError:
         print("Error opening settings.ini")
