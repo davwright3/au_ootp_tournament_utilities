@@ -18,11 +18,11 @@ class MainApp(ctk.CTk):
         self.title(f"{self.settings['App']['title']}")
         self.geometry(f"{self.settings['MainWindow']['width']}x{self.settings['MainWindow']['height']}")
 
-        """variables for page sizing"""
+        #Variables for page sizing
         header_footer_height = int(int(self.settings["MainWindow"]["height"])*.1)
 
 
-        """Set grids for the main page"""
+        #Set grids for the main page
         self.grid_rowconfigure(0, weight=0)
         self.grid_rowconfigure(1, weight=1)
         self.grid_rowconfigure(2, weight=0)
@@ -38,14 +38,14 @@ class MainApp(ctk.CTk):
         flipped_unicorn_image = ctk.CTkImage(image.transpose(Image.FLIP_LEFT_RIGHT), size=(100,100))
 
 
-        """Create header frame"""
+        #Create header frame
         self.header_frame = ctk.CTkFrame(self, height=header_footer_height, width=int(self.settings['MainWindow']['width']))
         self.header_frame.grid(column=0, row=0, padx=10, pady=10, sticky='new')
 
         self.header_frame.grid_columnconfigure(0, weight=1)
 
 
-        """Create main frame"""
+        #Create main frame
         self.main_frame = ctk.CTkFrame(self, corner_radius=5)
         self.main_frame.grid(column=0, row=1, padx=10, sticky="nsew")
 
@@ -57,11 +57,11 @@ class MainApp(ctk.CTk):
         self.main_frame.grid_rowconfigure(2, weight=1)
 
 
-        """Create footer frame"""
+        #Create footer frame
         self.footer_frame =ctk.CTkFrame(self, height=header_footer_height, width=int(self.settings['MainWindow']['width']))
         self.footer_frame.grid(column=0, row=2, padx=10, pady=10, sticky='sew')
 
-        """Header frame data"""
+        #Header frame data
         self.header_title = ctk.CTkLabel(self.header_frame, text="Welcome to Angered Unicorn's Tournament Utilities", font=("Arial", 24))
         self.header_title.grid(column=0, row=0, padx=10, pady=10, sticky='ew')
 
@@ -72,12 +72,16 @@ class MainApp(ctk.CTk):
         label.grid(column=0, row=0, padx=10, pady=10, sticky='e')
 
 
-        """Main frame data"""
+        #Main frame data"""
         self.file_processing_select_button = AppSelectButton(self.main_frame, command=open_file_processing, text="File Processing")
         self.file_processing_select_button.grid(column=0, row=0, padx=10, pady=10, sticky='nsew')
 
 
-"""This method will open the file processing app in a new window"""
+"""
+This method will open the file processing app in a new window
+
+
+"""
 def open_file_processing():
     subprocess.Popen(["python", "apps/file_processing.py"])
 
