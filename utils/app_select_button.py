@@ -1,6 +1,5 @@
-from configparser import ConfigParser
-
 import customtkinter as ctk
+
 
 class AppSelectButton(ctk.CTkButton):
     def __init__(self, parent, text="Button", command=None, **kwargs):
