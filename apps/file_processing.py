@@ -1,10 +1,7 @@
 import tkinter as tk
-import sys
-import os
 import customtkinter as ctk
 from utils import load_settings as _settings
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from utils.header_footer import Header, Footer
 
 
 """
@@ -41,31 +38,34 @@ class FileProcessor(tk.Tk):
         header_footer_height = int(int(self.height) * .1)
 
         # Set up the frames
-        self.header_frame = ctk.CTkFrame(
-            self, height=header_footer_height, width=int(self.frame_width)
+        self.header_frame = Header(
+            self,
+            height=header_footer_height,
+            width=int(self.frame_width)
         )
-        self.header_frame.grid(column=0, row=0, padx=10, pady=10, sticky='n')
+        self.header_frame.grid(row=0, column=0, padx=10, pady=10, sticky='ew')
 
         self.file_select_frame = ctk.CTkFrame(
             self, height=header_footer_height, width=int(self.frame_width)
         )
         self.file_select_frame.grid(
-            column=0, row=1, padx=10, pady=10, sticky='n'
+            column=0, row=1, padx=10, pady=10, sticky='new'
         )
 
         self.main_frame = ctk.CTkFrame(
             self, corner_radius=5, width=int(self.frame_width)
         )
         self.main_frame.grid(
-            column=0, row=2, padx=10, pady=10, sticky='ns'
+            column=0, row=2, padx=10, pady=10, sticky='nsew'
         )
 
-        self.footer_frame = ctk.CTkFrame(
-            self, height=header_footer_height, width=int(self.frame_width)
+        self.footer_frame = Footer(
+            self,
+            height=header_footer_height,
+            width=int(self.frame_width)
         )
         self.footer_frame.grid(
-            column=0, row=3, padx=10, pady=10, sticky='n'
-        )
+            column=0, row=3, padx=10, pady=10, sticky='ew')
 
 
 if __name__ == '__main__':

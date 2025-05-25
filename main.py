@@ -1,9 +1,12 @@
+import sys
+
 import customtkinter as ctk
 import subprocess
 import os
 from utils.app_select_button import AppSelectButton
 from PIL import Image
 from utils.load_settings import load_settings
+from utils.header_footer import Header, Footer
 
 
 class MainApp(ctk.CTk):
@@ -107,7 +110,7 @@ This method will open the file processing app in a new window
 
 
 def open_file_processing():
-    subprocess.Popen(["python", "apps/file_processing.py"])
+    subprocess.Popen([sys.executable, '-m', 'apps.file_processing'])
 
 
 """
@@ -117,7 +120,7 @@ This method will open the edit settings portion of the app
 
 
 def open_edit_settings():
-    subprocess.Popen(["python", "apps/update_settings.py"])
+    subprocess.Popen([sys.executable, '-m', "apps.update_settings"])
 
 
 if __name__ == "__main__":
