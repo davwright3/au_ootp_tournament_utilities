@@ -1,8 +1,10 @@
+"""Use on each app to import settings."""
 import os
 from configparser import ConfigParser
 
 
 def load_settings():
+    """Initialize path and load settings file."""
     ini_path = (
         os.path.join(
             os.path.dirname(os.path.abspath(__file__)),
