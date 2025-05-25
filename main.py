@@ -25,6 +25,7 @@ class MainApp(ctk.CTk):
         )
 
         # Variables for page sizing
+        self.frame_width = int(self.width) * .9
         header_footer_height = int(int(self.height)*.1)
 
         # Set grids for the main page
@@ -36,23 +37,15 @@ class MainApp(ctk.CTk):
         self.grid_columnconfigure(1, weight=1)
         self.grid_columnconfigure(2, weight=1)
 
-        unicorn_image_path = os.path.join(
-            "assets", "Unicorn_logo_nobg2.png")
-        unicorn_image = ctk.CTkImage(
-            light_image=Image.open(unicorn_image_path), size=(100, 100))
-        image = Image.open(unicorn_image_path)
-        flipped_unicorn_image = ctk.CTkImage(
-            image.transpose(Image.FLIP_LEFT_RIGHT), size=(100, 100))
-
         # Create header frame
-        self.header_frame = ctk.CTkFrame(self, height=header_footer_height)
-        self.header_frame.grid(column=0, row=0, padx=10, pady=10, sticky='new')
+        self.header_frame = Header(self, height=header_footer_height, width=int(self.frame_width))
+        self.header_frame.grid(column=0, row=0, columnspan=3, padx=10, pady=10, sticky='new')
 
         self.header_frame.grid_columnconfigure(0, weight=1)
 
         # Create main frame
-        self.main_frame = ctk.CTkFrame(self, corner_radius=5)
-        self.main_frame.grid(column=0, row=1, padx=10, sticky="nsew")
+        self.main_frame = ctk.CTkFrame(self, corner_radius=5, width=int(self.frame_width))
+        self.main_frame.grid(column=0, row=1, columnspan=3, padx=10, sticky="nsew")
 
         self.main_frame.grid_columnconfigure(0, weight=1)
         self.main_frame.grid_columnconfigure(1, weight=1)
@@ -62,24 +55,8 @@ class MainApp(ctk.CTk):
         self.main_frame.grid_rowconfigure(2, weight=1)
 
         # Create footer frame
-        self.footer_frame = ctk.CTkFrame(self, height=header_footer_height)
-        self.footer_frame.grid(column=0, row=2, padx=10, pady=10, sticky='sew')
-
-        # Header frame data
-        self.header_title = ctk.CTkLabel(
-            self.header_frame,
-            text="Welcome to Angered Unicorn's Tournament Utilities",
-            font=("Arial", 24))
-        self.header_title.grid(column=0, row=0, padx=10, pady=10, sticky='ew')
-
-        label = ctk.CTkLabel(self.header_frame, image=unicorn_image, text="")
-        label.grid(column=0, row=0, padx=10, pady=10, sticky='w')
-
-        label = ctk.CTkLabel(
-            self.header_frame,
-            image=flipped_unicorn_image,
-            text="")
-        label.grid(column=0, row=0, padx=10, pady=10, sticky='e')
+        self.footer_frame = Footer(self, height=header_footer_height, width=int(self.frame_width))
+        self.footer_frame.grid(column=0, row=2, columnspan=3, padx=10, pady=10, sticky='sew')
 
         # Main frame data
         self.file_processing_select_button = (
@@ -92,14 +69,7 @@ class MainApp(ctk.CTk):
             column=0, row=0, padx=10, pady=10, sticky='nsew'
         )
 
-        # Footer data
-        self.edit_settings_button = AppSelectButton(
-            self.footer_frame,
-            text="Edit Settings",
-            command=open_edit_settings)
-        self.edit_settings_button.grid(
-            column=0, row=1, padx=10, pady=10, sticky='nsew'
-        )
+
 
 
 """
