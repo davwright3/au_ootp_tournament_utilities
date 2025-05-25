@@ -41,7 +41,8 @@ class FileProcessor(tk.Tk):
         self.header_frame = Header(
             self,
             height=header_footer_height,
-            width=int(self.frame_width)
+            width=int(self.frame_width),
+            title="File Processing Tool"
         )
         self.header_frame.grid(row=0, column=0, padx=10, pady=10, sticky='ew')
 

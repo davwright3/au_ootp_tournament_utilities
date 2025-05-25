@@ -38,7 +38,7 @@ class MainApp(ctk.CTk):
         self.grid_columnconfigure(2, weight=1)
 
         # Create header frame
-        self.header_frame = Header(self, height=header_footer_height, width=int(self.frame_width))
+        self.header_frame = Header(self, height=header_footer_height, width=int(self.frame_width), title="Angered Unicorn's OOTP Tournament Utilities")
         self.header_frame.grid(column=0, row=0, columnspan=3, padx=10, pady=10, sticky='new')
 
         self.header_frame.grid_columnconfigure(0, weight=1)
