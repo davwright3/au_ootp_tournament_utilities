@@ -3,7 +3,10 @@ from configparser import ConfigParser
 
 
 def load_settings():
-    ini_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../settings.ini')
+    ini_path = (
+        os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            '../settings.ini'))
 
     config = ConfigParser()
 
