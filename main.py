@@ -72,9 +72,15 @@ class MainApp(ctk.CTk):
         label.grid(column=0, row=0, padx=10, pady=10, sticky='e')
 
 
-        #Main frame data"""
+        #Main frame data
         self.file_processing_select_button = AppSelectButton(self.main_frame, command=open_file_processing, text="File Processing")
         self.file_processing_select_button.grid(column=0, row=0, padx=10, pady=10, sticky='nsew')
+
+
+        #Footer data
+        self.edit_settings_button = AppSelectButton(self.footer_frame, text="Edit Settings", command= open_edit_settings)
+        self.edit_settings_button.grid(column=0, row=1, padx=10, pady=10, sticky='nsew')
+
 
 
 """
@@ -84,6 +90,13 @@ This method will open the file processing app in a new window
 """
 def open_file_processing():
     subprocess.Popen(["python", "apps/file_processing.py"])
+
+"""
+This method will open the edit settings portion of the app
+
+"""
+def open_edit_settings():
+    subprocess.Popen(["python", "apps/update_settings.py"])
 
 
 
