@@ -1,18 +1,15 @@
+"""App for processing raw files."""
 import tkinter as tk
 import customtkinter as ctk
 from utils import load_settings as _settings
 from utils.header_footer import Header, Footer
 
 
-"""
-The file processing app will be used to take raw data from OOTP Baseball
- and convert it into a format useable by the rest of the applications.
-
-"""
-
-
 class FileProcessor(tk.Tk):
+    """Load module for processing raw files."""
+
     def __init__(self):
+        """Initializes the class."""
         super().__init__()
 
         # Load json settings file

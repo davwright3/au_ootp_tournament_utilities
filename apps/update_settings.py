@@ -1,10 +1,14 @@
+"""Run app for updating program settings."""
 import os
 import customtkinter as ctk
 from configparser import ConfigParser
 
 
 class SettingsEditor(ctk.CTk):
+    """Create class."""
+
     def __init__(self):
+        """Initialize class."""
         super().__init__()
         self.title = "Settings Editor"
         self.geometry = "800x600"
@@ -46,6 +50,7 @@ class SettingsEditor(ctk.CTk):
         save_button.grid(row=row, column=0, pady=20)
 
     def save_settings(self):
+        """Write settings to settings.ini file."""
         try:
             for (section, key), entry in self.entries.items():
                 try:
