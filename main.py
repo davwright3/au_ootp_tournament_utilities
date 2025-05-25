@@ -1,16 +1,17 @@
+"""This is the main menu opening for the program."""
 import sys
-
 import customtkinter as ctk
 import subprocess
-import os
 from utils.app_select_button import AppSelectButton
-from PIL import Image
 from utils.load_settings import load_settings
 from utils.header_footer import Header, Footer
 
 
 class MainApp(ctk.CTk):
+    """This class opens and runs the main window."""
+
     def __init__(self):
+        """Initialize the main window."""
         super().__init__()
         ctk.set_default_color_theme('themes/main_theme.json')
 
@@ -38,14 +39,24 @@ class MainApp(ctk.CTk):
         self.grid_columnconfigure(2, weight=1)
 
         # Create header frame
-        self.header_frame = Header(self, height=header_footer_height, width=int(self.frame_width), title="Angered Unicorn's OOTP Tournament Utilities")
-        self.header_frame.grid(column=0, row=0, columnspan=3, padx=10, pady=10, sticky='new')
+        self.header_frame = Header(
+            self,
+            height=header_footer_height,
+            width=int(self.frame_width),
+            title="Angered Unicorn's OOTP Tournament Utilities")
+        self.header_frame.grid(
+            column=0, row=0, columnspan=3, padx=10, pady=10, sticky='new'
+        )
 
         self.header_frame.grid_columnconfigure(0, weight=1)
 
         # Create main frame
-        self.main_frame = ctk.CTkFrame(self, corner_radius=5, width=int(self.frame_width))
-        self.main_frame.grid(column=0, row=1, columnspan=3, padx=10, sticky="nsew")
+        self.main_frame = ctk.CTkFrame(
+            self, corner_radius=5, width=int(self.frame_width)
+        )
+        self.main_frame.grid(
+            column=0, row=1, columnspan=3, padx=10, sticky="nsew"
+        )
 
         self.main_frame.grid_columnconfigure(0, weight=1)
         self.main_frame.grid_columnconfigure(1, weight=1)
@@ -55,8 +66,12 @@ class MainApp(ctk.CTk):
         self.main_frame.grid_rowconfigure(2, weight=1)
 
         # Create footer frame
-        self.footer_frame = Footer(self, height=header_footer_height, width=int(self.frame_width))
-        self.footer_frame.grid(column=0, row=2, columnspan=3, padx=10, pady=10, sticky='sew')
+        self.footer_frame = Footer(
+            self, height=header_footer_height, width=int(self.frame_width)
+        )
+        self.footer_frame.grid(
+            column=0, row=2, columnspan=3, padx=10, pady=10, sticky='sew'
+        )
 
         # Main frame data
         self.file_processing_select_button = (
@@ -70,27 +85,9 @@ class MainApp(ctk.CTk):
         )
 
 
-
-
-"""
-This method will open the file processing app in a new window
-
-
-"""
-
-
 def open_file_processing():
+    """Open the file processing app in a new window."""
     subprocess.Popen([sys.executable, '-m', 'apps.file_processing'])
-
-
-"""
-This method will open the edit settings portion of the app
-
-"""
-
-
-def open_edit_settings():
-    subprocess.Popen([sys.executable, '-m', "apps.update_settings"])
 
 
 if __name__ == "__main__":
