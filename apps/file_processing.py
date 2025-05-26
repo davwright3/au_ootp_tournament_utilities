@@ -1,8 +1,11 @@
 """App for processing raw files."""
+import os
 import tkinter as tk
 import customtkinter as ctk
 from utils import load_settings as _settings
 from utils.header_footer import Header, Footer
+from utils.file_selector import open_file
+from utils.folder_selector import select_folder
 
 
 class FileProcessor(tk.Tk):
@@ -64,6 +67,45 @@ class FileProcessor(tk.Tk):
         )
         self.footer_frame.grid(
             column=0, row=3, padx=10, pady=10, sticky='ew')
+
+
+        self.target_file_select_button = ctk.CTkButton(
+            self.file_select_frame,
+            text="Select file",
+            command=self.select_file
+        )
+        self.target_file_select_button.pack(pady=10)
+
+        self.target_file_label = ctk.CTkLabel(
+            self.file_select_frame,
+            text="No file selected"
+        )
+        self.target_file_label.pack(pady=10)
+
+        self.data_folder_select_button = ctk.CTkButton(
+            self.file_select_frame,
+            text="Select data folder",
+            command=self.select_folder_handler
+        )
+        self.data_folder_select_button.pack(pady=10)
+
+        self.data_folder_select_label = ctk.CTkLabel(
+            self.file_select_frame,
+            text="No data folder selected"
+        )
+        self.data_folder_select_label.pack(pady=10)
+
+    def select_file(self):
+        file = open_file(parent=self)
+        if file:
+            self.target_file_label.configure(text=file.name)
+
+
+    def select_folder_handler(self):
+        data_directory = select_folder(parent=self)
+        if data_directory:
+            self.data_folder_select_label.configure(text=data_directory)
+
 
 
 if __name__ == '__main__':
