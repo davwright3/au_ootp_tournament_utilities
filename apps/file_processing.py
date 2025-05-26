@@ -1,8 +1,8 @@
 """App for processing raw files."""
-import os
+import os.path
 import tkinter as tk
 import customtkinter as ctk
-from utils import load_settings as _settings
+from utils.settings import settings
 from utils.header_footer import Header, Footer
 from utils.file_selector import open_file
 from utils.folder_selector import select_folder
@@ -12,19 +12,18 @@ class FileProcessor(tk.Tk):
     """Load module for processing raw files."""
 
     def __init__(self):
-        """Initializes the class."""
+        """Initialize the class."""
         super().__init__()
 
-        # Load json settings file
-        self.settings = _settings.load_settings()
-
         # Set element heights from the settings
-        self.height = int(self.settings['FileProcessor']['height'])
-        self.width = int(self.settings['FileProcessor']['width'])
+        self.height = int(settings['FileProcessor']['height'])
+        self.width = int(settings['FileProcessor']['width'])
         self.frame_width = self.width * .9
+        self.initial_target_dir = settings['InitialFileDirs']['target']
+        self.initial_data_dir = settings['InitialFileDirs']['data']
 
         # Title and window size from the settings
-        self.title(f"{self.settings['FileProcessor']['title']}")
+        self.title(f"{settings['FileProcessor']['title']}")
         self.geometry(f"{self.width}x{self.height}")
 
         # Variables for grid Configurations
@@ -68,10 +67,9 @@ class FileProcessor(tk.Tk):
         self.footer_frame.grid(
             column=0, row=3, padx=10, pady=10, sticky='ew')
 
-
         self.target_file_select_button = ctk.CTkButton(
             self.file_select_frame,
-            text="Select file",
+            text="Select target file",
             command=self.select_file
         )
         self.target_file_select_button.pack(pady=10)
@@ -96,16 +94,23 @@ class FileProcessor(tk.Tk):
         self.data_folder_select_label.pack(pady=10)
 
     def select_file(self):
-        file = open_file(parent=self)
-        if file:
-            self.target_file_label.configure(text=file.name)
-
+        """Open select target file dialog."""
+        path = self.initial_target_dir.strip().replace("\\", "/")
+        if os.path.isdir(path):
+            file = open_file(parent=self, initial_dir=self.initial_target_dir)
+            if file:
+                self.target_file_label.configure(text=file.name)
+        else:
+            print("Invalid start directory")
+            self.target_file_label.configure(text="Invalid start directory")
 
     def select_folder_handler(self):
-        data_directory = select_folder(parent=self)
+        """Open select data folder dialog."""
+        data_directory = select_folder(
+            parent=self,
+            initial_dir=self.initial_data_dir)
         if data_directory:
             self.data_folder_select_label.configure(text=data_directory)
-
 
 
 if __name__ == '__main__':

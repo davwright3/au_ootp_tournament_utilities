@@ -3,7 +3,7 @@ import sys
 import customtkinter as ctk
 import subprocess
 from utils.app_select_button import AppSelectButton
-from utils.load_settings import load_settings
+from utils.settings import settings
 from utils.header_footer import Header, Footer
 
 
@@ -16,11 +16,10 @@ class MainApp(ctk.CTk):
         ctk.set_default_color_theme('themes/main_theme.json')
 
         # load settings from load_settings utility
-        self.settings = load_settings()
-        self.title(f"{self.settings['App']['title']}")
+        self.title = settings['App']['title']
 
-        self.height = self.settings['MainWindow']['height']
-        self.width = self.settings['MainWindow']['width']
+        self.height = settings['MainWindow']['height']
+        self.width = settings['MainWindow']['width']
         self.geometry(
             f"{self.width}x{self.height}"
         )

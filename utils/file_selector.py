@@ -2,7 +2,7 @@
 from tkinter import filedialog
 
 
-def open_file(parent=None, initial_dir=r"C:\BaseballData\OOTPFiles\Tournaments\ReadyData"):
+def open_file(parent=None, initial_dir="/"):
     """Open csv file for processing with optional parent window."""
     return filedialog.askopenfile(
         title="Select target file",
