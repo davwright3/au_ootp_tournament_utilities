@@ -2,10 +2,15 @@
 import os
 from configparser import ConfigParser
 
+SETTINGS_PATH = os.path.join(
+    os.path.dirname(os.path.realpath(__file__)), '../settings.ini')
+
 
 def clean_path(path_str):
     """Clean the path to ensure valid starting directory paths."""
     path_str = path_str.strip().strip('"').strip("'")
+    if not path_str:
+        return ""
     path_str = os.path.expanduser(path_str)
     path_str = os.path.abspath(path_str)
     return path_str if os.path.isdir(path_str) else ""
@@ -13,15 +18,10 @@ def clean_path(path_str):
 
 def _load():
     """Initialize path and load settings file."""
-    ini_path = (
-        os.path.join(
-            os.path.dirname(os.path.abspath(__file__)),
-            '../settings.ini'))
-
     config = ConfigParser()
 
     try:
-        config.read(ini_path)
+        config.read(SETTINGS_PATH)
     except FileNotFoundError:
         print("Error opening settings.ini")
     except Exception as e:
@@ -63,6 +63,7 @@ def _load():
                 'data',
                 fallback='')),
         }
+
     }
 
 

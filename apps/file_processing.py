@@ -37,6 +37,7 @@ class FileProcessor(tk.Tk):
         header_footer_height = int(int(self.height) * .1)
 
         # Set up the frames
+        # Header frame
         self.header_frame = Header(
             self,
             height=header_footer_height,
@@ -45,13 +46,21 @@ class FileProcessor(tk.Tk):
         )
         self.header_frame.grid(row=0, column=0, padx=10, pady=10, sticky='ew')
 
+        # File/folder selection frame
         self.file_select_frame = ctk.CTkFrame(
             self, height=header_footer_height, width=int(self.frame_width)
         )
         self.file_select_frame.grid(
             column=0, row=1, padx=10, pady=10, sticky='new'
         )
+        self.file_select_frame.columnconfigure(0, weight=0)
+        self.file_select_frame.columnconfigure(1, weight=0)
+        self.file_select_frame.columnconfigure(2, weight=1)
+        self.file_select_frame.columnconfigure(3, weight=0)
+        self.file_select_frame.rowconfigure(0, weight=1)
+        self.file_select_frame.rowconfigure(1, weight=1)
 
+        # Main frame
         self.main_frame = ctk.CTkFrame(
             self, corner_radius=5, width=int(self.frame_width)
         )
@@ -59,6 +68,7 @@ class FileProcessor(tk.Tk):
             column=0, row=2, padx=10, pady=10, sticky='nsew'
         )
 
+        # Footer frame
         self.footer_frame = Footer(
             self,
             height=header_footer_height,
@@ -67,31 +77,39 @@ class FileProcessor(tk.Tk):
         self.footer_frame.grid(
             column=0, row=3, padx=10, pady=10, sticky='ew')
 
+        # Set up the data for the file/folder selection frame
         self.target_file_select_button = ctk.CTkButton(
             self.file_select_frame,
             text="Select target file",
             command=self.select_file
         )
-        self.target_file_select_button.pack(pady=10)
+        self.target_file_select_button.grid(column=0, row=0)
 
         self.target_file_label = ctk.CTkLabel(
             self.file_select_frame,
             text="No file selected"
         )
-        self.target_file_label.pack(pady=10)
+        self.target_file_label.grid(column=1, row=0)
 
         self.data_folder_select_button = ctk.CTkButton(
             self.file_select_frame,
             text="Select data folder",
             command=self.select_folder_handler
         )
-        self.data_folder_select_button.pack(pady=10)
+        self.data_folder_select_button.grid(column=0, row=1)
 
         self.data_folder_select_label = ctk.CTkLabel(
             self.file_select_frame,
             text="No data folder selected"
         )
-        self.data_folder_select_label.pack(pady=10)
+        self.data_folder_select_label.grid(column=1, row=1)
+
+        self.process_files_button = ctk.CTkButton(
+            self.file_select_frame,
+            text="Process files",
+            command=self.process_files
+        )
+        self.process_files_button.grid(column=3, row=1)
 
     def select_file(self):
         """Open select target file dialog."""
@@ -111,6 +129,12 @@ class FileProcessor(tk.Tk):
             initial_dir=self.initial_data_dir)
         if data_directory:
             self.data_folder_select_label.configure(text=data_directory)
+
+    def process_files(self):
+        """Process files into the ready CSV."""
+
+    def add_new_file(self):
+        """Use template file to create a new file in the target directory."""
 
 
 if __name__ == '__main__':
