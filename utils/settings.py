@@ -1,9 +1,13 @@
 """Create settings singleton for app use."""
 import os
+import shutil
 from configparser import ConfigParser
 
 SETTINGS_PATH = os.path.join(
     os.path.dirname(os.path.realpath(__file__)), '../settings.ini')
+
+DEFAULT_SETTINGS_PATH = os.path.join(
+    os.path.dirname(os.path.realpath(__file__)), '../settings_default.ini')
 
 
 def clean_path(path_str):
@@ -20,10 +24,14 @@ def _load():
     """Initialize path and load settings file."""
     config = ConfigParser()
 
+    if not os.path.exists(SETTINGS_PATH):
+        shutil.copyfile(DEFAULT_SETTINGS_PATH, SETTINGS_PATH)
+    print("No settings file found, creating user settings file.")
+
     try:
         config.read(SETTINGS_PATH)
     except FileNotFoundError:
-        print("Error opening settings.ini")
+        print("No settings file, using defaults.ini")
     except Exception as e:
         print(f" an error occurred: {e}")
 
