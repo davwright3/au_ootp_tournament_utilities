@@ -7,7 +7,7 @@ from utils.file_selector import open_file
 from utils.folder_selector import select_folder
 from utils.create_new_target_file import create_file_from_template
 from utils.input_dialog import CustomInputDialog
-from utils.process_files import ProcessFiles
+from utils.process_files import process_files
 
 
 class FileProcessor(ctk.CTkToplevel):
@@ -161,21 +161,22 @@ class FileProcessor(ctk.CTkToplevel):
 
     def process_files(self):
         """Process files into the ready CSV."""
-        processor = ProcessFiles()
-
-        #paths to the targets
+        # paths to the targets
         target_csv = self.selected_target_file
         raw_dir = self.selected_raw_dir
         if not target_csv or not raw_dir:
             self.status_label.configure(text="No file selected")
             return
 
-        processor.process_files(target_csv, raw_dir)
+        process_files(self, target_csv, raw_dir)
 
     def create_new_file(self):
         """Use template file to create a new file in the target directory."""
         root_window = self.winfo_toplevel()
-        dialog = CustomInputDialog(root_window, title="Create New File", prompt="Enter new file name (without extension): ")
+        dialog = CustomInputDialog(
+            root_window,
+            title="Create New File",
+            prompt="Enter new file name (without extension): ")
         user_input = dialog.get_input()
 
         if not user_input:
@@ -193,9 +194,3 @@ class FileProcessor(ctk.CTkToplevel):
             self.target_file_label.configure(text="File already exists")
         except Exception as e:
             self.target_file_label.configure(text=str(e))
-
-
-
-# if __name__ == '__main__':
-#     app = FileProcessor()
-#     app.mainloop()

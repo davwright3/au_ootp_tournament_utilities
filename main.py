@@ -1,9 +1,6 @@
 """This is the main menu opening for the program."""
-import sys
 import customtkinter as ctk
-import subprocess
 from utils.app_select_button import AppSelectButton
-from utils.process_files import ProcessFiles
 from utils.settings import settings
 from utils.header_footer import Header, Footer
 from apps.file_processing import FileProcessor
@@ -88,7 +85,6 @@ class MainApp(ctk.CTk):
 
 def open_file_processing():
     """Open the file processing app in a new window."""
-    #subprocess.Popen([sys.executable, '-m', 'apps.file_processing'])
     FileProcessor()
 
 
