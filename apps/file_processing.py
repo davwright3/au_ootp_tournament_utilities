@@ -6,9 +6,11 @@ from utils.settings import settings
 from utils.header_footer import Header, Footer
 from utils.file_selector import open_file
 from utils.folder_selector import select_folder
+from utils.create_new_target_file import create_file_from_template
+from utils.input_dialog import CustomInputDialog
 
 
-class FileProcessor(tk.Tk):
+class FileProcessor(ctk.CTkToplevel):
     """Load module for processing raw files."""
 
     def __init__(self):
@@ -104,6 +106,13 @@ class FileProcessor(tk.Tk):
         )
         self.data_folder_select_label.grid(column=1, row=1)
 
+        self.data_folder_make_new_target_file_button = ctk.CTkButton(
+            self.file_select_frame,
+            text="New File",
+            command=self.create_new_file
+        )
+        self.data_folder_make_new_target_file_button.grid(column=3, row=0)
+
         self.process_files_button = ctk.CTkButton(
             self.file_select_frame,
             text="Process files",
@@ -133,8 +142,27 @@ class FileProcessor(tk.Tk):
     def process_files(self):
         """Process files into the ready CSV."""
 
-    def add_new_file(self):
+    def create_new_file(self):
         """Use template file to create a new file in the target directory."""
+        root_window = self.winfo_toplevel()
+        dialog = CustomInputDialog(root_window, title="Create New File", prompt="Enter new file name (without extension): ")
+        user_input = dialog.get_input()
+
+        if not user_input:
+            return
+
+        template_path = os.path.join("assets", "empty.csv")
+        try:
+            new_file = create_file_from_template(
+                template_path=template_path,
+                output_folder=self.initial_target_dir,
+                new_name=user_input
+            )
+            self.target_file_label.configure(text=f"Created: {new_file}")
+        except FileExistsError:
+            self.target_file_label.configure(text="File already exists")
+        except Exception as e:
+            self.target_file_label.configure(text=str(e))
 
 
 if __name__ == '__main__':
