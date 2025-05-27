@@ -1,6 +1,5 @@
 """App for processing raw files."""
 import os.path
-import tkinter as tk
 import customtkinter as ctk
 from utils.settings import settings
 from utils.header_footer import Header, Footer
@@ -8,6 +7,7 @@ from utils.file_selector import open_file
 from utils.folder_selector import select_folder
 from utils.create_new_target_file import create_file_from_template
 from utils.input_dialog import CustomInputDialog
+from utils.process_files import ProcessFiles
 
 
 class FileProcessor(ctk.CTkToplevel):
@@ -16,6 +16,10 @@ class FileProcessor(ctk.CTkToplevel):
     def __init__(self):
         """Initialize the class."""
         super().__init__()
+
+        # Initialize target folder and file variables
+        self.selected_target_file = None
+        self.selected_raw_dir = None
 
         # Set element heights from the settings
         self.height = int(settings['FileProcessor']['height'])
@@ -120,12 +124,27 @@ class FileProcessor(ctk.CTkToplevel):
         )
         self.process_files_button.grid(column=3, row=1)
 
+        self.status_label = ctk.CTkLabel(
+            self.file_select_frame,
+            text="Select target file and raw folder"
+        )
+        self.status_label.grid(column=2, row=0)
+
+        self.lift()
+        self.focus_force()
+        self.attributes("-topmost", True)
+
+        def release_topmost():
+            self.attributes("-topmost", False)
+        self.after(10, release_topmost)
+
     def select_file(self):
         """Open select target file dialog."""
         path = self.initial_target_dir.strip().replace("\\", "/")
         if os.path.isdir(path):
             file = open_file(parent=self, initial_dir=self.initial_target_dir)
             if file:
+                self.selected_target_file = file.name
                 self.target_file_label.configure(text=file.name)
         else:
             print("Invalid start directory")
@@ -137,10 +156,21 @@ class FileProcessor(ctk.CTkToplevel):
             parent=self,
             initial_dir=self.initial_data_dir)
         if data_directory:
+            self.selected_raw_dir = data_directory
             self.data_folder_select_label.configure(text=data_directory)
 
     def process_files(self):
         """Process files into the ready CSV."""
+        processor = ProcessFiles()
+
+        #paths to the targets
+        target_csv = self.selected_target_file
+        raw_dir = self.selected_raw_dir
+        if not target_csv or not raw_dir:
+            self.status_label.configure(text="No file selected")
+            return
+
+        processor.process_files(target_csv, raw_dir)
 
     def create_new_file(self):
         """Use template file to create a new file in the target directory."""
@@ -165,6 +195,7 @@ class FileProcessor(ctk.CTkToplevel):
             self.target_file_label.configure(text=str(e))
 
 
-if __name__ == '__main__':
-    app = FileProcessor()
-    app.mainloop()
+
+# if __name__ == '__main__':
+#     app = FileProcessor()
+#     app.mainloop()

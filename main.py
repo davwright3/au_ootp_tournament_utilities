@@ -3,8 +3,10 @@ import sys
 import customtkinter as ctk
 import subprocess
 from utils.app_select_button import AppSelectButton
+from utils.process_files import ProcessFiles
 from utils.settings import settings
 from utils.header_footer import Header, Footer
+from apps.file_processing import FileProcessor
 
 
 class MainApp(ctk.CTk):
@@ -16,7 +18,7 @@ class MainApp(ctk.CTk):
         ctk.set_default_color_theme('themes/main_theme.json')
 
         # load settings from load_settings utility
-        self.title = settings['App']['title']
+        self.title(settings['App']['title'])
 
         self.height = settings['MainWindow']['height']
         self.width = settings['MainWindow']['width']
@@ -86,7 +88,8 @@ class MainApp(ctk.CTk):
 
 def open_file_processing():
     """Open the file processing app in a new window."""
-    subprocess.Popen([sys.executable, '-m', 'apps.file_processing'])
+    #subprocess.Popen([sys.executable, '-m', 'apps.file_processing'])
+    FileProcessor()
 
 
 if __name__ == "__main__":
