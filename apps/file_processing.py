@@ -130,6 +130,15 @@ class FileProcessor(ctk.CTkToplevel):
         )
         self.status_label.grid(column=2, row=0)
 
+        # Data for text box in main frame
+        self.output_textbox = ctk.CTkTextbox(
+            self.main_frame,
+            height=300,
+            width=int(self.frame_width * .95),
+            wrap="word"
+        )
+        self.output_textbox.pack(padx=10, pady=10, fill="both", expand=True)
+
         self.lift()
         self.focus_force()
         self.attributes("-topmost", True)
@@ -145,10 +154,16 @@ class FileProcessor(ctk.CTkToplevel):
             file = open_file(parent=self, initial_dir=self.initial_target_dir)
             if file:
                 self.selected_target_file = file.name
-                self.target_file_label.configure(text=file.name)
+                self.log_message(
+                    f"Target file: {self.selected_target_file} selected")
         else:
             print("Invalid start directory")
-            self.target_file_label.configure(text="Invalid start directory")
+            self.log_message("Invalid start directory")
+
+    def log_message(self, message):
+        """Log message to output textbox."""
+        self.output_textbox.insert("end", message + "\n")
+        self.output_textbox.see("end")
 
     def select_folder_handler(self):
         """Open select data folder dialog."""
@@ -157,7 +172,8 @@ class FileProcessor(ctk.CTkToplevel):
             initial_dir=self.initial_data_dir)
         if data_directory:
             self.selected_raw_dir = data_directory
-            self.data_folder_select_label.configure(text=data_directory)
+            self.log_message(
+                f"Selected raw data directory: {self.selected_raw_dir}")
 
     def process_files(self):
         """Process files into the ready CSV."""
@@ -168,7 +184,12 @@ class FileProcessor(ctk.CTkToplevel):
             self.status_label.configure(text="No file selected")
             return
 
-        process_files(self, target_csv, raw_dir)
+        self.log_message(f"Processing {raw_dir} into {target_csv}")
+        processed_files = process_files(target_csv, raw_dir)
+        for file_name, removed in processed_files:
+            self.log_message(f"Added {file_name} | Teams removed {removed}")
+
+        self.log_message(f"Processed {len(processed_files)} files")
 
     def create_new_file(self):
         """Use template file to create a new file in the target directory."""
