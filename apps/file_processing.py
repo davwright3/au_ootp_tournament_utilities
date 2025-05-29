@@ -1,13 +1,14 @@
 """App for processing raw files."""
 import os.path
 import customtkinter as ctk
-from utils.settings import settings
+from utils import settings as settings_module
 from utils.header_footer import Header, Footer
 from utils.file_selector import open_file
 from utils.folder_selector import select_folder
 from utils.create_new_target_file import create_file_from_template
 from utils.input_dialog import CustomInputDialog
 from utils.process_files import process_files
+from utils.settings import settings, reload_settings
 
 
 class FileProcessor(ctk.CTkToplevel):
@@ -17,16 +18,17 @@ class FileProcessor(ctk.CTkToplevel):
         """Initialize the class."""
         super().__init__()
 
+        page_settings = settings_module.settings
         # Initialize target folder and file variables
         self.selected_target_file = None
         self.selected_raw_dir = None
 
         # Set element heights from the settings
-        self.height = int(settings['FileProcessor']['height'])
-        self.width = int(settings['FileProcessor']['width'])
+        self.height = int(page_settings['FileProcessor']['height'])
+        self.width = int(page_settings['FileProcessor']['width'])
         self.frame_width = self.width * .9
-        self.initial_target_dir = settings['InitialFileDirs']['target']
-        self.initial_data_dir = settings['InitialFileDirs']['data']
+        self.initial_target_dir = page_settings['InitialFileDirs']['target']
+        self.initial_data_dir = page_settings['InitialFileDirs']['data']
 
         # Title and window size from the settings
         self.title(f"{settings['FileProcessor']['title']}")
@@ -78,7 +80,7 @@ class FileProcessor(ctk.CTkToplevel):
         self.footer_frame = Footer(
             self,
             height=header_footer_height,
-            width=int(self.frame_width)
+            width=int(self.frame_width),
         )
         self.footer_frame.grid(
             column=0, row=3, padx=10, pady=10, sticky='ew')
