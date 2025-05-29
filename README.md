@@ -26,12 +26,17 @@ This is a desktop utility for processing and analyzing OOTP Baseball tournament 
 
   - RECOMMENDED:  Have one main folder for your processed files and individual raw data folders for each tournament
   - Setting targets is not mandatory but is recommended for improving your workflow
+  - View should include the following stats, in this order:
+     - Tag Controls, PT Card ID, Organization, PT Card Value, PT Is Variant, PT Variant Level, (Batter) G, GS, PA, AB, H, 1B, 2B, 3B, HR, RBI, R, BB, IBB,
+       HP, SH, SF, SO, GIDP, EBH, TB, RC, RC/27, wOBA, WPA, WAR, SB, CS, wSB, UBR, BsR, (Pitcher) G, GS, W, L, SVO, SV, BS, HLD, SD, MD, IP, BF, AB, HA, 1B,
+       2B, 3B, HR, TB, R, ER, BB, IBB, K, HP, SH, SF, WP, DP, IR, IRS, QS, CG, SHO, GB, FB, SB, CS, FIP, WAR, TC, A, PO, E, DP, TP, PCT, ZR, SBA, RTO
 
 ### File Processing
 
 - Export file as a CSV from your "Sortable Statistics" page
 
   - By default, this file will be automatically exported to your "\<user>\OOTP Developments\OOTP Baseball XX\online_data" folder
+  - 
 
 - Move this CSV to your raw data folder for the currently working program
 - In the File Processing application, select the target (destination) file for your main tournament data and 
