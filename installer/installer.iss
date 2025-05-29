@@ -9,7 +9,7 @@ Compression=lzma
 SolidCompression=yes
 
 [Files]
-Source: "dist\main\*"; DestDir: "{app}"; Flags: recursesubdirs createallsubdirs
+Source: "{#MyOutputDir}\*"; DestDir: "{app}"; Flags: recursesubdirs createallsubdirs
 
 [Icons]
 Name: "{group}\AU Tournament Utilities"; Filename: "{app}\main.exe"
