@@ -37,13 +37,13 @@ jobs:
           & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" "installer/installer.iss" "/DMyOutputDir=$env:GITHUB_WORKSPACE\dist\main"
 
       - name: List Output Files
-        run: dir Output
+        run: dir installer/Output
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v0.1.${{ github.run_number }}
           name: Release v0.1.${{ github.run_number }}
-          files: Output/AU_Tournament_Installer.exe
+          files: installer/Output/*.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
