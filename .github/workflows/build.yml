@@ -43,4 +43,4 @@ jobs:
           name: Release v0.1.${{ github.run_number }}
           file: Output/AU_Tournament_Installer.exe
         env:
-          GITHUB_TOKEN: ${{ secret.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
