@@ -4,6 +4,7 @@ added_files = [
     ('utils', 'utils'),
     ('assets', 'assets'),
     ('apps', 'apps'),
+    ('themes', 'themes'),
     ('settings_default.ini', '.')
 ]
 
