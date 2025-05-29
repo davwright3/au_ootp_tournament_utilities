@@ -28,7 +28,7 @@ class MainApp(ctk.CTk):
     def __init__(self):
         """Initialize the main window."""
         super().__init__()
-        ctk.set_default_color_theme('themes/main_theme.json')
+        ctk.set_default_color_theme('blue')
 
         # load settings from load_settings utility
         self.title(settings['App']['title'])
