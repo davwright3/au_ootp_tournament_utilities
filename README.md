@@ -32,7 +32,17 @@ This is a desktop utility for processing and analyzing OOTP Baseball tournament 
 - Export file as a CSV from your "Sortable Statistics" page
 
   - By default, this file will be automatically exported to your "\<user>\OOTP Developments\OOTP Baseball XX\online_data" folder
+
 - Move this CSV to your raw data folder for the currently working program
+- In the File Processing application, select the target (destination) file for your main tournament data and 
+the folder you are importing data from
+- Press the "Process Files" button and all CSV's in the folder that are not already in the file will be added
+- NOTE: The application uses the name of the file to determine whether it is already in the target dataset (i.e. 24 May)
+- NOTE: I expect the initial release of the statistic to use DateTime for sorting, with a future update being able to 
+manage between DateTime and integers.  For now, I recommend labeling your raw data in DD MMM format.  I will advice when
+this becomes obsolete.
+
+![File Processing Image](assets/file_processing.png)
 
 
 ---
