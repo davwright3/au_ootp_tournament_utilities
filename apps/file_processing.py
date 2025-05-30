@@ -1,5 +1,6 @@
 """App for processing raw files."""
 import os.path
+import sys
 import customtkinter as ctk
 from utils import settings as settings_module
 from utils.header_footer import Header, Footer
@@ -9,6 +10,16 @@ from utils.create_new_target_file import create_file_from_template
 from utils.input_dialog import CustomInputDialog
 from utils.process_files import process_files
 from utils.settings import settings, reload_settings
+
+def get_resource_path(relative_path):
+    """Get absolute path to resource, compatible with PyInstaller or development."""
+    if getattr(sys, 'frozen', False):
+        # Running in PyInstaller bundle
+        base_path = sys._MEIPASS
+    else:
+        # Running in development mode
+        base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    return os.path.join(base_path, relative_path)
 
 
 class FileProcessor(ctk.CTkToplevel):
