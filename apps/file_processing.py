@@ -216,7 +216,7 @@ class FileProcessor(ctk.CTkToplevel):
         if not user_input:
             return
 
-        template_path = os.path.join("assets", "empty.csv")
+        template_path = get_resource_path(os.path.join("assets", "empty.csv"))
         try:
             new_file = create_file_from_template(
                 template_path=template_path,
