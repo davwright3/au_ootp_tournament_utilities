@@ -1,16 +1,19 @@
-"""Script for adding a new file"""
+"""Script for adding a new file."""
 import os
-from utils.settings import settings
 import shutil
 import re
 
+
 def sanitize_filename(filename):
-    """Remove characters not allow in filenames"""
+    """Remove characters not allow in filenames."""
     return re.sub(r'[^\w\s-]', '', filename.strip())
+
 
 def create_file_from_template(template_path, output_folder, new_name):
     """
-    Copies template file to the output folder for use in making new CSV files for data analysis.
+    Copy template file to the output folder.
+
+    For use in making new CSV files for data analysis.
 
     Args:
         template_path (str): Path to the template file.
@@ -31,4 +34,3 @@ def create_file_from_template(template_path, output_folder, new_name):
 
     shutil.copy(template_path, destination_path)
     return destination_path
-

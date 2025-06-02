@@ -5,16 +5,10 @@ import sys
 import customtkinter as ctk
 from configparser import ConfigParser
 import utils.settings as settings_module
+from utils.get_user_settings_path import get_user_settings_path
 
 
 APP_NAME = "AU Tournament Utilities"
-
-def get_user_settings_path():
-    if os.name == 'nt':
-        base_dir = os.getenv('APPDATA', os.path.expanduser('~'))
-    else:
-        base_dir = os.path.expanduser('~/.config')
-    return os.path.join(base_dir, APP_NAME, 'settings.ini')
 
 class SettingsEditor(ctk.CTkToplevel):
     """Create class."""
@@ -27,7 +21,7 @@ class SettingsEditor(ctk.CTkToplevel):
         self.geometry = "800x600"
 
         # Get the settings path
-        self.settings_path = get_user_settings_path()
+        self.settings_path = get_user_settings_path(APP_NAME)
         self.config = ConfigParser()
         self.config.read(self.settings_path)
 

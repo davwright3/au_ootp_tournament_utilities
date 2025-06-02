@@ -8,6 +8,7 @@ APP_NAME = 'AU Tournament Utilities'
 
 
 def get_user_settings_path():
+    """Check OS and find settings path."""
     if os.name == 'nt':
         base_dir = os.getenv('APPDATA', os.path.expanduser('~'))
     else:
@@ -16,11 +17,16 @@ def get_user_settings_path():
     os.makedirs(settings_dir, exist_ok=True)
     return os.path.join(settings_dir, 'settings.ini')
 
+
 def get_default_settings_path():
+    """Find the default settings path."""
     if getattr(sys, 'frozen', False):
         return os.path.join(sys._MEIPASS, 'settings_default.ini')
     else:
-        return os.path.join(os.path.dirname(__file__), '..', 'settings_default.ini')
+        return os.path.join(
+            os.path.dirname(__file__),
+            '..',
+            'settings_default.ini')
 
 SETTINGS_PATH = get_user_settings_path()
 DEFAULT_SETTINGS_PATH = get_default_settings_path()
@@ -35,7 +41,9 @@ def clean_path(path_str):
     path_str = os.path.abspath(path_str)
     return path_str if os.path.isdir(path_str) else ""
 
+
 def reload_settings():
+    """Reload new settings."""
     global settings
     settings = _load()
 
@@ -68,7 +76,7 @@ def _load():
             'title': config.get(
                 'App',
                 'title',
-                fallback='Auto Tournament Utilities'),
+                fallback='AU Tournament Utilities'),
         },
         'FileProcessor': {
             'title': config.get(

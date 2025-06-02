@@ -1,20 +1,9 @@
 """This is the main menu opening for the program."""
 import customtkinter as ctk
-import os
 import sys
+from utils.get_base_sys_path import get_base_sys_path
 
-print("sys.path' ", sys.path)
-if getattr(sys, 'frozen', False):
-    # Running from PyInstaller .exe
-    base_dir = sys._MEIPASS
-else:
-    # Running from source
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-
-# Add base_dir to sys.path so Python can find utils and apps
-sys.path.insert(0, base_dir)
-print("base_dir ", base_dir)
-
+sys.path.insert(0, get_base_sys_path())
 from utils.app_select_button import AppSelectButton
 from utils.settings import settings, reload_settings
 from utils.header_footer import Header, Footer
@@ -24,7 +13,6 @@ from apps.file_processing import FileProcessor
 class MainApp(ctk.CTk):
     """This class opens and runs the main window."""
 
-
     def __init__(self):
         """Initialize the main window."""
         super().__init__()
@@ -32,7 +20,6 @@ class MainApp(ctk.CTk):
 
         # load settings from load_settings utility
         self.title(settings['App']['title'])
-
         self.height = settings['MainWindow']['height']
         self.width = settings['MainWindow']['width']
         self.geometry(
@@ -85,13 +72,13 @@ class MainApp(ctk.CTk):
 
         # Create footer frame
         self.footer_frame = Footer(
-            self, height=header_footer_height, width=int(self.frame_width), on_settings_updated=on_settings_updated
+            self, height=header_footer_height,
+            width=int(self.frame_width),
+            on_settings_updated=on_settings_updated
         )
         self.footer_frame.grid(
             column=0, row=2, columnspan=3, padx=10, pady=10, sticky='sew'
         )
-
-
 
         # Main frame data
         self.file_processing_select_button = (
@@ -105,13 +92,9 @@ class MainApp(ctk.CTk):
         )
 
 
-
-
 def open_file_processing():
     """Open the file processing app in a new window."""
     FileProcessor()
-
-
 
 
 if __name__ == "__main__":

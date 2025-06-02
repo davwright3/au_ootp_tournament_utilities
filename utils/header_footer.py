@@ -2,23 +2,15 @@
 from PIL import Image
 import customtkinter as ctk
 import os
-import subprocess
-import sys
+
 
 from utils.app_select_button import AppSelectButton
 from apps.update_settings import SettingsEditor
+from utils.get_resource_path import get_resource_path
 
-def get_resource_path(relative_path):
-    """Get absolute path to resource, compatible with PyInstaller or development."""
-    if getattr(sys, 'frozen', False):
-        # Running in PyInstaller bundle
-        base_path = sys._MEIPASS
-    else:
-        # Running in development mode
-        base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-    return os.path.join(base_path, relative_path)
 
-unicorn_image_path = get_resource_path(os.path.join("assets", "Unicorn_logo_nobg2.png"))
+unicorn_image_path = get_resource_path(
+    os.path.join("assets", "Unicorn_logo_nobg2.png"))
 print(unicorn_image_path)
 print("Exists?", os.path.exists(unicorn_image_path))
 
@@ -76,7 +68,13 @@ class Header(ctk.CTkFrame):
 class Footer(ctk.CTkFrame):
     """Create footer."""
 
-    def __init__(self, parent, height, width, on_settings_updated=None, **kwargs):
+    def __init__(
+            self,
+            parent,
+            height,
+            width,
+            on_settings_updated=None,
+            **kwargs):
         """Initialize footer."""
         super().__init__(parent, height=height, width=width)
         self.on_settings_updated = on_settings_updated
@@ -90,8 +88,3 @@ class Footer(ctk.CTkFrame):
     def open_edit_settings(self):
         """Open edit settings menu for the application."""
         SettingsEditor(on_save_callback=self.on_settings_updated)
-
-
-
-
-

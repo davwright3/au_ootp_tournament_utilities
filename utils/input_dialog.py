@@ -1,7 +1,12 @@
+"""Custom input dialogue for user input."""
 import customtkinter as ctk
 
+
 class CustomInputDialog(ctk.CTkToplevel):
+    """Create custom input dialog."""
+
     def __init__(self, parent, title="Input", prompt="Enter value"):
+        """Initialize custom input dialog."""
         super().__init__(parent)
         self.title(title)
         self.geometry("300x150")
@@ -11,22 +16,26 @@ class CustomInputDialog(ctk.CTkToplevel):
         self.user_input = None
 
         self.label = ctk.CTkLabel(self, text=prompt)
-        self.label.pack(pady=(20,10))
+        self.label.pack(pady=(20, 10))
 
         self.entry = ctk.CTkEntry(self)
         self.entry.pack(pady=5, padx=20)
         self.entry.focus_set()
 
-        self.confirm_button = ctk.CTkButton(self, text="OK", command=self._on_confirm)
+        self.confirm_button = ctk.CTkButton(
+            self,
+            text="OK",
+            command=self._on_confirm)
         self.confirm_button.pack(pady=10)
 
         self.bind("<Return>", lambda e: self._on_confirm())
 
     def _on_confirm(self):
+        """Confirm input."""
         self.user_input = self.entry.get()
         self.destroy()
 
     def get_input(self):
+        """Return user input."""
         self.wait_window()
         return self.user_input
-
