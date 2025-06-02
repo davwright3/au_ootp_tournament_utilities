@@ -45,6 +45,23 @@ this becomes obsolete.
 ![File Processing Image](assets/file_processing.png)
 
 
+___
+# Release Information
+
+### v0.1.13
+
+- Initial release
+- File processing utility
+
+### v0.1.16
+
+- Fixed pathing issue for creation of new file from program template
+
+### v0.1.17
+
+- Minor UI adjustments
+
+
 ---
 
 ## Upcoming Features
