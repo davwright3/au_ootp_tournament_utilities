@@ -1,6 +1,5 @@
 """App for processing raw files."""
 import os.path
-import sys
 import customtkinter as ctk
 from utils import settings as settings_module
 from utils.header_footer import Header, Footer
@@ -9,17 +8,8 @@ from utils.folder_selector import select_folder
 from utils.create_new_target_file import create_file_from_template
 from utils.input_dialog import CustomInputDialog
 from utils.process_files import process_files
-from utils.settings import settings, reload_settings
-
-def get_resource_path(relative_path):
-    """Get absolute path to resource, compatible with PyInstaller or development."""
-    if getattr(sys, 'frozen', False):
-        # Running in PyInstaller bundle
-        base_path = sys._MEIPASS
-    else:
-        # Running in development mode
-        base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-    return os.path.join(base_path, relative_path)
+from utils.settings import settings
+from utils.get_resource_path import get_resource_path
 
 
 class FileProcessor(ctk.CTkToplevel):
@@ -78,6 +68,7 @@ class FileProcessor(ctk.CTkToplevel):
         self.file_select_frame.columnconfigure(3, weight=0)
         self.file_select_frame.rowconfigure(0, weight=1)
         self.file_select_frame.rowconfigure(1, weight=1)
+        self.file_select_frame.rowconfigure(2, weight=1)
 
         # Main frame
         self.main_frame = ctk.CTkFrame(
@@ -108,14 +99,14 @@ class FileProcessor(ctk.CTkToplevel):
             self.file_select_frame,
             text="No file selected"
         )
-        self.target_file_label.grid(column=1, row=0)
+        self.target_file_label.grid(column=1, row=0, padx=2, pady=2)
 
         self.data_folder_select_button = ctk.CTkButton(
             self.file_select_frame,
             text="Select data folder",
             command=self.select_folder_handler
         )
-        self.data_folder_select_button.grid(column=0, row=1)
+        self.data_folder_select_button.grid(column=0, row=1, padx=2, pady=2)
 
         self.data_folder_select_label = ctk.CTkLabel(
             self.file_select_frame,
@@ -128,14 +119,22 @@ class FileProcessor(ctk.CTkToplevel):
             text="New File",
             command=self.create_new_file
         )
-        self.data_folder_make_new_target_file_button.grid(column=3, row=0)
+        self.data_folder_make_new_target_file_button.grid(
+            column=3,
+            row=0,
+            padx=2,
+            pady=2)
 
         self.process_files_button = ctk.CTkButton(
             self.file_select_frame,
             text="Process files",
             command=self.process_files
         )
-        self.process_files_button.grid(column=3, row=1)
+        self.process_files_button.grid(
+            column=0,
+            row=2,
+            padx=2,
+            pady=2)
 
         self.status_label = ctk.CTkLabel(
             self.file_select_frame,
@@ -169,6 +168,8 @@ class FileProcessor(ctk.CTkToplevel):
                 self.selected_target_file = file.name
                 self.log_message(
                     f"Target file: {self.selected_target_file} selected")
+                self.target_file_label.configure(
+                    text=self.selected_target_file)
         else:
             print("Invalid start directory")
             self.log_message("Invalid start directory")
@@ -187,6 +188,7 @@ class FileProcessor(ctk.CTkToplevel):
             self.selected_raw_dir = data_directory
             self.log_message(
                 f"Selected raw data directory: {self.selected_raw_dir}")
+            self.data_folder_select_label.configure(text=self.selected_raw_dir)
 
     def process_files(self):
         """Process files into the ready CSV."""
