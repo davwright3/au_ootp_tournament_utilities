@@ -48,8 +48,45 @@ def reload_settings():
     settings = _load()
 
 
+def ensure_settings_up_to_date():
+    user_config = ConfigParser()
+    default_config = ConfigParser()
+
+    default_config.read(DEFAULT_SETTINGS_PATH)
+
+    if not os.path.exists(SETTINGS_PATH):
+        try:
+            shutil.copyfile(DEFAULT_SETTINGS_PATH, SETTINGS_PATH)
+            print("Created user settings from default")
+            return
+        except Exception as e:
+            print(f"Could not copy default settings: {e}")
+            return
+
+    user_config.read(SETTINGS_PATH)
+
+    updated = False
+    for section in default_config.sections():
+        if not user_config.has_section(section):
+            user_config.add_section(section)
+            updated = True
+        for key, value in default_config.items(section):
+            if not user_config.has_option(section, key):
+                user_config.set(section, key, value)
+                updated = True
+
+    if updated:
+        with open(SETTINGS_PATH, 'w') as configfile:
+            user_config.write(configfile)
+        print("User settings updated with missing defaults")
+    else:
+        print("User settings already up to date")
+
+
+
 def _load():
     """Initialize path and load settings file."""
+    ensure_settings_up_to_date()
     config = ConfigParser()
 
     if not os.path.exists(SETTINGS_PATH):
@@ -93,13 +130,13 @@ def _load():
                 fallback=1080),
         },
         'InitialFileDirs': {
-            'target': clean_path(config.get(
+            'initial_target_folder': clean_path(config.get(
                 'InitialFileDirs',
-                'target',
+                'initial_target_folder',
                 fallback='')),
-            'data': clean_path(config.get(
+            'initial_data_folder': clean_path(config.get(
                 'InitialFileDirs',
-                'data',
+                'initial_data_folder',
                 fallback='')),
         }
 

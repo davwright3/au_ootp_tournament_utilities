@@ -28,8 +28,8 @@ class FileProcessor(ctk.CTkToplevel):
         self.height = int(page_settings['FileProcessor']['height'])
         self.width = int(page_settings['FileProcessor']['width'])
         self.frame_width = self.width * .9
-        self.initial_target_dir = page_settings['InitialFileDirs']['target']
-        self.initial_data_dir = page_settings['InitialFileDirs']['data']
+        self.initial_target_dir = page_settings['InitialFileDirs']['initial_target_folder']
+        self.initial_data_dir = page_settings['InitialFileDirs']['initial_data_folder']
 
         # Title and window size from the settings
         self.title(f"{settings['FileProcessor']['title']}")
