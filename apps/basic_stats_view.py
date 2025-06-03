@@ -1,6 +1,7 @@
 """App for viewing the basic tournament stats."""
 import customtkinter as ctk
 from utils import settings as settings_module
+from utils.header_footer import Header, Footer
 
 class BasicStatsView(ctk.CTkToplevel):
     """Initialize basic stats view.
@@ -19,11 +20,23 @@ class BasicStatsView(ctk.CTkToplevel):
 
         self.height = int(page_settings['FileProcessor']['height'])
         self.width = int(page_settings['FileProcessor']['width'])
-        self.frame_width = int(self.width * .9)
+        self.frame_width = int(int(self.width) * .9)
         self.initial_target_dir = page_settings['InitialFileDirs']['initial_target_folder']
+        header_footer_height = int(int(self.height) * .1)
 
         self.title = 'Basic Stats View'
         self.geometry(f"{self.width}x{self.height}")
+
+        self.header_frame = Header(
+            self,
+            height=header_footer_height,
+            width= int(self.frame_width),
+            title="Basic Stats View"
+        )
+        self.header_frame.grid(row=0, column=0, columnspan=3, padx=10, pady=10, sticky='nsew')
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_columnconfigure(1, weight=1)
+        self.grid_columnconfigure(2, weight=1)
 
 
 
