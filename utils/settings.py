@@ -32,13 +32,15 @@ SETTINGS_PATH = get_user_settings_path()
 DEFAULT_SETTINGS_PATH = get_default_settings_path()
 
 
-def clean_path(path_str):
+def clean_path(path_str, expect_file=False):
     """Clean the path to ensure valid starting directory paths."""
     path_str = path_str.strip().strip('"').strip("'")
     if not path_str:
         return ""
     path_str = os.path.expanduser(path_str)
     path_str = os.path.abspath(path_str)
+    if expect_file:
+        return path_str if os.path.isfile(path_str) else ""
     return path_str if os.path.isdir(path_str) else ""
 
 
@@ -69,10 +71,12 @@ def ensure_settings_up_to_date():
     for section in default_config.sections():
         if not user_config.has_section(section):
             user_config.add_section(section)
+            print(f"Adding section {section}")
             updated = True
         for key, value in default_config.items(section):
             if not user_config.has_option(section, key):
                 user_config.set(section, key, value)
+                print(f"Setting {key} to {value}")
                 updated = True
 
     if updated:
@@ -138,6 +142,16 @@ def _load():
                 'InitialFileDirs',
                 'initial_data_folder',
                 fallback='')),
+            'target_card_list_file': clean_path(config.get(
+                'InitialFileDirs',
+                'target_card_list_file',
+                fallback=''
+            ), expect_file=True),
+            'target_collection_list_file': clean_path(config.get(
+                'InitialFileDirs',
+                'target_collection_list_file',
+                fallback=''
+            ), expect_file=True),
         }
 
     }

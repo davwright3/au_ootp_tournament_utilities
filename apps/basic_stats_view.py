@@ -20,7 +20,7 @@ class BasicStatsView(ctk.CTkToplevel):
         self.height = int(page_settings['FileProcessor']['height'])
         self.width = int(page_settings['FileProcessor']['width'])
         self.frame_width = int(self.width * .9)
-        self.initial_target_dir = page_settings['InitialFileDirs']['data']
+        self.initial_target_dir = page_settings['InitialFileDirs']['initial_target_folder']
 
         self.title = 'Basic Stats View'
         self.geometry(f"{self.width}x{self.height}")

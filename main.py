@@ -1,6 +1,7 @@
 """This is the main menu opening for the program."""
 import customtkinter as ctk
 import sys
+import os
 
 from apps.basic_stats_view import BasicStatsView
 from utils.get_base_sys_path import get_base_sys_path
@@ -10,6 +11,7 @@ from utils.app_select_button import AppSelectButton
 from utils.settings import settings, reload_settings
 from utils.header_footer import Header, Footer
 from apps.file_processing import FileProcessor
+from utils.confirm_display_path import confirm_display_path
 
 
 class MainApp(ctk.CTk):
@@ -53,7 +55,7 @@ class MainApp(ctk.CTk):
 
         self.header_frame.grid_columnconfigure(0, weight=1)
 
-        # Create main frame
+        # Create main frame with buttons for opening apps
         self.main_frame = ctk.CTkFrame(
             self, corner_radius=5, width=int(self.frame_width)
         )
@@ -68,18 +70,47 @@ class MainApp(ctk.CTk):
         self.main_frame.grid_rowconfigure(1, weight=1)
         self.main_frame.grid_rowconfigure(2, weight=1)
 
+
+        # Create info frame with target file and folder information
+        self.info_frame = ctk.CTkFrame(
+            self, corner_radius=5, width=int(self.frame_width)
+        )
+        self.info_frame.grid(
+            column=0, row=2, columnspan=3, padx=10, pady=10, sticky='new')
+
+        self.info_frame.grid_rowconfigure(0, weight=0)
+        self.info_frame.grid_rowconfigure(1, weight=0)
+        self.info_frame.grid_rowconfigure(2, weight=0)
+        self.info_frame.grid_rowconfigure(3, weight=0)
+
+        self.initial_target_folder_info_box = ctk.CTkLabel(self.info_frame, text=f"Target Folder: {settings['InitialFileDirs']['initial_target_folder']}", anchor='w')
+        self.initial_target_folder_info_box.grid(row=0, sticky='w')
+
+        self.initial_data_folder_info_box = ctk.CTkLabel(self.info_frame, text=f"Data Folder: {settings['InitialFileDirs']['initial_data_folder']} ", anchor='w')
+        self.initial_data_folder_info_box.grid(row=1, sticky='w')
+
+        card_list_text, valid_card_path = confirm_display_path(settings['InitialFileDirs']['target_card_list_file'], ".csv")
+
+        self.card_list_target_info_box = ctk.CTkLabel(self.info_frame, text=f"Card List: {card_list_text}, {settings['InitialFileDirs']['target_card_list_file']}", text_color="red" if not valid_card_path else "black", anchor='w')
+        self.card_list_target_info_box.grid(row=2, sticky='w')
+
+        collection_list_text, valid_collection_path = confirm_display_path(settings['InitialFileDirs']['target_collection_list_file'], '.csv')
+
+        self.collection_list_target_info_box = ctk.CTkLabel(self.info_frame, text=f"Collection List Target Info: {collection_list_text}", text_color="red" if not valid_collection_path else "black", anchor='w')
+        self.collection_list_target_info_box.grid(row=3, sticky='w')
+
         def on_settings_updated():
             reload_settings()
             self.settings = settings
 
-        # Create footer frame
+        # Create footer frame with settings and other info
         self.footer_frame = Footer(
             self, height=header_footer_height,
             width=int(self.frame_width),
             on_settings_updated=on_settings_updated
         )
         self.footer_frame.grid(
-            column=0, row=2, columnspan=3, padx=10, pady=10, sticky='sew'
+            column=0, row=3, columnspan=3, padx=10, pady=10, sticky='sew'
         )
 
         # Main frame data
