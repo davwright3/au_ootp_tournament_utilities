@@ -27,6 +27,16 @@ class BasicStatsView(ctk.CTkToplevel):
         self.title = 'Basic Stats View'
         self.geometry(f"{self.width}x{self.height}")
 
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_columnconfigure(1, weight=1)
+        self.grid_columnconfigure(2, weight=1)
+
+        self.grid_rowconfigure(0, weight=0)
+        self.grid_rowconfigure(1, weight=0)
+        self.grid_rowconfigure(2, weight=1)
+        self.grid_rowconfigure(3, weight=0)
+
+        # Set up the frames for the page
         self.header_frame = Header(
             self,
             height=header_footer_height,
@@ -34,11 +44,24 @@ class BasicStatsView(ctk.CTkToplevel):
             title="Basic Stats View"
         )
         self.header_frame.grid(row=0, column=0, columnspan=3, padx=10, pady=10, sticky='nsew')
-        self.grid_columnconfigure(0, weight=1)
-        self.grid_columnconfigure(1, weight=1)
-        self.grid_columnconfigure(2, weight=1)
 
+        self.file_select_frame = ctk.CTkFrame(
+            self
+        )
+        self.file_select_frame.grid(
+            row=1,
+            column=0,
+            columnspan=3,
+            padx=10,
+            pady=10,
+            sticky='new')
 
+        self.footer_frame = Footer(
+            self,
+            height=header_footer_height,
+            width= int(self.frame_width)
+        )
+        self.footer_frame.grid(row=3, column=0, columnspan=3, padx=10, pady=10, sticky='nsew')
 
 
         self.lift()
