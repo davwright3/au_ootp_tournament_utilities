@@ -1,7 +1,13 @@
 """App for viewing the basic tournament stats."""
+import os
+import sys
 import customtkinter as ctk
 from utils import settings as settings_module
 from utils.header_footer import Header, Footer
+from utils.data_view_frame import TreeviewTableFrame
+from utils.handle_select_file import handle_select_file
+from utils.calc_basic_stats import calc_basic_stats
+import pandas as pd
 
 class BasicStatsView(ctk.CTkToplevel):
     """Initialize basic stats view.
@@ -9,6 +15,7 @@ class BasicStatsView(ctk.CTkToplevel):
     Uses CTKTopLevel to create the basic
     tournament stats viewer.
     """
+    data = pd.DataFrame()
 
     def __init__(self):
         """Initialize the app."""
@@ -16,7 +23,8 @@ class BasicStatsView(ctk.CTkToplevel):
 
         page_settings = settings_module.settings
         # Initialize the target file
-        self.initial_target_file = None
+        self.target_file = None
+        self.stats_df = pd.DataFrame(['No file selected'])
 
         self.height = int(page_settings['FileProcessor']['height'])
         self.width = int(page_settings['FileProcessor']['width'])
@@ -56,12 +64,34 @@ class BasicStatsView(ctk.CTkToplevel):
             pady=10,
             sticky='new')
 
+        self.data_view_frame = TreeviewTableFrame(self)
+        self.data_view_frame.grid(row=2, column=0, columnspan=3, padx=10, pady=10, sticky='nsew')
+
         self.footer_frame = Footer(
             self,
             height=header_footer_height,
             width= int(self.frame_width)
         )
         self.footer_frame.grid(row=3, column=0, columnspan=3, padx=10, pady=10, sticky='nsew')
+
+        self.file_select_button = ctk.CTkButton(
+            self.file_select_frame,
+            text="Select File",
+            command=self.select_file
+        )
+        self.file_select_button.grid(row=0, column=0, padx=10, pady=10, sticky='w')
+
+        self.file_select_label = ctk.CTkLabel(
+            self.file_select_frame,
+            text="No File Selected")
+        self.file_select_label.grid(row=0, column=1, padx=10, pady=10)
+
+        self.process_button = ctk.CTkButton(
+            self.file_select_frame,
+            text="Process",
+            command=self.process_file
+        )
+        self.process_button.grid(row=0, column=2, padx=10, pady=10)
 
 
         self.lift()
@@ -72,3 +102,24 @@ class BasicStatsView(ctk.CTkToplevel):
             self.attributes("-topmost", False)
         self.after(10, release_topmost)
 
+
+    def select_file(self):
+        self.target_file = handle_select_file(self, self.initial_target_dir)
+
+
+    def process_file(self):
+        if not self.target_file:
+            self.log_message("No file selected")
+            return
+
+        try:
+            df=calc_basic_stats(pd.read_csv(self.target_file))
+            self.data_view_frame.load_dataframe(df)
+            self.update_idletasks()
+            self.log_message("Data loaded")
+        except Exception as e:
+            self.log_message(f"Error loading {self.target_file}: {e}")
+
+
+    def log_message(self, message):
+        self.file_select_label.configure(text=message)
