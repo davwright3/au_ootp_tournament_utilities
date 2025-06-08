@@ -1,5 +1,5 @@
 import os
-from utils.file_selector import open_file
+from utils.file_utils.file_selector import open_file
 
 def handle_select_file(self, initial_dir="/", initial_target_dir=None, target_file_label=None):
     """Open select target file dialog."""

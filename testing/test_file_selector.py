@@ -1,11 +1,11 @@
 import sys
 import os
-import tempfile
 from unittest.mock import patch, MagicMock
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from utils import file_selector, folder_selector
+from utils.file_utils import file_selector, folder_selector
+
 
 def test_open_file_returns_path():
     mock_file = MagicMock()

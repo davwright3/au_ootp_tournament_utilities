@@ -1,12 +1,10 @@
 """App for viewing the basic tournament stats."""
-import os
-import sys
 import customtkinter as ctk
-from utils import settings as settings_module
-from utils.header_footer import Header, Footer
-from utils.data_view_frame import TreeviewTableFrame
-from utils.handle_select_file import handle_select_file
-from utils.calc_basic_stats import calc_basic_stats
+from utils.config_utils import settings as settings_module
+from utils.view_utils.header_footer import Header, Footer
+from utils.view_utils.data_view_frame import TreeviewTableFrame
+from utils.file_utils.handle_select_file import handle_select_file
+from utils.stats_utils.calc_basic_batting_stats import calc_basic_stats
 import pandas as pd
 
 class BasicStatsView(ctk.CTkToplevel):
@@ -37,7 +35,7 @@ class BasicStatsView(ctk.CTkToplevel):
 
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
-        self.grid_columnconfigure(2, weight=1)
+        self.grid_columnconfigure(2, weight=0)
 
         self.grid_rowconfigure(0, weight=0)
         self.grid_rowconfigure(1, weight=0)
@@ -65,7 +63,30 @@ class BasicStatsView(ctk.CTkToplevel):
             sticky='new')
 
         self.data_view_frame = TreeviewTableFrame(self)
-        self.data_view_frame.grid(row=2, column=0, columnspan=3, padx=10, pady=10, sticky='nsew')
+        self.data_view_frame.grid(row=2, column=0, columnspan=2, padx=10, pady=10, sticky='nsew')
+
+        self.menu_frame = ctk.CTkFrame(
+            self
+        )
+        self.menu_frame.grid(
+            row=2,
+            column=2,
+            padx=10,
+            pady=10,
+            sticky='nsw'
+        )
+        self.menu_frame.rowconfigure(0, weight=1)
+        self.menu_frame.rowconfigure(1, weight=1)
+        self.menu_frame.rowconfigure(2, weight=1)
+        self.menu_frame.rowconfigure(3, weight=1)
+        self.menu_frame.rowconfigure(4, weight=1)
+        self.menu_frame.rowconfigure(5, weight=1)
+        self.menu_frame.rowconfigure(6, weight=1)
+        self.menu_frame.rowconfigure(7, weight=1)
+        self.menu_frame.rowconfigure(8, weight=1)
+        self.menu_frame.rowconfigure(9, weight=1)
+        self.menu_frame.rowconfigure(10, weight=1)
+
 
         self.footer_frame = Footer(
             self,
@@ -93,6 +114,17 @@ class BasicStatsView(ctk.CTkToplevel):
         )
         self.process_button.grid(row=0, column=2, padx=10, pady=10)
 
+        self.plate_app_label = ctk.CTkLabel(
+            self.menu_frame,
+            text="Min PA"
+        )
+        self.plate_app_label.grid(row=0, column=0, padx=10, pady=10)
+
+        self.plate_app_entry = ctk.CTkEntry(
+            self.menu_frame
+        )
+        self.plate_app_entry.grid(row=1, column=0, padx=10, pady=10)
+
 
         self.lift()
         self.focus_force()
@@ -113,7 +145,12 @@ class BasicStatsView(ctk.CTkToplevel):
             return
 
         try:
-            df=calc_basic_stats(pd.read_csv(self.target_file))
+            try:
+                min_pa = int(self.plate_app_entry.get())
+            except (ValueError, TypeError):
+                min_pa = 600
+
+            df=calc_basic_stats(pd.read_csv(self.target_file), min_pa)
             self.data_view_frame.load_dataframe(df)
             self.update_idletasks()
             self.log_message("Data loaded")

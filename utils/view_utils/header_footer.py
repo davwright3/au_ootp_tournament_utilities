@@ -4,9 +4,9 @@ import customtkinter as ctk
 import os
 
 
-from utils.app_select_button import AppSelectButton
+from utils.interface_utils.app_select_button import AppSelectButton
 from apps.update_settings import SettingsEditor
-from utils.get_resource_path import get_resource_path
+from utils.config_utils.get_resource_path import get_resource_path
 
 
 unicorn_image_path = get_resource_path(

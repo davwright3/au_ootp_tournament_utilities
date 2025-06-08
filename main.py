@@ -1,17 +1,16 @@
 """This is the main menu opening for the program."""
 import customtkinter as ctk
 import sys
-import os
 
-from apps.basic_stats_view import BasicStatsView
-from utils.get_base_sys_path import get_base_sys_path
+from apps.basic_batting_stats_view import BasicStatsView
+from utils.config_utils.get_base_sys_path import get_base_sys_path
 
 sys.path.insert(0, get_base_sys_path())
-from utils.app_select_button import AppSelectButton
-from utils.settings import settings, reload_settings
-from utils.header_footer import Header, Footer
+from utils.interface_utils.app_select_button import AppSelectButton
+from utils.config_utils.settings import settings, reload_settings
+from utils.view_utils.header_footer import Header, Footer
 from apps.file_processing import FileProcessor
-from utils.confirm_display_path import confirm_display_path
+from utils.config_utils.confirm_display_path import confirm_display_path
 
 
 class MainApp(ctk.CTk):
@@ -128,7 +127,7 @@ class MainApp(ctk.CTk):
             AppSelectButton(
                 self.main_frame,
                 command=open_basic_stats_view,
-                text="Basic Stats View"
+                text="Basic Batting Stats View"
 
             )
         )

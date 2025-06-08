@@ -3,7 +3,7 @@ import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 import tempfile
-from utils.settings import settings, _load, SETTINGS_PATH
+from utils.config_utils.settings import _load
 
 
 def write_test_ini(contents: str) -> str:

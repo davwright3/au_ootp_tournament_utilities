@@ -7,7 +7,7 @@ import pandas as pd
 sys.path.insert(
     0,
     os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from utils.process_files import cull_teams, process_files
+from utils.file_utils.process_files import cull_teams, process_files
 
 
 def test_cull_teams_removes_high_scoring():

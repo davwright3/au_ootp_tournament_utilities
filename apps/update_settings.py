@@ -1,12 +1,9 @@
 """Run app for updating program settings."""
-import os
-import sys
 
 import customtkinter as ctk
 import tkinter.filedialog as fd
 from configparser import ConfigParser
-import utils.settings as settings_module
-from utils.get_user_settings_path import get_user_settings_path
+from utils.config_utils.get_user_settings_path import get_user_settings_path
 
 
 APP_NAME = "AU Tournament Utilities"
