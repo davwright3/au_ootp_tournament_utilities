@@ -16,7 +16,11 @@ def calc_basic_stats(df, min_pa = 1, pos = None):
                                                 'BB', 'HP', 'SH', 'SF', 'SO', 'TB', 'RC', 'WAR', 'SB',
                                                 'CS', 'BsR', 'ZR']].sum()
 
-    df2 = pd.merge(card_df[['CID', 'Title']], df2, on='CID', how='inner')
+    if pos is None:
+        df2 = pd.merge(card_df[['CID', 'Title']], df2, on='CID', how='inner')
+    else:
+        df2 = pd.merge(card_df[card_df[pos]==1], df2, on='CID', how='inner')
+
     df2['AVG'] = (df2['H']/df2['AB']).round(3)
     df2['OBP'] = ((df2['H'] + df2['BB'] + df2['HP'])/(df2['AB'] + df2['BB'] + df2['HP'] + df2['SF'])).round(3)
     df2['SLG'] = (df2['TB']/df2['AB']).round(3)

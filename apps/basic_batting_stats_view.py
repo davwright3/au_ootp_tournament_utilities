@@ -5,6 +5,7 @@ from utils.view_utils.header_footer import Header, Footer
 from utils.view_utils.data_view_frame import TreeviewTableFrame
 from utils.file_utils.handle_select_file import handle_select_file
 from utils.stats_utils.calc_basic_batting_stats import calc_basic_stats
+from utils.interface_utils.pos_select_button import CustomPositionButton
 import pandas as pd
 
 class BasicStatsView(ctk.CTkToplevel):
@@ -125,6 +126,69 @@ class BasicStatsView(ctk.CTkToplevel):
         )
         self.plate_app_entry.grid(row=1, column=0, padx=10, pady=10)
 
+        self.catcher_button = CustomPositionButton(
+            self.menu_frame,
+            text="Catcher",
+            command=lambda: self.process_file(pos='LearnC')
+        )
+        self.catcher_button.grid(row=2, column=0, padx=10, pady=10)
+
+        self.first_base_button = CustomPositionButton(
+            self.menu_frame,
+            text="First Base",
+            command=lambda: self.process_file(pos='Learn1B')
+        )
+        self.first_base_button.grid(row=3, column=0, padx=10, pady=10)
+
+        self.second_base_button = CustomPositionButton(
+            self.menu_frame,
+            text="Second Base",
+            command=lambda: self.process_file(pos='Learn2B')
+        )
+        self.second_base_button.grid(row=4, column=0, padx=10, pady=10)
+
+        self.third_base_button = CustomPositionButton(
+            self.menu_frame,
+            text="Third Base",
+            command=lambda: self.process_file(pos='Learn3B')
+        )
+        self.third_base_button.grid(row=5, column=0, padx=10, pady=10)
+
+        self.shortstop_button = CustomPositionButton(
+            self.menu_frame,
+            text="Shortstop",
+            command=lambda: self.process_file(pos='LearnSS')
+        )
+        self.shortstop_button.grid(row=6, column=0, padx=10, pady=10)
+
+        self.left_field_button = CustomPositionButton(
+            self.menu_frame,
+            text="Left Field",
+            command=lambda: self.process_file(pos='LearnLF')
+        )
+        self.left_field_button.grid(row=7, column=0, padx=10, pady=10)
+
+        self.center_field_button = CustomPositionButton(
+            self.menu_frame,
+            text="Center Field",
+            command=lambda: self.process_file(pos='LearnCF')
+        )
+        self.center_field_button.grid(row=8, column=0, padx=10, pady=10)
+
+        self.right_field_button = CustomPositionButton(
+            self.menu_frame,
+            text="Right Field",
+            command=lambda: self.process_file(pos='LearnRF')
+        )
+        self.right_field_button.grid(row=9, column=0, padx=10, pady=10)
+
+        self.all_batters_button = CustomPositionButton(
+            self.menu_frame,
+            text="Batters",
+            command=lambda: self.process_file(pos=None)
+        )
+        self.all_batters_button.grid(row=10, column=0, padx=10, pady=10)
+
 
         self.lift()
         self.focus_force()
@@ -136,10 +200,16 @@ class BasicStatsView(ctk.CTkToplevel):
 
 
     def select_file(self):
-        self.target_file = handle_select_file(self, self.initial_target_dir)
+        selected = handle_select_file(self, self.initial_target_dir)
+        if selected:
+            self.target_file = selected
+            self.file_select_label.configure(text=f"Selected: {selected.split('/')[-1]}")
+        else:
+            self.log_message("File selection cancelled")
 
 
-    def process_file(self):
+    def process_file(self, pos=None):
+        df = pd.DataFrame()
         if not self.target_file:
             self.log_message("No file selected")
             return
@@ -150,7 +220,8 @@ class BasicStatsView(ctk.CTkToplevel):
             except (ValueError, TypeError):
                 min_pa = 600
 
-            df=calc_basic_stats(pd.read_csv(self.target_file), min_pa)
+            df=calc_basic_stats(pd.read_csv(self.target_file), min_pa, pos)
+
             self.data_view_frame.load_dataframe(df)
             self.update_idletasks()
             self.log_message("Data loaded")
