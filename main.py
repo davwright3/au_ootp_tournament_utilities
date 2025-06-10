@@ -123,7 +123,7 @@ class MainApp(ctk.CTk):
             column=0, row=0, padx=10, pady=10, sticky='nsew'
         )
 
-        self.basic_stats_view_button = (
+        self.basic_batting_stats_view_button = (
             AppSelectButton(
                 self.main_frame,
                 command=open_basic_stats_view,
@@ -131,7 +131,7 @@ class MainApp(ctk.CTk):
 
             )
         )
-        self.basic_stats_view_button.grid(
+        self.basic_batting_stats_view_button.grid(
             column=1, row=0, padx=10, pady=10, sticky='nsew'
         )
 
