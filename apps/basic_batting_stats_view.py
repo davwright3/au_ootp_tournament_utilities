@@ -4,7 +4,7 @@ from utils.config_utils import settings as settings_module
 from utils.view_utils.header_footer import Header, Footer
 from utils.view_utils.data_view_frame import TreeviewTableFrame
 from utils.file_utils.handle_select_file import handle_select_file
-from utils.stats_utils.calc_basic_batting_stats import calc_basic_stats
+from utils.stats_utils.calc_basic_batting_stats import calc_basic_batting_stats
 from utils.interface_utils.pos_select_button import CustomPositionButton
 import pandas as pd
 
@@ -96,6 +96,7 @@ class BasicStatsView(ctk.CTkToplevel):
         )
         self.footer_frame.grid(row=3, column=0, columnspan=3, padx=10, pady=10, sticky='nsew')
 
+        # Data for the page
         self.file_select_button = ctk.CTkButton(
             self.file_select_frame,
             text="Select File",
@@ -220,7 +221,7 @@ class BasicStatsView(ctk.CTkToplevel):
             except (ValueError, TypeError):
                 min_pa = 600
 
-            df=calc_basic_stats(pd.read_csv(self.target_file), min_pa, pos)
+            df=calc_basic_batting_stats(pd.read_csv(self.target_file), min_pa, pos)
 
             self.data_view_frame.load_dataframe(df)
             self.update_idletasks()

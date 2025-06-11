@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from utils.config_utils import settings as settings_module
 
-def calc_basic_stats(df, min_pa = 1, pos = None):
+def calc_basic_batting_stats(df, min_pa = 1, pos = None):
     df1 = pd.DataFrame(df)
     script_settings = settings_module.settings
     card_df_path = script_settings['InitialFileDirs']['target_card_list_file']
