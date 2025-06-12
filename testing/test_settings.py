@@ -54,5 +54,5 @@ width = 800
     # Missing section should load defaults or fallback
     assert cfg['MainWindow']['width'] == 800
     assert cfg['FileProcessor']['title'] == "File Processor"
-    assert cfg['InitialFileDirs']['target'] == ''
+    assert cfg['InitialFileDirs']['initial_target_folder'] == ''
 
