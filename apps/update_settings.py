@@ -1,14 +1,14 @@
 """Run app for updating program settings."""
-import os
-import sys
+
 
 import customtkinter as ctk
+import tkinter.filedialog as fd
 from configparser import ConfigParser
-import utils.settings as settings_module
-from utils.get_user_settings_path import get_user_settings_path
+from utils.config_utils.get_user_settings_path import get_user_settings_path
 
 
 APP_NAME = "AU Tournament Utilities"
+
 
 class SettingsEditor(ctk.CTkToplevel):
     """Create class."""
@@ -47,6 +47,35 @@ class SettingsEditor(ctk.CTkToplevel):
                 entry.insert(0, value)
                 entry.grid(row=row, column=1, padx=10, pady=2, sticky='w')
                 self.entries[(section, key)] = entry
+
+                # If the key is a file or folder
+                if "file" in key or "path" in key or "folder" in key:
+                    # This
+                    def make_browse_callback(e=entry, k=key):
+                        def callback():
+                            if "folder" in k or "path" in k:
+                                selected = (
+                                    fd.askdirectory(title="Select Folder")
+                                )
+                            else:
+                                selected = (
+                                    fd.askopenfilename(title="Select File")
+                                )
+                            if selected:
+                                e.delete(0, 'end')
+                                e.insert(0, selected)
+                            self.lift()
+                            self.focus_force()
+                        return callback
+
+                    browse_button = ctk.CTkButton(
+                        self,
+                        text="Browse",
+                        command=make_browse_callback(entry, key),
+                        width=80
+                    )
+                    browse_button.grid(column=2, row=row, padx=5, sticky='w')
+
                 row += 1
 
         save_button = ctk.CTkButton(
@@ -63,7 +92,6 @@ class SettingsEditor(ctk.CTkToplevel):
             self.attributes("-topmost", False)
 
         self.after(10, release_topmost)
-
 
     def save_settings(self):
         """Write settings to settings.ini file."""
@@ -82,15 +110,5 @@ class SettingsEditor(ctk.CTkToplevel):
                 self.on_save_callback()
 
             print("Settings saved successfully")
-            self.destroy()
         except Exception as e:
             print(f"Failed to save settings: {e}")
-
-
-
-
-if __name__ == "__main__":
-    ctk.set_appearance_mode("System")
-    ctk.set_default_color_theme("blue")
-    app = SettingsEditor()
-    app.mainloop()

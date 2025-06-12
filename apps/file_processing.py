@@ -1,15 +1,15 @@
 """App for processing raw files."""
 import os.path
 import customtkinter as ctk
-from utils import settings as settings_module
-from utils.header_footer import Header, Footer
-from utils.file_selector import open_file
-from utils.folder_selector import select_folder
-from utils.create_new_target_file import create_file_from_template
-from utils.input_dialog import CustomInputDialog
-from utils.process_files import process_files
-from utils.settings import settings
-from utils.get_resource_path import get_resource_path
+from utils.config_utils import settings as settings_module
+from utils.view_utils.header_footer import Header, Footer
+from utils.file_utils.file_selector import open_file
+from utils.file_utils.folder_selector import select_folder
+from utils.file_utils.create_new_target_file import create_file_from_template
+from utils.dialog_utils.input_dialog import CustomInputDialog
+from utils.file_utils.process_files import process_files
+from utils.config_utils.settings import settings
+from utils.config_utils.get_resource_path import get_resource_path
 
 
 class FileProcessor(ctk.CTkToplevel):
@@ -28,8 +28,12 @@ class FileProcessor(ctk.CTkToplevel):
         self.height = int(page_settings['FileProcessor']['height'])
         self.width = int(page_settings['FileProcessor']['width'])
         self.frame_width = self.width * .9
-        self.initial_target_dir = page_settings['InitialFileDirs']['target']
-        self.initial_data_dir = page_settings['InitialFileDirs']['data']
+        self.initial_target_dir = (
+            page_settings['InitialFileDirs']['initial_target_folder']
+        )
+        self.initial_data_dir = (
+            page_settings['InitialFileDirs']['initial_data_folder']
+        )
 
         # Title and window size from the settings
         self.title(f"{settings['FileProcessor']['title']}")

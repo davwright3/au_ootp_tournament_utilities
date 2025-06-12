@@ -3,7 +3,7 @@ import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 import tempfile
-from utils.settings import settings, _load, SETTINGS_PATH
+from utils.config_utils.settings import _load
 
 
 def write_test_ini(contents: str) -> str:
@@ -30,7 +30,7 @@ data = C:\\Test\\Data
 )
 
     #patch the loader to point to the test file
-    monkeypatch.setattr('utils.settings.SETTINGS_PATH', ini_file)
+    monkeypatch.setattr('utils.config_utils.settings.SETTINGS_PATH', ini_file)
 
     cfg = _load()
 
@@ -47,12 +47,12 @@ def test_load_missing_section(tmp_path, monkeypatch):
 width = 800
 """
                               )
-    monkeypatch.setattr('utils.settings.SETTINGS_PATH', ini_file)
+    monkeypatch.setattr('utils.config_utils.settings.SETTINGS_PATH', ini_file)
 
     cfg = _load()
 
     # Missing section should load defaults or fallback
     assert cfg['MainWindow']['width'] == 800
     assert cfg['FileProcessor']['title'] == "File Processor"
-    assert cfg['InitialFileDirs']['target'] == ''
+    assert cfg['InitialFileDirs']['initial_target_folder'] == ''
 

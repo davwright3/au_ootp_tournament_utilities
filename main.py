@@ -1,13 +1,17 @@
 """This is the main menu opening for the program."""
 import customtkinter as ctk
 import sys
-from utils.get_base_sys_path import get_base_sys_path
+
+from apps.basic_batting_stats_view import BasicStatsView
+from apps.basic_pitching_stats_view import BasicPitchingStatsView
+from utils.config_utils.get_base_sys_path import get_base_sys_path
 
 sys.path.insert(0, get_base_sys_path())
-from utils.app_select_button import AppSelectButton
-from utils.settings import settings, reload_settings
-from utils.header_footer import Header, Footer
-from apps.file_processing import FileProcessor
+from utils.interface_utils.app_select_button import AppSelectButton # noqa
+from utils.config_utils.settings import settings, reload_settings # noqa
+from utils.view_utils.header_footer import Header, Footer # noqa
+from apps.file_processing import FileProcessor # noqa
+from utils.config_utils.confirm_display_path import confirm_display_path # noqa
 
 
 class MainApp(ctk.CTk):
@@ -51,7 +55,7 @@ class MainApp(ctk.CTk):
 
         self.header_frame.grid_columnconfigure(0, weight=1)
 
-        # Create main frame
+        # Create main frame with buttons for opening apps
         self.main_frame = ctk.CTkFrame(
             self, corner_radius=5, width=int(self.frame_width)
         )
@@ -66,18 +70,67 @@ class MainApp(ctk.CTk):
         self.main_frame.grid_rowconfigure(1, weight=1)
         self.main_frame.grid_rowconfigure(2, weight=1)
 
+        # Create info frame with target file and folder information
+        self.info_frame = ctk.CTkFrame(
+            self, corner_radius=5, width=int(self.frame_width)
+        )
+        self.info_frame.grid(
+            column=0, row=2, columnspan=3, padx=10, pady=10, sticky='new')
+
+        self.info_frame.grid_rowconfigure(0, weight=0)
+        self.info_frame.grid_rowconfigure(1, weight=0)
+        self.info_frame.grid_rowconfigure(2, weight=0)
+        self.info_frame.grid_rowconfigure(3, weight=0)
+
+        self.initial_target_folder_info_box = ctk.CTkLabel(
+            self.info_frame,
+            text=f"Target Folder:"
+                 f" {settings['InitialFileDirs']['initial_target_folder']}",
+            anchor='w')
+        self.initial_target_folder_info_box.grid(row=0, sticky='w')
+
+        self.initial_data_folder_info_box = ctk.CTkLabel(
+            self.info_frame,
+            text=f"Data Folder: "
+                 f"{settings['InitialFileDirs']['initial_data_folder']} ",
+            anchor='w')
+        self.initial_data_folder_info_box.grid(row=1, sticky='w')
+
+        card_list_text, valid_card_path = confirm_display_path(
+            settings['InitialFileDirs']['target_card_list_file'], ".csv")
+
+        self.card_list_target_info_box = ctk.CTkLabel(
+            self.info_frame,
+            text=f"Card List: {card_list_text},"
+                 f" {settings['InitialFileDirs']['target_card_list_file']}",
+            text_color="red" if not valid_card_path else "black", anchor='w')
+        self.card_list_target_info_box.grid(row=2, sticky='w')
+
+        collection_list_text, valid_collection_path = (
+            confirm_display_path(
+                settings['InitialFileDirs']['target_collection_list_file'],
+                '.csv')
+        )
+
+        self.collection_list_target_info_box = ctk.CTkLabel(
+            self.info_frame,
+            text=f"Collection List Target Info: {collection_list_text}",
+            text_color="red" if not valid_collection_path else "black",
+            anchor='w')
+        self.collection_list_target_info_box.grid(row=3, sticky='w')
+
         def on_settings_updated():
             reload_settings()
             self.settings = settings
 
-        # Create footer frame
+        # Create footer frame with settings and other info
         self.footer_frame = Footer(
             self, height=header_footer_height,
             width=int(self.frame_width),
             on_settings_updated=on_settings_updated
         )
         self.footer_frame.grid(
-            column=0, row=2, columnspan=3, padx=10, pady=10, sticky='sew'
+            column=0, row=3, columnspan=3, padx=10, pady=10, sticky='sew'
         )
 
         # Main frame data
@@ -91,10 +144,43 @@ class MainApp(ctk.CTk):
             column=0, row=0, padx=10, pady=10, sticky='nsew'
         )
 
+        self.basic_batting_stats_view_button = (
+            AppSelectButton(
+                self.main_frame,
+                command=open_basic_batting_stats_view,
+                text="Basic Batting Stats View"
+
+            )
+        )
+        self.basic_batting_stats_view_button.grid(
+            column=1, row=0, padx=10, pady=10, sticky='nsew'
+        )
+
+        self.basic_pitching_stats_view_button = (
+            AppSelectButton(
+                self.main_frame,
+                command=open_basic_pitching_stats_view,
+                text="Basic Pitching Stats View"
+            )
+        )
+        self.basic_pitching_stats_view_button.grid(
+            column=2, row=0, padx=10, pady=10, sticky='nsew'
+        )
+
 
 def open_file_processing():
     """Open the file processing app in a new window."""
     FileProcessor()
+
+
+def open_basic_batting_stats_view():
+    """Open the basic stats view app in a new window."""
+    BasicStatsView()
+
+
+def open_basic_pitching_stats_view():
+    """Open the basic pitching stats view app in a new window."""
+    BasicPitchingStatsView()
 
 
 if __name__ == "__main__":

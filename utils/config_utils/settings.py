@@ -28,17 +28,20 @@ def get_default_settings_path():
             '..',
             'settings_default.ini')
 
+
 SETTINGS_PATH = get_user_settings_path()
 DEFAULT_SETTINGS_PATH = get_default_settings_path()
 
 
-def clean_path(path_str):
+def clean_path(path_str, expect_file=False):
     """Clean the path to ensure valid starting directory paths."""
     path_str = path_str.strip().strip('"').strip("'")
     if not path_str:
         return ""
     path_str = os.path.expanduser(path_str)
     path_str = os.path.abspath(path_str)
+    if expect_file:
+        return path_str if os.path.isfile(path_str) else ""
     return path_str if os.path.isdir(path_str) else ""
 
 
@@ -48,8 +51,47 @@ def reload_settings():
     settings = _load()
 
 
+def ensure_settings_up_to_date():
+    """Check that user has most up to date settings."""
+    user_config = ConfigParser()
+    default_config = ConfigParser()
+
+    default_config.read(DEFAULT_SETTINGS_PATH)
+
+    if not os.path.exists(SETTINGS_PATH):
+        try:
+            shutil.copyfile(DEFAULT_SETTINGS_PATH, SETTINGS_PATH)
+            print("Created user settings from default")
+            return
+        except Exception as e:
+            print(f"Could not copy default settings: {e}")
+            return
+
+    user_config.read(SETTINGS_PATH)
+
+    updated = False
+    for section in default_config.sections():
+        if not user_config.has_section(section):
+            user_config.add_section(section)
+            print(f"Adding section {section}")
+            updated = True
+        for key, value in default_config.items(section):
+            if not user_config.has_option(section, key):
+                user_config.set(section, key, value)
+                print(f"Setting {key} to {value}")
+                updated = True
+
+    if updated:
+        with open(SETTINGS_PATH, 'w') as configfile:
+            user_config.write(configfile)
+        print("User settings updated with missing defaults")
+    else:
+        print("User settings already up to date")
+
+
 def _load():
     """Initialize path and load settings file."""
+    ensure_settings_up_to_date()
     config = ConfigParser()
 
     if not os.path.exists(SETTINGS_PATH):
@@ -93,14 +135,24 @@ def _load():
                 fallback=1080),
         },
         'InitialFileDirs': {
-            'target': clean_path(config.get(
+            'initial_target_folder': clean_path(config.get(
                 'InitialFileDirs',
-                'target',
+                'initial_target_folder',
                 fallback='')),
-            'data': clean_path(config.get(
+            'initial_data_folder': clean_path(config.get(
                 'InitialFileDirs',
-                'data',
+                'initial_data_folder',
                 fallback='')),
+            'target_card_list_file': clean_path(config.get(
+                'InitialFileDirs',
+                'target_card_list_file',
+                fallback=''
+            ), expect_file=True),
+            'target_collection_list_file': clean_path(config.get(
+                'InitialFileDirs',
+                'target_collection_list_file',
+                fallback=''
+            ), expect_file=True),
         }
 
     }

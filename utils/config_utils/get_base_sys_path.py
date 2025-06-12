@@ -2,6 +2,7 @@
 import sys
 import os
 
+
 def get_base_sys_path():
     """Find base path depending on environment."""
     if getattr(sys, 'frozen', False):
