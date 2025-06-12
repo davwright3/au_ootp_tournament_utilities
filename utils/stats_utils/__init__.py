@@ -1,3 +1,4 @@
+"""Init file for stats utils."""
 # utils\stats_utils\__init__.py
 
 # This subpackage includes any file pertaining to stat calculations

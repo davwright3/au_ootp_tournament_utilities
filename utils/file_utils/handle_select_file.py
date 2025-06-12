@@ -1,7 +1,14 @@
+"""Script for handling file selection."""
 import os
 from utils.file_utils.file_selector import open_file
 
-def handle_select_file(self, initial_dir="/", initial_target_dir=None, target_file_label=None):
+
+def handle_select_file(
+        self,
+        initial_dir="/",
+        initial_target_dir=None,
+        target_file_label=None
+):
     """Open select target file dialog."""
     path = self.initial_target_dir.strip().replace("\\", "/")
     if os.path.isdir(path):

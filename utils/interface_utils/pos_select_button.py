@@ -1,7 +1,9 @@
+"""Custom button for selecting positions to view."""
 import customtkinter as ctk
 
+
 class CustomPositionButton(ctk.CTkButton):
-    """Create a button to choose the position"""
+    """Create a button to choose the position."""
 
     def __init__(self, parent, text="Position", command=None, **kwargs):
         """Initialize button."""

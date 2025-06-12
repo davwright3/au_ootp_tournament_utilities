@@ -1,7 +1,10 @@
+"""App for viewing basic pitching stats."""
 import customtkinter as ctk
 import pandas as pd
 from utils.config_utils import settings as settings_module
-from utils.stats_utils.calc_basic_pitching_stats import calc_basic_pitching_stats
+from utils.stats_utils.calc_basic_pitching_stats import (
+    calc_basic_pitching_stats
+)
 from utils.view_utils.header_footer import Header, Footer
 from utils.view_utils.data_view_frame import TreeviewTableFrame
 from utils.file_utils.handle_select_file import handle_select_file
@@ -13,8 +16,7 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
     data = pd.DataFrame()
 
     def __init__(self):
-        """Initialize the stats view app"""
-
+        """Initialize the stats view app."""
         super().__init__()
         """Initialize the basic pitching stats view."""
 
@@ -26,7 +28,9 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
         self.height = int(page_settings['FileProcessor']['height'])
         self.width = int(page_settings['FileProcessor']['width'])
         self.frame_width = int(self.width*.9)
-        self.initial_target_dir = page_settings['InitialFileDirs']['initial_target_folder']
+        self.initial_target_dir = (
+            page_settings['InitialFileDirs']['initial_target_folder']
+        )
         self.header_footer_height = int(self.height*.1)
 
         self.title = "Basic Pitching Stats"
@@ -132,8 +136,6 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
             sticky="w"
         )
 
-
-
         self.lift()
         self.focus_force()
         self.attributes("-topmost", True)
@@ -143,15 +145,18 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
         self.after(10, release_topmost)
 
     def select_file(self):
+        """Select csv file for processing."""
         selected = handle_select_file(self, self.initial_target_dir)
         if selected:
             self.target_file = selected
-            self.file_select_label.configure(text=f"Selected: {selected.split('/')[-1]}")
+            self.file_select_label.configure(
+                text=f"Selected: {selected.split('/')[-1]}"
+            )
         else:
             self.log_message("File selection cancelled")
 
-
     def run_pitcher_file(self):
+        """Run calculations script for pitching stats."""
         if not self.target_file:
             self.log_message("No file selected")
             return
@@ -163,10 +168,6 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
         self.update_idletasks()
         self.log_message("Pitcher file loaded")
 
-
-
     def log_message(self, message):
+        """Log status update messages."""
         self.file_select_label.configure(text=message)
-
-
-

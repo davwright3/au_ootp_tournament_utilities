@@ -28,6 +28,7 @@ def get_default_settings_path():
             '..',
             'settings_default.ini')
 
+
 SETTINGS_PATH = get_user_settings_path()
 DEFAULT_SETTINGS_PATH = get_default_settings_path()
 
@@ -51,6 +52,7 @@ def reload_settings():
 
 
 def ensure_settings_up_to_date():
+    """Check that user has most up to date settings."""
     user_config = ConfigParser()
     default_config = ConfigParser()
 
@@ -85,7 +87,6 @@ def ensure_settings_up_to_date():
         print("User settings updated with missing defaults")
     else:
         print("User settings already up to date")
-
 
 
 def _load():
