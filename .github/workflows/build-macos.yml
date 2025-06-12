@@ -3,7 +3,7 @@ name: Build macOS Package and Release
 on:
   push:
     branches:
-      - '**'
+      - 'main'
     paths-ignore:
       - 'README.md'
 
