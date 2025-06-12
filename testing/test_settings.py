@@ -30,7 +30,7 @@ data = C:\\Test\\Data
 )
 
     #patch the loader to point to the test file
-    monkeypatch.setattr('utils.settings.SETTINGS_PATH', ini_file)
+    monkeypatch.setattr('utils.config_utils.settings.SETTINGS_PATH', ini_file)
 
     cfg = _load()
 
@@ -47,7 +47,7 @@ def test_load_missing_section(tmp_path, monkeypatch):
 width = 800
 """
                               )
-    monkeypatch.setattr('utils.settings.SETTINGS_PATH', ini_file)
+    monkeypatch.setattr('utils.config_utils.settings.SETTINGS_PATH', ini_file)
 
     cfg = _load()
 
