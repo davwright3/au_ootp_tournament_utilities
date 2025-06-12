@@ -1,6 +1,7 @@
 import customtkinter as ctk
 import pandas as pd
 from utils.config_utils import settings as settings_module
+from utils.stats_utils.calc_basic_pitching_stats import calc_basic_pitching_stats
 from utils.view_utils.header_footer import Header, Footer
 from utils.view_utils.data_view_frame import TreeviewTableFrame
 from utils.file_utils.handle_select_file import handle_select_file
@@ -68,6 +69,16 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
             sticky="nsew"
         )
 
+        self.data_view_frame = TreeviewTableFrame(self)
+        self.data_view_frame.grid(
+            row=2,
+            column=0,
+            columnspan=3,
+            padx=10,
+            pady=10,
+            sticky="nsew"
+        )
+
         self.footer_frame = Footer(
             self,
             height=self.header_footer_height,
@@ -82,7 +93,7 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
             sticky="nsew"
         )
 
-        # Frame data
+        # Data to be entered into the frames
         self.file_select_button = ctk.CTkButton(
             self.file_select_frame,
             text="Select File",
@@ -108,6 +119,18 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
             sticky="w",
         )
 
+        self.process_button = ctk.CTkButton(
+            self.file_select_frame,
+            text="Process Data",
+            command=self.run_pitcher_file
+        )
+        self.process_button.grid(
+            row=0,
+            column=2,
+            padx=10,
+            pady=10,
+            sticky="w"
+        )
 
 
 
@@ -126,6 +149,21 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
             self.file_select_label.configure(text=f"Selected: {selected.split('/')[-1]}")
         else:
             self.log_message("File selection cancelled")
+
+
+    def run_pitcher_file(self):
+        if not self.target_file:
+            self.log_message("No file selected")
+            return
+
+        print("Running pitcher file")
+        df = calc_basic_pitching_stats(pd.read_csv(self.target_file))
+
+        self.data_view_frame.load_dataframe(df)
+        self.update_idletasks()
+        self.log_message("Pitcher file loaded")
+
+
 
     def log_message(self, message):
         self.file_select_label.configure(text=message)

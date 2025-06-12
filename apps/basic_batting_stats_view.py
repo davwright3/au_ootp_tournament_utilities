@@ -210,7 +210,6 @@ class BasicStatsView(ctk.CTkToplevel):
 
 
     def run_position_file(self, pos=None):
-        df = pd.DataFrame()
         if not self.target_file:
             self.log_message("No file selected")
             return
