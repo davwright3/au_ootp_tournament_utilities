@@ -4,6 +4,7 @@ import sys
 
 from apps.basic_batting_stats_view import BasicStatsView
 from apps.basic_pitching_stats_view import BasicPitchingStatsView
+from apps.basic_team_stats import BasicTeamStatsView
 from utils.config_utils.get_base_sys_path import get_base_sys_path
 
 sys.path.insert(0, get_base_sys_path())
@@ -167,6 +168,17 @@ class MainApp(ctk.CTk):
             column=2, row=0, padx=10, pady=10, sticky='nsew'
         )
 
+        self.basic_team_stats_view_button = (
+            AppSelectButton(
+                self.main_frame,
+                command=open_basic_teams_stats_view,
+                text="Basic Team Stats View"
+            )
+        )
+        self.basic_team_stats_view_button.grid(
+            column=0, row=1, padx=10, pady=10, sticky='nsew'
+        )
+
 
 def open_file_processing():
     """Open the file processing app in a new window."""
@@ -181,6 +193,11 @@ def open_basic_batting_stats_view():
 def open_basic_pitching_stats_view():
     """Open the basic pitching stats view app in a new window."""
     BasicPitchingStatsView()
+
+
+def open_basic_teams_stats_view():
+    """Open the basic teams stats view app in a new window."""
+    BasicTeamStatsView()
 
 
 if __name__ == "__main__":

@@ -51,7 +51,7 @@ class BasicStatsView(ctk.CTkToplevel):
             self,
             height=header_footer_height,
             width=int(self.frame_width),
-            title="Basic Stats View"
+            title=self.title
         )
         self.header_frame.grid(
             row=0,

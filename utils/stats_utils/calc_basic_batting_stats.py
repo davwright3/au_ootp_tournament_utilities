@@ -16,6 +16,8 @@ def calc_basic_batting_stats(df, min_pa=1, pos=None):
 
     df2 = pd.DataFrame(df1)
 
+    columns_from_data = ['CID', 'Title', 'Card Value', 'Bats']
+
     # Calculate the basic statistics
     df2 = df2.groupby(
         ['CID'], as_index=False)[['PA', 'AB', 'H', '1B', '2B', '3B', 'HR',
@@ -23,9 +25,9 @@ def calc_basic_batting_stats(df, min_pa=1, pos=None):
                                   'RC', 'WAR', 'SB', 'CS', 'BsR', 'ZR']].sum()
 
     if pos is None:
-        df2 = pd.merge(card_df[['CID', 'Title']], df2, on='CID', how='inner')
+        df2 = pd.merge(card_df[columns_from_data], df2, on='CID', how='inner')
     else:
-        df2 = pd.merge(card_df[card_df[pos] == 1], df2, on='CID', how='inner')
+        df2 = pd.merge(card_df[card_df[pos] == 1][columns_from_data], df2, on='CID', how='inner')
 
     df2['AVG'] = (df2['H']/df2['AB']).round(3)
     df2['OBP'] = ((df2['H'] + df2['BB'] + df2['HP']) /
@@ -53,37 +55,38 @@ def calc_basic_batting_stats(df, min_pa=1, pos=None):
     df3 = df2[df2['PA'] > min_pa].copy()
     df3['CID'] = df3['CID'].astype(str)
     df3['Title'] = df3['Title'].astype(str)
-    df3['PA'] = df2['PA'].astype(str)
-    df3['AVG'] = df2['AVG'].apply(
+    df3['Bats'] = df3['Bats'].apply(lambda x: "R" if x == 1 else "L" if x == 2 else "S")
+    df3['PA'] = df3['PA'].astype(str)
+    df3['AVG'] = df3['AVG'].apply(
         lambda x: f"{x:.3f}"[1:] if x < 1 else f"{x:.3f}")
-    df3['OBP'] = df2['OBP'].apply(
+    df3['OBP'] = df3['OBP'].apply(
         lambda x: f"{x:.3f}"[1:] if x < 1 else f"{x:.3f}")
-    df3['SLG'] = df2['SLG'].apply(
+    df3['SLG'] = df3['SLG'].apply(
         lambda x: f"{x:.3f}"[1:] if x < 1 else f"{x:.3f}")
-    df3['OPS'] = df2['OPS'].apply(
+    df3['OPS'] = df3['OPS'].apply(
         lambda x: f"{x:.3f}"[1:] if x < 1 else f"{x:.3f}")
-    df3['wOBA'] = df2['wOBA'].apply(
+    df3['wOBA'] = df3['wOBA'].apply(
         lambda x: f"{x:.3f}"[1:] if x < 1 else f"{x:.3f}")
-    df3['HR/600'] = df2['HR/600'].apply(
+    df3['HR/600'] = df3['HR/600'].apply(
         lambda x: f"{x:.1f}"[1:] if x < 1 else f"{x:.1f}")
-    df3['K/600'] = df2['K/600'].apply(
+    df3['K/600'] = df3['K/600'].apply(
         lambda x: f"{x:.1f}"[1:] if x < 1 else f"{x:.1f}")
-    df3['BB/600'] = df2['BB/600'].apply(
+    df3['BB/600'] = df3['BB/600'].apply(
         lambda x: f"{x:.1f}"[1:] if x < 1 else f"{x:.1f}")
-    df3['SB/600'] = df2['SB/600'].apply(
+    df3['SB/600'] = df3['SB/600'].apply(
         lambda x: f"{x:.1f}"[1:] if x < 1 else f"{x:.1f}")
-    df3['SBPct'] = df2['SBPct'].apply(
+    df3['SBPct'] = df3['SBPct'].apply(
         lambda x: f"{x:.2f}"[1:] if x < 1 else f"{x:.2f}")
-    df3['RC/600'] = df2['RC/600'].apply(
+    df3['RC/600'] = df3['RC/600'].apply(
         lambda x: f"{x:.1f}"[1:] if -1 < x < 1 else f"{x:.1f}")
-    df3['WAR/600'] = df2['WAR/600'].apply(
+    df3['WAR/600'] = df3['WAR/600'].apply(
         lambda x: f"{x:.1f}"[1:] if -1 < x < 1 else f"{x:.1f}")
-    df3['BsR/600'] = df2['BsR/600'].apply(
+    df3['BsR/600'] = df3['BsR/600'].apply(
         lambda x: f"{x:.1f}"[1:] if -1 < x < 1 else f"{x:.1f}")
-    df3['ZR/600'] = df2['ZR/600'].apply(
+    df3['ZR/600'] = df3['ZR/600'].apply(
         lambda x: f"{x:.1f}"[1:] if -1 < x < 1 else f"{x:.1f}")
 
-    columns_to_keep = ['CID', 'Title', 'PA', 'AVG', 'OBP', 'SLG', 'OPS',
+    columns_to_keep = ['CID', 'Title', 'Bats', 'Card Value', 'PA', 'AVG', 'OBP', 'SLG', 'OPS',
                        'wOBA', 'HR/600', 'K/600', 'BB/600', 'SB/600', 'SBPct',
                        'RC/600', 'WAR/600', 'BsR/600', 'ZR/600']
 
