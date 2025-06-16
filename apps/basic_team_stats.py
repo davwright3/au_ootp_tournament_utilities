@@ -1,6 +1,7 @@
 """Module to view basic team stats and results"""
 import customtkinter as ctk
 from utils.config_utils import settings as settings_module
+from utils.file_utils.handle_select_file import handle_select_file
 import pandas as pd
 
 from utils.view_utils.header_footer import Header, Footer
@@ -71,7 +72,23 @@ class BasicTeamStatsView(ctk.CTkToplevel):
             row=3, column=0, columnspan=3, padx=10, pady=10, sticky='nsew'
         )
 
+        # Create the data for the frames
+        self.file_select_button = ctk.CTkButton(
+            self.file_select_frame,
+            text="Select File",
+            command=self.select_file
+        )
+        self.file_select_button.grid(
+            row=0, column=0, padx=10, pady=10, sticky='nsew'
+        )
 
+        self.file_select_label = ctk.CTkLabel(
+            self.file_select_frame,
+            text="No file selected"
+        )
+        self.file_select_label.grid(
+            row=0, column=1, padx=10, pady=10, sticky='nsew'
+        )
 
 
         self.lift()
@@ -82,5 +99,21 @@ class BasicTeamStatsView(ctk.CTkToplevel):
             self.attributes("-topmost", False)
 
         self.after(10, release_topmost)
+
+    def select_file(self):
+        """Select new csv for processing."""
+        selected = handle_select_file(self, self.initial_target_dir)
+        if selected:
+            self.target_file = selected
+            self.file_select_label.configure(
+                text=f"Selected: {selected.split('/')[-1]}"
+            )
+        else:
+            self.log_message("File selection cancelled")
+
+    def log_message(self, message):
+        """Update message label."""
+        self.file_select_label.configure(text=message)
+
 
 
