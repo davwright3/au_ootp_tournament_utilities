@@ -1,16 +1,18 @@
-"""Module to view basic team stats and results"""
+"""Module to view basic team stats and results."""
 import customtkinter as ctk
 from utils.config_utils import settings as settings_module
 from utils.file_utils.handle_select_file import handle_select_file
 import pandas as pd
 
+from utils.view_utils.data_view_frame import TreeviewTableFrame
 from utils.view_utils.header_footer import Header, Footer
 
 
 class BasicTeamStatsView(ctk.CTkToplevel):
-    """Initialize and format the application"""
+    """Initialize and format the application."""
 
     def __init__(self):
+        """Initialize the basic team stats view."""
         super().__init__()
 
         page_settings = settings_module.settings
@@ -55,13 +57,10 @@ class BasicTeamStatsView(ctk.CTkToplevel):
             row=1, column=0, columnspan=3, padx=10, pady=10, sticky='nsew'
         )
 
-        self.main_frame = ctk.CTkFrame(
-            self
-        )
-        self.main_frame.grid(
+        self.data_view_frame = TreeviewTableFrame(self)
+        self.data_view_frame.grid(
             row=2, column=0, columnspan=3, padx=10, pady=10, sticky='nsew'
         )
-
 
         self.footer_frame = Footer(
             self,
@@ -90,7 +89,6 @@ class BasicTeamStatsView(ctk.CTkToplevel):
             row=0, column=1, padx=10, pady=10, sticky='nsew'
         )
 
-
         self.lift()
         self.focus_force()
         self.attributes("-topmost", True)
@@ -114,6 +112,3 @@ class BasicTeamStatsView(ctk.CTkToplevel):
     def log_message(self, message):
         """Update message label."""
         self.file_select_label.configure(text=message)
-
-
-

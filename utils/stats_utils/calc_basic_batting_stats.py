@@ -2,9 +2,10 @@
 import pandas as pd
 import numpy as np
 from utils.config_utils import settings as settings_module
+from utils.stats_utils.cull_teams import cull_teams
 
 
-def calc_basic_batting_stats(df, min_pa=1, pos=None):
+def calc_basic_batting_stats(df, min_pa=1, pos=None, variant_split=False):
     """Calculate basic batting stats."""
     df1 = pd.DataFrame(df)
     script_settings = settings_module.settings
@@ -14,20 +15,42 @@ def calc_basic_batting_stats(df, min_pa=1, pos=None):
         columns={'Card ID': 'CID', '//Card Title': 'Title'}
     )
 
-    df2 = pd.DataFrame(df1)
+    df2, removed = cull_teams(pd.DataFrame(df1))
+    print("Removed: ", removed, " teams")
 
     columns_from_data = ['CID', 'Title', 'Card Value', 'Bats']
+    columns_to_keep = []
 
+    print("Variant split: ", variant_split)
     # Calculate the basic statistics
-    df2 = df2.groupby(
-        ['CID'], as_index=False)[['PA', 'AB', 'H', '1B', '2B', '3B', 'HR',
-                                  'IBB', 'BB', 'HP', 'SH', 'SF', 'SO', 'TB',
-                                  'RC', 'WAR', 'SB', 'CS', 'BsR', 'ZR']].sum()
+    if not variant_split:
+        columns_to_keep = ['CID', 'Title', 'Bats', 'Card Value',
+                           'PA', 'AVG', 'OBP', 'SLG', 'OPS', 'wOBA',
+                           'HR/600', 'K/600', 'BB/600', 'SB/600',
+                           'SBPct', 'RC/600', 'WAR/600', 'BsR/600', 'ZR/600']
+        df2 = df2.groupby(
+            ['CID'],
+            as_index=False)[['PA', 'AB', 'H', '1B', '2B', '3B', 'HR',
+                             'IBB', 'BB', 'HP', 'SH', 'SF', 'SO', 'TB',
+                             'RC', 'WAR', 'SB', 'CS', 'BsR', 'ZR']].sum()
+    else:
+        columns_to_keep = ['CID', 'Title', 'VLvl', 'Bats', 'Card Value',
+                           'PA', 'AVG', 'OBP', 'SLG', 'OPS', 'wOBA',
+                           'HR/600', 'K/600', 'BB/600', 'SB/600', 'SBPct',
+                           'RC/600', 'WAR/600', 'BsR/600', 'ZR/600']
+        df2 = df2.groupby(
+            ['CID', 'VLvl'],
+            as_index=False)[['PA', 'AB', 'H', '1B', '2B', '3B', 'HR',
+                             'IBB', 'BB', 'HP', 'SH', 'SF', 'SO', 'TB',
+                             'RC', 'WAR', 'SB', 'CS', 'BsR', 'ZR']].sum()
 
     if pos is None:
         df2 = pd.merge(card_df[columns_from_data], df2, on='CID', how='inner')
     else:
-        df2 = pd.merge(card_df[card_df[pos] == 1][columns_from_data], df2, on='CID', how='inner')
+        df2 = pd.merge(card_df[card_df[pos] == 1][columns_from_data],
+                       df2,
+                       on='CID',
+                       how='inner')
 
     df2['AVG'] = (df2['H']/df2['AB']).round(3)
     df2['OBP'] = ((df2['H'] + df2['BB'] + df2['HP']) /
@@ -55,7 +78,8 @@ def calc_basic_batting_stats(df, min_pa=1, pos=None):
     df3 = df2[df2['PA'] > min_pa].copy()
     df3['CID'] = df3['CID'].astype(str)
     df3['Title'] = df3['Title'].astype(str)
-    df3['Bats'] = df3['Bats'].apply(lambda x: "R" if x == 1 else "L" if x == 2 else "S")
+    df3['Bats'] = df3['Bats'].apply(
+        lambda x: "R" if x == 1 else "L" if x == 2 else "S")
     df3['PA'] = df3['PA'].astype(str)
     df3['AVG'] = df3['AVG'].apply(
         lambda x: f"{x:.3f}"[1:] if x < 1 else f"{x:.3f}")
@@ -86,10 +110,11 @@ def calc_basic_batting_stats(df, min_pa=1, pos=None):
     df3['ZR/600'] = df3['ZR/600'].apply(
         lambda x: f"{x:.1f}"[1:] if -1 < x < 1 else f"{x:.1f}")
 
-    columns_to_keep = ['CID', 'Title', 'Bats', 'Card Value', 'PA', 'AVG', 'OBP', 'SLG', 'OPS',
-                       'wOBA', 'HR/600', 'K/600', 'BB/600', 'SB/600', 'SBPct',
-                       'RC/600', 'WAR/600', 'BsR/600', 'ZR/600']
-
     df3 = df3[columns_to_keep]
 
+    del df1, card_df, df2
+    import gc
+    gc.collect()
+
     return df3
+
