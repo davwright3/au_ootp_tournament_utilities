@@ -117,4 +117,3 @@ def calc_basic_batting_stats(df, min_pa=1, pos=None, variant_split=False):
     gc.collect()
 
     return df3
-

@@ -1,4 +1,6 @@
+"""Check for teams to remove due to outlier statistics."""
 import pandas as pd
+
 
 def cull_teams(df):
     """Cull teams that have more than the given number of runs."""

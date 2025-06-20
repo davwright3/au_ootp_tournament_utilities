@@ -22,15 +22,15 @@ def cull_teams(df):
 def add_file(target_file, file_to_add):
     """Add file to the dataframe for the target file."""
     file_name_string = os.path.splitext(os.path.basename(file_to_add))[0]
-    #addition, removed_teams = cull_teams(pd.read_csv(file_to_add))
+    # addition, removed_teams = cull_teams(pd.read_csv(file_to_add))
     addition = pd.read_csv(file_to_add)
     addition['Trny'] = file_name_string
 
     if target_file.empty or target_file.isna().all().all():
-        #return addition, removed_teams
+        # return addition, removed_teams
         return addition
     else:
-        #return pd.concat([target_file, addition]), removed_teams
+        # return pd.concat([target_file, addition]), removed_teams
         return pd.concat([target_file, addition])
 
 
@@ -46,7 +46,6 @@ def process_files(target_csv, raw_dir):
 
     target_df = pd.read_csv(target_csv)
     num_files_added = 0
-    total_teams_removed = 0
     existing_files = set(target_df['Trny'].unique())
 
     # update the file with each file in the directory
