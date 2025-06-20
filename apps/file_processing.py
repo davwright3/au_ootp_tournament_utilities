@@ -205,8 +205,10 @@ class FileProcessor(ctk.CTkToplevel):
 
         self.log_message(f"Processing {raw_dir} into {target_csv}")
         processed_files = process_files(target_csv, raw_dir)
-        for file_name, removed in processed_files:
-            self.log_message(f"Added {file_name} | Teams removed {removed}")
+        # for file_name, removed in processed_files:
+        for file_name in processed_files:
+            # self.log_message(f"Added {file_name} | Teams removed {removed}")
+            self.log_message(f"Added {file_name}")
 
         self.log_message(f"Processed {len(processed_files)} files")
 

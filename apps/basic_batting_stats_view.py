@@ -26,6 +26,7 @@ class BasicStatsView(ctk.CTkToplevel):
         # Initialize the target file
         self.target_file = None
         self.stats_df = pd.DataFrame(['No file selected'])
+        self.variant_select = ctk.BooleanVar(value=False)
 
         self.height = int(page_settings['FileProcessor']['height'])
         self.width = int(page_settings['FileProcessor']['width'])
@@ -51,7 +52,7 @@ class BasicStatsView(ctk.CTkToplevel):
             self,
             height=header_footer_height,
             width=int(self.frame_width),
-            title="Basic Stats View"
+            title=self.title
         )
         self.header_frame.grid(
             row=0,
@@ -171,6 +172,18 @@ class BasicStatsView(ctk.CTkToplevel):
         self.plate_app_entry.grid(
             row=1,
             column=0,
+            padx=10,
+            pady=10
+        )
+
+        self.variant_checkbox = ctk.CTkCheckBox(
+            self.menu_frame,
+            text="Split Variant",
+            variable=self.variant_select,
+        )
+        self.variant_checkbox.grid(
+            row=1,
+            column=1,
             padx=10,
             pady=10
         )
@@ -324,7 +337,10 @@ class BasicStatsView(ctk.CTkToplevel):
                 min_pa = 600
 
             df = calc_basic_batting_stats(
-                pd.read_csv(self.target_file), min_pa, pos
+                pd.read_csv(self.target_file),
+                min_pa,
+                pos,
+                variant_split=self.variant_select.get()
             )
 
             self.data_view_frame.load_dataframe(df)

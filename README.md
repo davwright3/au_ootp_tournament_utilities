@@ -91,14 +91,22 @@ ___
 - Basic batting and pitching stat views
 - initial release of macOS compatible ZIP build
 
+### v0.1.2.20
+
+- Add variant splitting to basic stats
+- Add pitching stats menu including:
+
+  - Minimum innings pitched
+  - Variant splitting option box
+  - Starter/relief pitching cutoff variable
+  - Pitcher role select buttons
+
 
 ---
 
 ## Upcoming Features and Improvements
 
 - **(Priority)** Fix for resolution issues when changing between monitors
-- **(Priority)** Relief/Starting Pitcher filtering
-- Tournament statistic application displaying player stats
 - Team analysis
 - Player comparison tool
 - Player and tournament statistics over time

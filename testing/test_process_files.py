@@ -45,9 +45,9 @@ def test_process_files_adds_unique_files():
         pd.DataFrame(
             {'ORG': ['X'],
              'GS.1': [1],
-             'R': ['9']}).to_csv(file1_path, index=False)
+             'R': ['5']}).to_csv(file1_path, index=False)
 
         result = process_files(tmp_target.name, tmp_raw)
 
         assert isinstance(result, list)
-        assert result[0][0] == "file1"
+        assert result[0] == "file1"

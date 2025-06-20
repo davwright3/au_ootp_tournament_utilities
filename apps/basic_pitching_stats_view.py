@@ -24,6 +24,9 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
 
         self.target_file = None
         self.df = pd.DataFrame(["No file selected"])
+        self.min_ip = 200
+        self.inning_split = 4
+        self.variant_select = ctk.BooleanVar(value=False)
 
         self.height = int(page_settings['FileProcessor']['height'])
         self.width = int(page_settings['FileProcessor']['width'])
@@ -77,7 +80,18 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
         self.data_view_frame.grid(
             row=2,
             column=0,
-            columnspan=3,
+            columnspan=2,
+            padx=10,
+            pady=10,
+            sticky="nsew"
+        )
+
+        self.menu_frame = ctk.CTkFrame(
+            self
+        )
+        self.menu_frame.grid(
+            row=2,
+            column=2,
             padx=10,
             pady=10,
             sticky="nsew"
@@ -136,6 +150,107 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
             sticky="w"
         )
 
+        self.min_innings_label = ctk.CTkLabel(
+            self.menu_frame,
+            text="Min IP"
+        )
+        self.min_innings_label.grid(
+            row=0,
+            column=0,
+            padx=10,
+            pady=10,
+            sticky="nsew",
+        )
+
+        self.min_innings_input = ctk.CTkEntry(
+            self.menu_frame,
+        )
+        self.min_innings_input.grid(
+            row=0,
+            column=1,
+            padx=10,
+            pady=10,
+            sticky="nsew",
+        )
+
+        self.innings_split_label = ctk.CTkLabel(
+            self.menu_frame,
+            text="SP/RP Split"
+        )
+        self.innings_split_label.grid(
+            row=1,
+            column=0,
+            padx=10,
+            pady=10,
+            sticky="nsew"
+        )
+
+        self.innings_split_input = ctk.CTkEntry(
+            self.menu_frame
+        )
+        self.innings_split_input.grid(
+            row=1,
+            column=1,
+            padx=10,
+            pady=10,
+            sticky="nsew"
+        )
+
+        self.variant_checkbox = ctk.CTkCheckBox(
+            self.menu_frame,
+            text="Split Variants",
+            variable=self.variant_select
+        )
+        self.variant_checkbox.grid(
+            row=1,
+            column=3,
+            padx=10,
+            pady=10,
+            sticky="nsew"
+        )
+
+        self.starting_pitchers_button = ctk.CTkButton(
+            self.menu_frame,
+            text="Starting Pitchers",
+            command=lambda: self.run_pitcher_file(pos=1)
+        )
+        self.starting_pitchers_button.grid(
+            row=2,
+            column=0,
+            columnspan=3,
+            padx=10,
+            pady=10,
+            sticky="nsew"
+        )
+
+        self.relief_pitchers_button = ctk.CTkButton(
+            self.menu_frame,
+            text="Relief Pitchers",
+            command=lambda: self.run_pitcher_file(pos=2)
+        )
+        self.relief_pitchers_button.grid(
+            row=3,
+            column=0,
+            columnspan=3,
+            padx=10,
+            pady=10,
+            sticky="nsew"
+        )
+
+        self.all_pitchers_button = ctk.CTkButton(
+            self.menu_frame,
+            text="All Pitchers",
+            command=self.run_pitcher_file
+        )
+        self.all_pitchers_button.grid(
+            row=4,
+            column=0,
+            columnspan=3,
+            padx=10,
+            pady=10,
+            sticky="nsew"
+        )
+
         self.lift()
         self.focus_force()
         self.attributes("-topmost", True)
@@ -155,14 +270,29 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
         else:
             self.log_message("File selection cancelled")
 
-    def run_pitcher_file(self):
+    def run_pitcher_file(self, pos=None):
         """Run calculations script for pitching stats."""
         if not self.target_file:
             self.log_message("No file selected")
             return
 
+        try:
+            self.min_ip = int(self.min_innings_input.get())
+        except ValueError:
+            self.min_ip = 200
+
+        try:
+            self.inning_split = int(self.innings_split_input.get())
+        except ValueError:
+            self.inning_split = 4
+
         print("Running pitcher file")
-        df = calc_basic_pitching_stats(pd.read_csv(self.target_file))
+        df = calc_basic_pitching_stats(
+            pd.read_csv(self.target_file),
+            self.min_ip,
+            role=pos,
+            inning_split=self.inning_split,
+            variant_split=self.variant_select.get())
 
         self.data_view_frame.load_dataframe(df)
         self.update_idletasks()
