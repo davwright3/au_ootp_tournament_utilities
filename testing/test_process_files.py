@@ -50,4 +50,4 @@ def test_process_files_adds_unique_files():
         result = process_files(tmp_target.name, tmp_raw)
 
         assert isinstance(result, list)
-        assert result[0][0] == "file1"
+        assert result[0] == "file1"
