@@ -10,7 +10,8 @@ def calc_basic_pitching_stats(
         role=None,
         inning_split=4,
         variant_split=False,
-        pitching_side=None
+        pitching_side=None,
+        player_name=None
 ):
     """Calculate basic pitching stats for display in a data frame."""
     script_settings = settings_module.settings
@@ -149,5 +150,8 @@ def calc_basic_pitching_stats(
 
     if pitching_side != 'Any':
         df3 = df3[df3['Throws'] == pitching_side]
+
+    if player_name is not None:
+        df3 = df3[df3['Title'].str.contains(player_name, case=False, na=False)]
 
     return df3

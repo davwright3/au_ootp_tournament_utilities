@@ -28,6 +28,7 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
         self.inning_split = 4
         self.variant_select = ctk.BooleanVar(value=False)
         self.pitching_side_checkbox = ctk.StringVar(value='Any')
+        self.player_search_name = None
 
         self.height = int(page_settings['FileProcessor']['height'])
         self.width = int(page_settings['FileProcessor']['width'])
@@ -109,7 +110,8 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
         self.menu_frame.rowconfigure(4, weight=0)
         self.menu_frame.rowconfigure(5, weight=0)
         self.menu_frame.rowconfigure(6, weight=0)
-        self.menu_frame.rowconfigure(7, weight=1)
+        self.menu_frame.rowconfigure(7, weight=0)
+        self.menu_frame.rowconfigure(8, weight=1)
 
         self.footer_frame = Footer(
             self,
@@ -165,12 +167,33 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
         )
 
         # Menu frame data
+        self.player_search_label = ctk.CTkLabel(
+            self.menu_frame,
+            text="Player Search"
+        )
+        self.player_search_label.grid(
+            row=0,
+            column=0,
+            padx=10,
+            pady=10,
+        )
+
+        self.player_search_entry = ctk.CTkEntry(
+            self.menu_frame,
+        )
+        self.player_search_entry.grid(
+            row=0,
+            column=1,
+            padx=10,
+            pady=10,
+        )
+
         self.min_innings_label = ctk.CTkLabel(
             self.menu_frame,
             text="Min IP"
         )
         self.min_innings_label.grid(
-            row=0,
+            row=1,
             column=0,
             padx=10,
             pady=10,
@@ -181,7 +204,7 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
             self.menu_frame,
         )
         self.min_innings_input.grid(
-            row=0,
+            row=1,
             column=1,
             padx=10,
             pady=10,
@@ -193,7 +216,7 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
             text="SP/RP Split"
         )
         self.innings_split_label.grid(
-            row=1,
+            row=2,
             column=0,
             padx=10,
             pady=10,
@@ -204,7 +227,7 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
             self.menu_frame
         )
         self.innings_split_input.grid(
-            row=1,
+            row=2,
             column=1,
             padx=10,
             pady=10,
@@ -217,7 +240,7 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
             variable=self.variant_select
         )
         self.variant_checkbox.grid(
-            row=2,
+            row=3,
             column=1,
             padx=10,
             pady=10,
@@ -229,7 +252,7 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
             text="Pitching Side"
         )
         self.pitching_side_label.grid(
-            row=3,
+            row=4,
             column=0,
             padx=10,
             pady=10,
@@ -247,7 +270,7 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
         )
         self.pitching_side_checkbox.set('Any')
         self.pitching_side_checkbox.grid(
-            row=3,
+            row=4,
             column=1,
             padx=10,
             pady=10,
@@ -260,7 +283,7 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
             command=lambda: self.run_pitcher_file(pos=1)
         )
         self.starting_pitchers_button.grid(
-            row=4,
+            row=5,
             column=0,
             columnspan=2,
             padx=10,
@@ -273,7 +296,7 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
             command=lambda: self.run_pitcher_file(pos=2)
         )
         self.relief_pitchers_button.grid(
-            row=5,
+            row=6,
             column=0,
             columnspan=2,
             padx=10,
@@ -286,7 +309,7 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
             command=self.run_pitcher_file
         )
         self.all_pitchers_button.grid(
-            row=6,
+            row=7,
             column=0,
             columnspan=2,
             padx=10,
@@ -328,6 +351,11 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
         except ValueError:
             self.inning_split = 4
 
+        if len(self.player_search_entry.get()) != 0:
+            self.player_search_name = self.player_search_entry.get()
+        else:
+            self.player_search_name = None
+
         print("Running pitcher file")
         df = calc_basic_pitching_stats(
             pd.read_csv(self.target_file),
@@ -335,7 +363,8 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
             role=pos,
             inning_split=self.inning_split,
             variant_split=self.variant_select.get(),
-            pitching_side=self.pitching_side_checkbox.get()
+            pitching_side=self.pitching_side_checkbox.get(),
+            player_name=self.player_search_name
         )
 
         self.data_view_frame.load_dataframe(df)
