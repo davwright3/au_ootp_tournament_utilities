@@ -5,7 +5,7 @@ from utils.config_utils import settings as settings_module
 from utils.stats_utils.cull_teams import cull_teams
 
 
-def calc_basic_batting_stats(df, min_pa=1, pos=None, variant_split=False, batter_side=None):
+def calc_basic_batting_stats(df, min_pa=1, pos=None, variant_split=False, batter_side=None, batter_name=None):
     """Calculate basic batting stats."""
     df1 = pd.DataFrame(df)
     script_settings = settings_module.settings
@@ -114,6 +114,9 @@ def calc_basic_batting_stats(df, min_pa=1, pos=None, variant_split=False, batter
         df3 = df3
     else:
         df3 = df3[df3['Bats'] == batter_side]
+
+    if batter_name is not None:
+        df3 = df3[df3['Title'].str.contains(batter_name, case=False, na=False)]
 
     del df1, card_df, df2
     import gc

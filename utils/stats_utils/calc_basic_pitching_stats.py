@@ -154,4 +154,8 @@ def calc_basic_pitching_stats(
     if player_name is not None:
         df3 = df3[df3['Title'].str.contains(player_name, case=False, na=False)]
 
+    del df2, df1, removed
+    import gc
+    gc.collect()
+
     return df3
