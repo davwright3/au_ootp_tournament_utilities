@@ -27,6 +27,7 @@ class BasicStatsView(ctk.CTkToplevel):
         self.target_file = None
         self.stats_df = pd.DataFrame(['No file selected'])
         self.variant_select = ctk.BooleanVar(value=False)
+        self.batter_side_select = ctk.StringVar(value='Any')
 
         self.height = int(page_settings['FileProcessor']['height'])
         self.width = int(page_settings['FileProcessor']['width'])
@@ -104,6 +105,7 @@ class BasicStatsView(ctk.CTkToplevel):
         self.menu_frame.rowconfigure(8, weight=1)
         self.menu_frame.rowconfigure(9, weight=1)
         self.menu_frame.rowconfigure(10, weight=1)
+        self.menu_frame.rowconfigure(11, weight=1)
 
         self.footer_frame = Footer(
             self,
@@ -155,6 +157,7 @@ class BasicStatsView(ctk.CTkToplevel):
             pady=10
         )
 
+        # Menu frame buttons and entries
         self.plate_app_label = ctk.CTkLabel(
             self.menu_frame,
             text="Min PA"
@@ -188,6 +191,37 @@ class BasicStatsView(ctk.CTkToplevel):
             pady=10
         )
 
+        self.batter_side_label = ctk.CTkLabel(
+            self.menu_frame,
+            text="Batter Side"
+        )
+        self.batter_side_label.grid(
+            row=2,
+            column=0,
+            padx=10,
+            pady=10,
+            sticky='nsew'
+        )
+
+        self.batter_side_checkbox = ctk.CTkComboBox(
+            self.menu_frame,
+            values=['R', 'L', 'S', 'Any'],
+            command=self.set_batter_side,
+            variable=self.batter_side_select,
+            border_color="black",
+            button_color="violet",
+            button_hover_color="darkviolet",
+        )
+        self.batter_side_checkbox.set('Any')
+        self.batter_side_checkbox.grid(
+            row=2,
+            column=1,
+            columnspan=2,
+            padx=10,
+            pady=10,
+            sticky='nsew'
+        )
+
         self.catcher_button = CustomPositionButton(
             self.menu_frame,
             text="Catcher",
@@ -195,8 +229,9 @@ class BasicStatsView(ctk.CTkToplevel):
                              self.log_message("Catchers"))
         )
         self.catcher_button.grid(
-            row=2,
+            row=3,
             column=0,
+            columnspan=2,
             padx=10,
             pady=10
         )
@@ -208,8 +243,9 @@ class BasicStatsView(ctk.CTkToplevel):
                              self.log_message("First Base"))
         )
         self.first_base_button.grid(
-            row=3,
+            row=4,
             column=0,
+            columnspan=2,
             padx=10,
             pady=10
         )
@@ -221,8 +257,9 @@ class BasicStatsView(ctk.CTkToplevel):
                              self.log_message("Second Base"))
         )
         self.second_base_button.grid(
-            row=4,
+            row=5,
             column=0,
+            columnspan=2,
             padx=10,
             pady=10
         )
@@ -234,8 +271,9 @@ class BasicStatsView(ctk.CTkToplevel):
                              self.log_message("Third Base"))
         )
         self.third_base_button.grid(
-            row=5,
+            row=6,
             column=0,
+            columnspan=2,
             padx=10,
             pady=10
         )
@@ -247,8 +285,9 @@ class BasicStatsView(ctk.CTkToplevel):
                              self.log_message("Shortstop"))
         )
         self.shortstop_button.grid(
-            row=6,
+            row=7,
             column=0,
+            columnspan=2,
             padx=10,
             pady=10
         )
@@ -260,8 +299,9 @@ class BasicStatsView(ctk.CTkToplevel):
                              self.log_message("Left Field"))
         )
         self.left_field_button.grid(
-            row=7,
+            row=8,
             column=0,
+            columnspan=2,
             padx=10,
             pady=10
         )
@@ -273,8 +313,9 @@ class BasicStatsView(ctk.CTkToplevel):
                              self.log_message("Center Field"))
         )
         self.center_field_button.grid(
-            row=8,
+            row=9,
             column=0,
+            columnspan=2,
             padx=10,
             pady=10
         )
@@ -286,8 +327,9 @@ class BasicStatsView(ctk.CTkToplevel):
                              self.log_message("Right Field"))
         )
         self.right_field_button.grid(
-            row=9,
+            row=10,
             column=0,
+            columnspan=2,
             padx=10,
             pady=10
         )
@@ -299,8 +341,9 @@ class BasicStatsView(ctk.CTkToplevel):
                              self.log_message("All Batters"))
         )
         self.all_batters_button.grid(
-            row=10,
+            row=11,
             column=0,
+            columnspan=2,
             padx=10,
             pady=10
         )
@@ -340,7 +383,8 @@ class BasicStatsView(ctk.CTkToplevel):
                 pd.read_csv(self.target_file),
                 min_pa,
                 pos,
-                variant_split=self.variant_select.get()
+                variant_split=self.variant_select.get(),
+                batter_side=self.batter_side_select.get()
             )
 
             self.data_view_frame.load_dataframe(df)
@@ -348,6 +392,12 @@ class BasicStatsView(ctk.CTkToplevel):
             self.log_message("Data loaded")
         except Exception as e:
             self.log_message(f"Error loading {self.target_file}: {e}")
+
+    def set_batter_side(self, choice):
+        """Setting for batter handedness selection."""
+        self.batter_side_select.set(choice)
+        print("Current batter side: ", self.batter_side_checkbox.cget("state"))
+
 
     def log_message(self, message):
         """Update message label."""
