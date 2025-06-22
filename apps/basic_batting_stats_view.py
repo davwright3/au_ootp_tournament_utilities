@@ -423,10 +423,9 @@ class BasicStatsView(ctk.CTkToplevel):
             self.log_message(f"Error loading {self.target_file}: {e}")
 
     def set_batter_side(self, choice):
-        """Setting for batter handedness selection."""
+        """Set batter handedness selection."""
         self.batter_side_select.set(choice)
         print("Current batter side: ", self.batter_side_checkbox.cget("state"))
-
 
     def log_message(self, message):
         """Update message label."""

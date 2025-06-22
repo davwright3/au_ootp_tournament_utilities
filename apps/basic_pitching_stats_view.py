@@ -372,6 +372,7 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
         self.log_message("Pitcher file loaded")
 
     def set_pitcher_side(self, choice):
+        """Set pitcher handedness selection."""
         self.pitching_side_checkbox.set(choice)
 
     def log_message(self, message):

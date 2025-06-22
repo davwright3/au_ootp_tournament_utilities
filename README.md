@@ -101,12 +101,17 @@ ___
   - Starter/relief pitching cutoff variable
   - Pitcher role select buttons
 
+### v0.1.2.21
+
+- Add batter/pitcher handedness options
+- Add player search function
+- Fix DPI scaling issue on Windows systems
+
 
 ---
 
 ## Upcoming Features and Improvements
 
-- **(Priority)** Fix for resolution issues when changing between monitors
 - Team analysis
 - Player comparison tool
 - Player and tournament statistics over time

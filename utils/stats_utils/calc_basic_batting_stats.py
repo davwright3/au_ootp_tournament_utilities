@@ -5,7 +5,13 @@ from utils.config_utils import settings as settings_module
 from utils.stats_utils.cull_teams import cull_teams
 
 
-def calc_basic_batting_stats(df, min_pa=1, pos=None, variant_split=False, batter_side=None, batter_name=None):
+def calc_basic_batting_stats(
+        df,
+        min_pa=1,
+        pos=None,
+        variant_split=False,
+        batter_side=None,
+        batter_name=None):
     """Calculate basic batting stats."""
     df1 = pd.DataFrame(df)
     script_settings = settings_module.settings
