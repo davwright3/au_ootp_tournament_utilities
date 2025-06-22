@@ -94,18 +94,19 @@ class BasicStatsView(ctk.CTkToplevel):
             pady=10,
             sticky='nsw'
         )
-        self.menu_frame.rowconfigure(0, weight=1)
-        self.menu_frame.rowconfigure(1, weight=1)
-        self.menu_frame.rowconfigure(2, weight=1)
-        self.menu_frame.rowconfigure(3, weight=1)
-        self.menu_frame.rowconfigure(4, weight=1)
-        self.menu_frame.rowconfigure(5, weight=1)
-        self.menu_frame.rowconfigure(6, weight=1)
-        self.menu_frame.rowconfigure(7, weight=1)
-        self.menu_frame.rowconfigure(8, weight=1)
-        self.menu_frame.rowconfigure(9, weight=1)
-        self.menu_frame.rowconfigure(10, weight=1)
-        self.menu_frame.rowconfigure(11, weight=1)
+        self.menu_frame.rowconfigure(0, weight=0)
+        self.menu_frame.rowconfigure(1, weight=0)
+        self.menu_frame.rowconfigure(2, weight=0)
+        self.menu_frame.rowconfigure(3, weight=0)
+        self.menu_frame.rowconfigure(4, weight=0)
+        self.menu_frame.rowconfigure(5, weight=0)
+        self.menu_frame.rowconfigure(6, weight=0)
+        self.menu_frame.rowconfigure(7, weight=0)
+        self.menu_frame.rowconfigure(8, weight=0)
+        self.menu_frame.rowconfigure(9, weight=0)
+        self.menu_frame.rowconfigure(10, weight=0)
+        self.menu_frame.rowconfigure(11, weight=0)
+        self.menu_frame.rowconfigure(12, weight=1)
 
         self.footer_frame = Footer(
             self,
@@ -173,8 +174,8 @@ class BasicStatsView(ctk.CTkToplevel):
             self.menu_frame
         )
         self.plate_app_entry.grid(
-            row=1,
-            column=0,
+            row=0,
+            column=1,
             padx=10,
             pady=10
         )
@@ -216,7 +217,6 @@ class BasicStatsView(ctk.CTkToplevel):
         self.batter_side_checkbox.grid(
             row=2,
             column=1,
-            columnspan=2,
             padx=10,
             pady=10,
             sticky='nsew'

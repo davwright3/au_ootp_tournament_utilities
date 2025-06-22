@@ -19,13 +19,13 @@ class TreeviewTableFrame(ctk.CTkFrame):
         self.style.configure(
             "Treeview",
             background="#ffffff",
-            font=("Arial", 18),
+            font=("Arial", 16),
             rowheight=32
         )
 
         self.style.configure(
             "Treeview.Heading",
-            font=("Arial", 20)
+            font=("Arial", 16, "bold")
         )
 
         self.tree_frame = tk.Frame(self, bg="red")
@@ -62,14 +62,14 @@ class TreeviewTableFrame(ctk.CTkFrame):
                     col,
                     anchor="w",
                     width=350,
-                    minwidth=100,
+                    minwidth=200,
                     stretch=True
                 )
             else:
                 self.tree.column(
                     col,
                     anchor='center',
-                    width=100,
+                    width=80,
                     stretch=False
                 )
 

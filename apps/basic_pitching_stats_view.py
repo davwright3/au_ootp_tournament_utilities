@@ -27,6 +27,7 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
         self.min_ip = 200
         self.inning_split = 4
         self.variant_select = ctk.BooleanVar(value=False)
+        self.pitching_side_checkbox = ctk.StringVar(value='Any')
 
         self.height = int(page_settings['FileProcessor']['height'])
         self.width = int(page_settings['FileProcessor']['width'])
@@ -40,7 +41,7 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
         self.geometry(f"{self.width}x{self.height}")
 
         # Set up the frames
-        self.grid_columnconfigure(0, weight=1)
+        self.grid_columnconfigure(0, weight=0)
         self.grid_columnconfigure(1, weight=1)
         self.grid_columnconfigure(2, weight=0)
 
@@ -97,6 +98,19 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
             sticky="nsew"
         )
 
+        self.menu_frame.columnconfigure(0, weight=0)
+        self.menu_frame.columnconfigure(1, weight=1)
+        self.menu_frame.columnconfigure(2, weight=0)
+
+        self.menu_frame.rowconfigure(0, weight=0)
+        self.menu_frame.rowconfigure(1, weight=0)
+        self.menu_frame.rowconfigure(2, weight=0)
+        self.menu_frame.rowconfigure(3, weight=0)
+        self.menu_frame.rowconfigure(4, weight=0)
+        self.menu_frame.rowconfigure(5, weight=0)
+        self.menu_frame.rowconfigure(6, weight=0)
+        self.menu_frame.rowconfigure(7, weight=1)
+
         self.footer_frame = Footer(
             self,
             height=self.header_footer_height,
@@ -150,6 +164,7 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
             sticky="w"
         )
 
+        # Menu frame data
         self.min_innings_label = ctk.CTkLabel(
             self.menu_frame,
             text="Min IP"
@@ -202,8 +217,38 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
             variable=self.variant_select
         )
         self.variant_checkbox.grid(
-            row=1,
-            column=3,
+            row=2,
+            column=1,
+            padx=10,
+            pady=10,
+            sticky="nsew"
+        )
+
+        self.pitching_side_label = ctk.CTkLabel(
+            self.menu_frame,
+            text="Pitching Side"
+        )
+        self.pitching_side_label.grid(
+            row=3,
+            column=0,
+            padx=10,
+            pady=10,
+            sticky="nsew"
+        )
+
+        self.pitching_side_checkbox = ctk.CTkComboBox(
+            self.menu_frame,
+            values=['L', 'R', 'Any'],
+            command=self.set_pitcher_side,
+            variable=self.pitching_side_checkbox,
+            border_color='black',
+            button_color='violet',
+            button_hover_color='darkviolet'
+        )
+        self.pitching_side_checkbox.set('Any')
+        self.pitching_side_checkbox.grid(
+            row=3,
+            column=1,
             padx=10,
             pady=10,
             sticky="nsew"
@@ -215,12 +260,11 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
             command=lambda: self.run_pitcher_file(pos=1)
         )
         self.starting_pitchers_button.grid(
-            row=2,
+            row=4,
             column=0,
-            columnspan=3,
+            columnspan=2,
             padx=10,
             pady=10,
-            sticky="nsew"
         )
 
         self.relief_pitchers_button = ctk.CTkButton(
@@ -229,12 +273,11 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
             command=lambda: self.run_pitcher_file(pos=2)
         )
         self.relief_pitchers_button.grid(
-            row=3,
+            row=5,
             column=0,
-            columnspan=3,
+            columnspan=2,
             padx=10,
             pady=10,
-            sticky="nsew"
         )
 
         self.all_pitchers_button = ctk.CTkButton(
@@ -243,12 +286,11 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
             command=self.run_pitcher_file
         )
         self.all_pitchers_button.grid(
-            row=4,
+            row=6,
             column=0,
-            columnspan=3,
+            columnspan=2,
             padx=10,
-            pady=10,
-            sticky="nsew"
+            pady=10
         )
 
         self.lift()
@@ -292,11 +334,16 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
             self.min_ip,
             role=pos,
             inning_split=self.inning_split,
-            variant_split=self.variant_select.get())
+            variant_split=self.variant_select.get(),
+            pitching_side=self.pitching_side_checkbox.get()
+        )
 
         self.data_view_frame.load_dataframe(df)
         self.update_idletasks()
         self.log_message("Pitcher file loaded")
+
+    def set_pitcher_side(self, choice):
+        self.pitching_side_checkbox.set(choice)
 
     def log_message(self, message):
         """Log status update messages."""

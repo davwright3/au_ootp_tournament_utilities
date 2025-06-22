@@ -16,10 +16,8 @@ def calc_basic_batting_stats(df, min_pa=1, pos=None, variant_split=False, batter
     )
 
     df2, removed = cull_teams(pd.DataFrame(df1))
-    print("Removed: ", removed, " teams")
 
     columns_from_data = ['CID', 'Title', 'Card Value', 'Bats']
-    columns_to_keep = []
 
     print("Variant split: ", variant_split)
     # Calculate the basic statistics
