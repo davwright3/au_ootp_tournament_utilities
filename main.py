@@ -1,6 +1,13 @@
 """This is the main menu opening for the program."""
-import customtkinter as ctk
 import sys
+
+import ctypes
+try:
+    ctypes.windll.shcore.SetProcessDpiAwareness(1)
+except AttributeError:
+    pass
+
+import customtkinter as ctk
 
 from apps.basic_batting_stats_view import BasicStatsView
 from apps.basic_pitching_stats_view import BasicPitchingStatsView
@@ -21,6 +28,7 @@ class MainApp(ctk.CTk):
     def __init__(self):
         """Initialize the main window."""
         super().__init__()
+        ctk.set_appearance_mode('system')
         ctk.set_default_color_theme('blue')
 
         # load settings from load_settings utility

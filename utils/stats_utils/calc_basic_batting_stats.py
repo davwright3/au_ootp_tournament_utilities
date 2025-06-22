@@ -5,7 +5,13 @@ from utils.config_utils import settings as settings_module
 from utils.stats_utils.cull_teams import cull_teams
 
 
-def calc_basic_batting_stats(df, min_pa=1, pos=None, variant_split=False):
+def calc_basic_batting_stats(
+        df,
+        min_pa=1,
+        pos=None,
+        variant_split=False,
+        batter_side=None,
+        batter_name=None):
     """Calculate basic batting stats."""
     df1 = pd.DataFrame(df)
     script_settings = settings_module.settings
@@ -16,10 +22,8 @@ def calc_basic_batting_stats(df, min_pa=1, pos=None, variant_split=False):
     )
 
     df2, removed = cull_teams(pd.DataFrame(df1))
-    print("Removed: ", removed, " teams")
 
     columns_from_data = ['CID', 'Title', 'Card Value', 'Bats']
-    columns_to_keep = []
 
     print("Variant split: ", variant_split)
     # Calculate the basic statistics
@@ -111,6 +115,14 @@ def calc_basic_batting_stats(df, min_pa=1, pos=None, variant_split=False):
         lambda x: f"{x:.1f}"[1:] if -1 < x < 1 else f"{x:.1f}")
 
     df3 = df3[columns_to_keep]
+    print(batter_side)
+    if batter_side == 'Any':
+        df3 = df3
+    else:
+        df3 = df3[df3['Bats'] == batter_side]
+
+    if batter_name is not None:
+        df3 = df3[df3['Title'].str.contains(batter_name, case=False, na=False)]
 
     del df1, card_df, df2
     import gc
