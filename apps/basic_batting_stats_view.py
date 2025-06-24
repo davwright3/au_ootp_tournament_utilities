@@ -6,6 +6,7 @@ from utils.view_utils.data_view_frame import TreeviewTableFrame
 from utils.file_utils.handle_select_file import handle_select_file
 from utils.stats_utils.calc_basic_batting_stats import calc_basic_batting_stats
 from utils.interface_utils.pos_select_button import CustomPositionButton
+from utils.view_utils.batter_stat_select_frame import BatterStatSelectFrame
 import pandas as pd
 
 
@@ -108,7 +109,8 @@ class BasicStatsView(ctk.CTkToplevel):
         self.menu_frame.rowconfigure(10, weight=0)
         self.menu_frame.rowconfigure(11, weight=0)
         self.menu_frame.rowconfigure(12, weight=0)
-        self.menu_frame.rowconfigure(13, weight=1)
+        self.menu_frame.rowconfigure(13, weight=0)
+        self.menu_frame.rowconfigure(14, weight=1)
 
         self.footer_frame = Footer(
             self,
@@ -371,6 +373,17 @@ class BasicStatsView(ctk.CTkToplevel):
             pady=10
         )
 
+        self.batter_stat_select_frame = BatterStatSelectFrame(
+            self.menu_frame
+        )
+        self.batter_stat_select_frame.grid(
+            row=13,
+            column=0,
+            columnspan=2,
+            padx=10,
+            pady=10
+        )
+
         self.lift()
         self.focus_force()
         self.attributes("-topmost", True)
@@ -407,13 +420,16 @@ class BasicStatsView(ctk.CTkToplevel):
             else:
                 self.batter_search_name = None
 
+            stats_to_view = self.get_active_stats()
+
             df = calc_basic_batting_stats(
                 pd.read_csv(self.target_file),
                 min_pa,
                 pos,
                 variant_split=self.variant_select.get(),
                 batter_side=self.batter_side_select.get(),
-                batter_name=self.batter_search_name
+                batter_name=self.batter_search_name,
+                stats_to_view=stats_to_view
             )
 
             self.data_view_frame.load_dataframe(df)
@@ -430,3 +446,6 @@ class BasicStatsView(ctk.CTkToplevel):
     def log_message(self, message):
         """Update message label."""
         self.file_select_label.configure(text=message)
+
+    def get_active_stats(self):
+        return self.batter_stat_select_frame.get_active_stats()
