@@ -11,7 +11,8 @@ def calc_basic_pitching_stats(
         inning_split=4,
         variant_split=False,
         pitching_side=None,
-        player_name=None
+        player_name=None,
+        pitching_stats_to_view=None
 ):
     """Calculate basic pitching stats for display in a data frame."""
     script_settings = settings_module.settings
@@ -28,21 +29,14 @@ def calc_basic_pitching_stats(
 
     print("Running basic pitching stat calculation...")
 
-    columns_to_keep = []
-
     # Set columns for whether variants will be split or not
     if variant_split:
         columns_to_keep = ['CID', 'Title', 'VLvl', 'Card Value', 'Throws',
-                           'IPC', 'FIP', 'ERA', 'K/9', 'KPct', 'BB/9',
-                           'BBPct', 'HR/9', 'QSPct', 'GSPct',
-                           'WHIP', 'IRSPct', 'SD/MD', 'IP/G',
-                           'WAR/200']
+                           'IPC']
     else:
-        columns_to_keep = ['CID', 'Title', 'Card Value', 'Throws', 'IPC',
-                           'FIP', 'ERA', 'K/9', 'KPct', 'BB/9',
-                           'BBPct', 'HR/9', 'QSPct', 'GSPct',
-                           'WHIP', 'IRSPct', 'SD/MD', 'IP/G',
-                           'WAR/200']
+        columns_to_keep = ['CID', 'Title', 'Card Value', 'Throws', 'IPC']
+
+    columns_to_keep.extend(pitching_stats_to_view)
 
     df1, removed = cull_teams(pd.DataFrame(df_to_load))
     print("Removed: ", removed)

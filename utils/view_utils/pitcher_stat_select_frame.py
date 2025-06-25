@@ -1,17 +1,16 @@
-"""Modular app for checkboxes to select batter stats to view"""
+"""Frame for selecting which pitcher stats to view"""
 import customtkinter as ctk
 
-class BatterStatSelectFrame(ctk.CTkFrame):
-    """View class for batter stats selection."""
-
+class PitcherStatSelectFrame(ctk.CTkFrame):
+    """View class for pitch stats"""
     def __init__(self, parent):
-        """Initialize the frame."""
+        """Initialize the frame"""
         ctk.CTkFrame.__init__(self, parent)
 
-        available_stats = ['AVG', 'OBP', 'SLG', 'OPS', 'wOBA',
-                           'HR/600', 'K/600', 'BB/600', 'SB/600',
-                           'SBPct', 'RC/600', 'WAR/600', 'BsR/600',
-                           'ZR/600' ]
+        available_stats = ['FIP', 'ERA', 'K/9', 'KPct', 'BB/9',
+                           'BBPct', 'HR/9', 'QSPct', 'GSPct',
+                           'WHIP', 'IRSPct', 'SD/MD', 'IP/G',
+                           'WAR/200']
 
         self.stats_to_keep = []
 
@@ -24,11 +23,11 @@ class BatterStatSelectFrame(ctk.CTkFrame):
 
         self.set_active_stats = set_active_stats
 
-        stat_num=0
+        stat_num = 0
 
         for stat in available_stats:
             checkbox = ctk.CTkCheckBox(
-                master=self,
+                self,
                 text=stat,
                 onvalue=stat,
                 offvalue='off',
@@ -37,14 +36,12 @@ class BatterStatSelectFrame(ctk.CTkFrame):
             checkbox.grid(
                 row=stat_num // 3,
                 column=stat_num % 3,
-                padx=2,
-                pady=2,
+                padx=3,
+                pady=3,
                 sticky='nsew',
             )
             stat_num += 1
 
-
     def get_active_stats(self):
+        """Return the active stats"""
         return self.stats_to_keep
-
-

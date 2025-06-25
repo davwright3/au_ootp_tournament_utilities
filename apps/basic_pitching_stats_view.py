@@ -8,6 +8,7 @@ from utils.stats_utils.calc_basic_pitching_stats import (
 from utils.view_utils.header_footer import Header, Footer
 from utils.view_utils.data_view_frame import TreeviewTableFrame
 from utils.file_utils.handle_select_file import handle_select_file
+from utils.view_utils.pitcher_stat_select_frame import PitcherStatSelectFrame
 
 
 class BasicPitchingStatsView(ctk.CTkToplevel):
@@ -111,7 +112,8 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
         self.menu_frame.rowconfigure(5, weight=0)
         self.menu_frame.rowconfigure(6, weight=0)
         self.menu_frame.rowconfigure(7, weight=0)
-        self.menu_frame.rowconfigure(8, weight=1)
+        self.menu_frame.rowconfigure(8, weight=0)
+        self.menu_frame.rowconfigure(9, weight=1)
 
         self.footer_frame = Footer(
             self,
@@ -316,6 +318,18 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
             pady=10
         )
 
+        self.pitching_stats_select_frame = PitcherStatSelectFrame(
+            self.menu_frame
+        )
+        self.pitching_stats_select_frame.grid(
+            row=8,
+            column=0,
+            columnspan=2,
+            padx=10,
+            pady=10,
+            sticky="nsew"
+        )
+
         self.lift()
         self.focus_force()
         self.attributes("-topmost", True)
@@ -356,7 +370,8 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
         else:
             self.player_search_name = None
 
-        print("Running pitcher file")
+        pitching_stats_to_view = self.get_pitching_stats_to_view()
+
         df = calc_basic_pitching_stats(
             pd.read_csv(self.target_file),
             self.min_ip,
@@ -364,7 +379,8 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
             inning_split=self.inning_split,
             variant_split=self.variant_select.get(),
             pitching_side=self.pitching_side_checkbox.get(),
-            player_name=self.player_search_name
+            player_name=self.player_search_name,
+            pitching_stats_to_view=pitching_stats_to_view,
         )
 
         self.data_view_frame.load_dataframe(df)
@@ -378,3 +394,6 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
     def log_message(self, message):
         """Log status update messages."""
         self.file_select_label.configure(text=message)
+
+    def get_pitching_stats_to_view(self):
+        return self.pitching_stats_select_frame.get_active_stats()
