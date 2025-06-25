@@ -28,7 +28,7 @@ jobs:
 
       - name: Build executable with PyInstaller
         run: |
-          pyinstaller main.spec
+          pyinstaller --target-architecture universal2 main.spec
 
       - name: Create ZIP of built app
         run: |
