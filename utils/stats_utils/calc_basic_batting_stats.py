@@ -11,7 +11,8 @@ def calc_basic_batting_stats(
         pos=None,
         variant_split=False,
         batter_side=None,
-        batter_name=None):
+        batter_name=None,
+        stats_to_view=None):
     """Calculate basic batting stats."""
     df1 = pd.DataFrame(df)
     script_settings = settings_module.settings
@@ -29,9 +30,7 @@ def calc_basic_batting_stats(
     # Calculate the basic statistics
     if not variant_split:
         columns_to_keep = ['CID', 'Title', 'Bats', 'Card Value',
-                           'PA', 'AVG', 'OBP', 'SLG', 'OPS', 'wOBA',
-                           'HR/600', 'K/600', 'BB/600', 'SB/600',
-                           'SBPct', 'RC/600', 'WAR/600', 'BsR/600', 'ZR/600']
+                           'PA']
         df2 = df2.groupby(
             ['CID'],
             as_index=False)[['PA', 'AB', 'H', '1B', '2B', '3B', 'HR',
@@ -39,14 +38,14 @@ def calc_basic_batting_stats(
                              'RC', 'WAR', 'SB', 'CS', 'BsR', 'ZR']].sum()
     else:
         columns_to_keep = ['CID', 'Title', 'VLvl', 'Bats', 'Card Value',
-                           'PA', 'AVG', 'OBP', 'SLG', 'OPS', 'wOBA',
-                           'HR/600', 'K/600', 'BB/600', 'SB/600', 'SBPct',
-                           'RC/600', 'WAR/600', 'BsR/600', 'ZR/600']
+                           'PA']
         df2 = df2.groupby(
             ['CID', 'VLvl'],
             as_index=False)[['PA', 'AB', 'H', '1B', '2B', '3B', 'HR',
                              'IBB', 'BB', 'HP', 'SH', 'SF', 'SO', 'TB',
                              'RC', 'WAR', 'SB', 'CS', 'BsR', 'ZR']].sum()
+
+    columns_to_keep.extend(stats_to_view)
 
     if pos is None:
         df2 = pd.merge(card_df[columns_from_data], df2, on='CID', how='inner')
@@ -120,6 +119,8 @@ def calc_basic_batting_stats(
         df3 = df3
     else:
         df3 = df3[df3['Bats'] == batter_side]
+
+    df3 = df3.rename(columns={"Card Value" : 'Val'})
 
     if batter_name is not None:
         df3 = df3[df3['Title'].str.contains(batter_name, case=False, na=False)]

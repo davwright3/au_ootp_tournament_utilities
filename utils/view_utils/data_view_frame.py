@@ -65,11 +65,18 @@ class TreeviewTableFrame(ctk.CTkFrame):
                     minwidth=200,
                     stretch=True
                 )
+            elif col == 'PA':
+                self.tree.column(
+                    col,
+                    anchor="center",
+                    width=5*26,
+                    stretch=False
+                )
             else:
                 self.tree.column(
                     col,
                     anchor='center',
-                    width=80,
+                    width=max(80, len(col)*26),
                     stretch=False
                 )
 
