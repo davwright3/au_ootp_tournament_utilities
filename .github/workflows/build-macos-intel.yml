@@ -1,15 +1,11 @@
-name: Build macOS Package and Release
+name: Build macOS (Intel)
 
 on:
-  push:
-    branches:
-      - 'main'
-    paths-ignore:
-      - 'README.md'
+  workflow_dispatch:
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: macos-13
 
     steps:
       - name: Checkout repository
@@ -26,21 +22,21 @@ jobs:
           pip install -r requirements.txt
           pip install pyinstaller
 
-      - name: Build executable with PyInstaller
+      - name: Build Intel-only binary
         run: |
-          pyinstaller main.spec
+          pyinstaller --onefile main.py
+          mv dist/main dist/main-intel
 
-      - name: Create ZIP of built app
+      - name: Zip binary
         run: |
           cd dist
-          zip -r main-macos.zip ./*
+          zip -r main-macos-intel.zip main-intel
 
-      - name: Create macOS Release
+      - name: Upload to Github Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: macos-v0.1.2.${{ github.run_number }}
-          name: macOS Release v0.1.2.${{ github.run_number }}
-          files: dist/main-macos.zip
+          name: macOS Intel Release v0.1.2.${{ github.run_number }}
+          files: dist/main-macos-intel.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
