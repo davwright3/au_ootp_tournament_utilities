@@ -1,132 +1,62 @@
-"""Script for calcuating basic batting stats."""
+"""Calculate basic batting stats"""
+
 import pandas as pd
 import numpy as np
-from utils.config_utils import settings as settings_module
-from utils.stats_utils.cull_teams import cull_teams
 
-
-def calc_basic_batting_stats(
-        df,
-        min_pa=1,
-        pos=None,
-        variant_split=False,
-        batter_side=None,
-        batter_name=None,
-        stats_to_view=None):
-    """Calculate basic batting stats."""
-    df1 = pd.DataFrame(df)
-    script_settings = settings_module.settings
-    card_df_path = script_settings['InitialFileDirs']['target_card_list_file']
-    card_df = pd.DataFrame(pd.read_csv(card_df_path))
-    card_df = card_df.rename(
-        columns={'Card ID': 'CID', '//Card Title': 'Title'}
-    )
-
-    df2, removed = cull_teams(pd.DataFrame(df1))
-
-    columns_from_data = ['CID', 'Title', 'Card Value', 'Bats']
-
-    print("Variant split: ", variant_split)
-    # Calculate the basic statistics
-    if not variant_split:
-        columns_to_keep = ['CID', 'Title', 'Bats', 'Card Value',
-                           'PA']
-        df2 = df2.groupby(
-            ['CID'],
-            as_index=False)[['PA', 'AB', 'H', '1B', '2B', '3B', 'HR',
-                             'IBB', 'BB', 'HP', 'SH', 'SF', 'SO', 'TB',
-                             'RC', 'WAR', 'SB', 'CS', 'BsR', 'ZR']].sum()
-    else:
-        columns_to_keep = ['CID', 'Title', 'VLvl', 'Bats', 'Card Value',
-                           'PA']
-        df2 = df2.groupby(
-            ['CID', 'VLvl'],
-            as_index=False)[['PA', 'AB', 'H', '1B', '2B', '3B', 'HR',
-                             'IBB', 'BB', 'HP', 'SH', 'SF', 'SO', 'TB',
-                             'RC', 'WAR', 'SB', 'CS', 'BsR', 'ZR']].sum()
-
-    columns_to_keep.extend(stats_to_view)
-
-    if pos is None:
-        df2 = pd.merge(card_df[columns_from_data], df2, on='CID', how='inner')
-    else:
-        df2 = pd.merge(card_df[card_df[pos] == 1][columns_from_data],
-                       df2,
-                       on='CID',
-                       how='inner')
-
-    df2['AVG'] = (df2['H']/df2['AB']).round(3)
-    df2['OBP'] = ((df2['H'] + df2['BB'] + df2['HP']) /
-                  (df2['AB'] + df2['BB'] + df2['HP'] + df2['SF'])).round(3)
-    df2['SLG'] = (df2['TB']/df2['AB']).round(3)
-    df2['OPS'] = (df2['OBP'] + df2['SLG']).round(3)
-    df2['wOBA'] = (((.701*df2['BB']) + (.732*df2['HP']) + (.895*df2['1B']) +
-                    (1.27*df2['2B']) + (1.608*df2['3B']) + (2.072*df2['HR'])) /
-                   (df2['AB'] + df2['BB'] - df2['IBB'] + df2['SF'] + df2['HP'])
+def calc_basic_batting_stats(df):
+    """Calculate basic batting stats and return a dataframe."""
+    df1 = df.copy()
+    df1['AVG'] = (df1['H']/df1['AB']).round(3)
+    df1['OBP'] = ((df1['H'] + df1['BB'] + df1['HP'])/(df1['AB'] + df1['BB'] + df1['HP'] + df1['SF'])).round(3)
+    df1['SLG'] = (df1['TB']/df1['AB']).round(3)
+    df1['OPS'] = df1['OBP'] + df1['SLG']
+    df1['wOBA'] = (((.701*df1['BB']) + (.732*df1['HP']) + (.895*df1['1B']) +
+                    (1.27*df1['2B']) + (1.608*df1['3B']) + (2.072*df1['HR'])) /
+                   (df1['AB'] + df1['BB'] - df1['IBB'] + df1['SF'] + df1['HP'])
                    ).round(3)
-    df2['HR/600'] = ((df2['HR']/df2['PA'])*600).round(1)
-    df2['K/600'] = ((df2['SO'] / df2['PA']) * 600).round(1)
-    df2['BB/600'] = ((df2['BB']/df2['PA'])*600).round(1)
-    df2['SB/600'] = ((df2['SB']/df2['PA'])*600).round(1)
-    df2['SBPct'] = np.where(
-        (df2['SB'] + df2['CS']) == 0,
+    df1['HR/600'] = ((df1['HR']/df1['PA'])*600).round(1)
+    df1['K/600'] = ((df1['SO'] / df1['PA']) * 600).round(1)
+    df1['BB/600'] = ((df1['BB']/df1['PA'])*600).round(1)
+    df1['SB/600'] = ((df1['SB']/df1['PA'])*600).round(1)
+    df1['SBPct'] = np.where(
+        (df1['SB'] + df1['CS']) == 0,
         0,
-        (df2['SB']/(df2['SB'] + df2['CS'])).round(3))
-    df2['RC/600'] = ((df2['RC']/df2['PA'])*600).round(1)
-    df2['WAR/600'] = ((df2['WAR']/df2['PA'])*600).round(1)
-    df2['BsR/600'] = ((df2['BsR']/df2['PA'])*600).round(2)
-    df2['ZR/600'] = ((df2['ZR']/df2['PA'])*600).round(2)
+        (df1['SB']/(df1['SB'] + df1['CS'])).round(3))
+    df1['RC/600'] = ((df1['RC']/df1['PA'])*600).round(1)
+    df1['WAR/600'] = ((df1['WAR']/df1['PA'])*600).round(1)
+    df1['BsR/600'] = ((df1['BsR']/df1['PA'])*600).round(2)
+    df1['ZR/600'] = ((df1['ZR']/df1['PA'])*600).round(2)
 
-    # Create the dataframe to pass to the frame view
-    df3 = df2[df2['PA'] > min_pa].copy()
-    df3['CID'] = df3['CID'].astype(str)
-    df3['Title'] = df3['Title'].astype(str)
-    df3['Bats'] = df3['Bats'].apply(
-        lambda x: "R" if x == 1 else "L" if x == 2 else "S")
-    df3['PA'] = df3['PA'].astype(str)
-    df3['AVG'] = df3['AVG'].apply(
+    df1['AVG'] = df1['AVG'].apply(
         lambda x: f"{x:.3f}"[1:] if x < 1 else f"{x:.3f}")
-    df3['OBP'] = df3['OBP'].apply(
+    df1['OBP'] = df1['OBP'].apply(
         lambda x: f"{x:.3f}"[1:] if x < 1 else f"{x:.3f}")
-    df3['SLG'] = df3['SLG'].apply(
+    df1['SLG'] = df1['SLG'].apply(
         lambda x: f"{x:.3f}"[1:] if x < 1 else f"{x:.3f}")
-    df3['OPS'] = df3['OPS'].apply(
+    df1['OPS'] = df1['OPS'].apply(
         lambda x: f"{x:.3f}"[1:] if x < 1 else f"{x:.3f}")
-    df3['wOBA'] = df3['wOBA'].apply(
+    df1['wOBA'] = df1['wOBA'].apply(
         lambda x: f"{x:.3f}"[1:] if x < 1 else f"{x:.3f}")
-    df3['HR/600'] = df3['HR/600'].apply(
+    df1['HR/600'] = df1['HR/600'].apply(
         lambda x: f"{x:.1f}"[1:] if x < 1 else f"{x:.1f}")
-    df3['K/600'] = df3['K/600'].apply(
+    df1['K/600'] = df1['K/600'].apply(
         lambda x: f"{x:.1f}"[1:] if x < 1 else f"{x:.1f}")
-    df3['BB/600'] = df3['BB/600'].apply(
+    df1['BB/600'] = df1['BB/600'].apply(
         lambda x: f"{x:.1f}"[1:] if x < 1 else f"{x:.1f}")
-    df3['SB/600'] = df3['SB/600'].apply(
+    df1['SB/600'] = df1['SB/600'].apply(
         lambda x: f"{x:.1f}"[1:] if x < 1 else f"{x:.1f}")
-    df3['SBPct'] = df3['SBPct'].apply(
+    df1['SBPct'] = df1['SBPct'].apply(
         lambda x: f"{x:.2f}"[1:] if x < 1 else f"{x:.2f}")
-    df3['RC/600'] = df3['RC/600'].apply(
+    df1['RC/600'] = df1['RC/600'].apply(
         lambda x: f"{x:.1f}"[1:] if -1 < x < 1 else f"{x:.1f}")
-    df3['WAR/600'] = df3['WAR/600'].apply(
+    df1['WAR/600'] = df1['WAR/600'].apply(
         lambda x: f"{x:.1f}"[1:] if -1 < x < 1 else f"{x:.1f}")
-    df3['BsR/600'] = df3['BsR/600'].apply(
+    df1['BsR/600'] = df1['BsR/600'].apply(
         lambda x: f"{x:.1f}"[1:] if -1 < x < 1 else f"{x:.1f}")
-    df3['ZR/600'] = df3['ZR/600'].apply(
+    df1['ZR/600'] = df1['ZR/600'].apply(
         lambda x: f"{x:.1f}"[1:] if -1 < x < 1 else f"{x:.1f}")
 
-    df3 = df3[columns_to_keep]
-    print(batter_side)
-    if batter_side == 'Any':
-        df3 = df3
-    else:
-        df3 = df3[df3['Bats'] == batter_side]
-
-    df3 = df3.rename(columns={"Card Value" : 'Val'})
-
-    if batter_name is not None:
-        df3 = df3[df3['Title'].str.contains(batter_name, case=False, na=False)]
-
-    del df, df1, card_df, df2
+    del df
     import gc
     gc.collect()
-
-    return df3
+    return df1

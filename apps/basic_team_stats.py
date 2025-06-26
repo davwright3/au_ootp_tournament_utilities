@@ -3,7 +3,9 @@ import customtkinter as ctk
 from utils.config_utils import settings as settings_module
 from utils.file_utils.handle_select_file import handle_select_file
 from utils.data_utils.get_team_list import get_team_list
-from utils.stats_utils.calc_basic_team_stats import calc_basic_team_stats
+from utils.stats_utils.display_basic_team_stats import display_basic_team_stats
+from utils.view_utils.batter_stat_select_frame import BatterStatSelectFrame
+from utils.view_utils.pitcher_stat_select_frame import PitcherStatSelectFrame
 import pandas as pd
 
 from utils.view_utils.data_view_frame import TreeviewTableFrame
@@ -135,12 +137,36 @@ class BasicTeamStatsView(ctk.CTkToplevel):
 
         self.batting_stats_button = ctk.CTkButton(
             self.menu_frame,
-            text="Batting",
-            command=self.get_batting_stats
+            text="Display Stats",
+            command=self.get_stats_to_display
         )
         self.batting_stats_button.grid(
             row=0,
             column=0,
+            padx=10,
+            pady=10,
+            sticky='nsew'
+        )
+
+        self.batter_stat_select_frame = BatterStatSelectFrame(
+            self.menu_frame
+        )
+        self.batter_stat_select_frame.grid(
+            row=1,
+            column=0,
+            columnspan=2,
+            padx=10,
+            pady=10,
+            sticky='nsew'
+        )
+
+        self.pitcher_stat_select_frame = PitcherStatSelectFrame(
+            self.menu_frame
+        )
+        self.pitcher_stat_select_frame.grid(
+            row=2,
+            column=0,
+            columnspan=2,
             padx=10,
             pady=10,
             sticky='nsew'
@@ -170,14 +196,19 @@ class BasicTeamStatsView(ctk.CTkToplevel):
         print("Processing file")
         df = pd.read_csv(self.target_file)
         self.set_team_list(df)
+        del df
 
     def set_team_list(self, df):
         self.team_list = get_team_list(df)
         self.team_dropdown.configure(values=self.team_list)
+        del df
 
-    def get_batting_stats(self):
-        df = calc_basic_team_stats(pd.read_csv(self.target_file))
+    def get_stats_to_display(self):
+        selected_batting_stats = self.batter_stat_select_frame.get_active_stats()
+        selected_pitching_stats = self.pitcher_stat_select_frame.get_active_stats()
+        df = display_basic_team_stats(pd.read_csv(self.target_file), selected_batting_stats, selected_pitching_stats)
         self.data_view_frame.load_dataframe(df)
+        del df
 
 
     def log_message(self, message):

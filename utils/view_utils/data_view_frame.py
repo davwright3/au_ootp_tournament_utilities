@@ -65,7 +65,7 @@ class TreeviewTableFrame(ctk.CTkFrame):
                     minwidth=200,
                     stretch=True
                 )
-            elif col == 'PA':
+            elif col == 'PA' or col=='IPC':
                 self.tree.column(
                     col,
                     anchor="center",

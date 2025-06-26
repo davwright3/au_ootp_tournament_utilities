@@ -2,8 +2,8 @@
 import customtkinter as ctk
 import pandas as pd
 from utils.config_utils import settings as settings_module
-from utils.stats_utils.calc_basic_pitching_stats import (
-    calc_basic_pitching_stats
+from utils.stats_utils.display_basic_player_pitching_stats import (
+    display_basic_pitching_stats
 )
 from utils.view_utils.header_footer_frame import Header, Footer
 from utils.view_utils.data_view_frame import TreeviewTableFrame
@@ -372,7 +372,7 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
 
         pitching_stats_to_view = self.get_pitching_stats_to_view()
 
-        df = calc_basic_pitching_stats(
+        df = display_basic_pitching_stats(
             pd.read_csv(self.target_file),
             self.min_ip,
             role=pos,
