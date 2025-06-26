@@ -5,7 +5,7 @@ from utils.config_utils import settings as settings_module
 from utils.stats_utils.calc_basic_pitching_stats import (
     calc_basic_pitching_stats
 )
-from utils.view_utils.header_footer import Header, Footer
+from utils.view_utils.header_footer_frame import Header, Footer
 from utils.view_utils.data_view_frame import TreeviewTableFrame
 from utils.file_utils.handle_select_file import handle_select_file
 from utils.view_utils.pitcher_stat_select_frame import PitcherStatSelectFrame

@@ -2,10 +2,12 @@
 import customtkinter as ctk
 from utils.config_utils import settings as settings_module
 from utils.file_utils.handle_select_file import handle_select_file
+from utils.data_utils.get_team_list import get_team_list
+from utils.stats_utils.calc_basic_team_stats import calc_basic_team_stats
 import pandas as pd
 
 from utils.view_utils.data_view_frame import TreeviewTableFrame
-from utils.view_utils.header_footer import Header, Footer
+from utils.view_utils.header_footer_frame import Header, Footer
 
 
 class BasicTeamStatsView(ctk.CTkToplevel):
@@ -19,7 +21,7 @@ class BasicTeamStatsView(ctk.CTkToplevel):
         # Initialize the target file
         self.target_file = None
         self.stats_df = pd.DataFrame()
-        self.team_list = []
+        self.team_list = ["No teams loaded"]
 
         self.height = int(page_settings['FileProcessor']['height'])
         self.width = int(page_settings['FileProcessor']['width'])
@@ -59,7 +61,23 @@ class BasicTeamStatsView(ctk.CTkToplevel):
 
         self.data_view_frame = TreeviewTableFrame(self)
         self.data_view_frame.grid(
-            row=2, column=0, columnspan=3, padx=10, pady=10, sticky='nsew'
+            row=2,
+            column=0,
+            columnspan=2,
+            padx=10,
+            pady=10,
+            sticky='nsew'
+        )
+
+        self.menu_frame = ctk.CTkFrame(
+            self
+        )
+        self.menu_frame.grid(
+            row=2,
+            column=2,
+            padx=10,
+            pady=10,
+            sticky='nsew'
         )
 
         self.footer_frame = Footer(
@@ -89,6 +107,45 @@ class BasicTeamStatsView(ctk.CTkToplevel):
             row=0, column=1, padx=10, pady=10, sticky='nsew'
         )
 
+        self.process_file_button = ctk.CTkButton(
+            self.file_select_frame,
+            command=self.process_file,
+            text="Process File"
+        )
+        self.process_file_button.grid(
+            row=0,
+            column=2,
+            padx=10,
+            pady=10,
+            sticky='nsew'
+        )
+
+        self.team_dropdown = ctk.CTkComboBox(
+            self.file_select_frame,
+            values=self.team_list
+        )
+        self.team_dropdown.set("No teams loaded")
+        self.team_dropdown.grid(
+            row=0,
+            column=3,
+            padx=10,
+            pady=10,
+            sticky='nsew'
+        )
+
+        self.batting_stats_button = ctk.CTkButton(
+            self.menu_frame,
+            text="Batting",
+            command=self.get_batting_stats
+        )
+        self.batting_stats_button.grid(
+            row=0,
+            column=0,
+            padx=10,
+            pady=10,
+            sticky='nsew'
+        )
+
         self.lift()
         self.focus_force()
         self.attributes("-topmost", True)
@@ -108,6 +165,20 @@ class BasicTeamStatsView(ctk.CTkToplevel):
             )
         else:
             self.log_message("File selection cancelled")
+
+    def process_file(self):
+        print("Processing file")
+        df = pd.read_csv(self.target_file)
+        self.set_team_list(df)
+
+    def set_team_list(self, df):
+        self.team_list = get_team_list(df)
+        self.team_dropdown.configure(values=self.team_list)
+
+    def get_batting_stats(self):
+        df = calc_basic_team_stats(pd.read_csv(self.target_file))
+        self.data_view_frame.load_dataframe(df)
+
 
     def log_message(self, message):
         """Update message label."""

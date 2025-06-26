@@ -11,8 +11,6 @@ from utils.config_utils.get_resource_path import get_resource_path
 
 unicorn_image_path = get_resource_path(
     os.path.join("assets", "Unicorn_logo_nobg2.png"))
-print(unicorn_image_path)
-print("Exists?", os.path.exists(unicorn_image_path))
 
 original_image = Image.open(unicorn_image_path)
 unicorn_image = ctk.CTkImage(light_image=original_image, size=(100, 100))

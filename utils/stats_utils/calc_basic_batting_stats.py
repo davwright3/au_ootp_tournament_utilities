@@ -125,7 +125,7 @@ def calc_basic_batting_stats(
     if batter_name is not None:
         df3 = df3[df3['Title'].str.contains(batter_name, case=False, na=False)]
 
-    del df1, card_df, df2
+    del df, df1, card_df, df2
     import gc
     gc.collect()
 

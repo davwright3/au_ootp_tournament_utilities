@@ -57,7 +57,7 @@ class TreeviewTableFrame(ctk.CTkFrame):
                 command=lambda c=col: self.sort_by_column(c)
             )
 
-            if col == "Title":
+            if col == "Title" or col == "ORG":
                 self.tree.column(
                     col,
                     anchor="w",
