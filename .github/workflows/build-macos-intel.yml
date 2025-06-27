@@ -24,7 +24,7 @@ jobs:
 
       - name: Build Intel-only binary
         run: |
-          pyinstaller --onefile main.py
+          pyinstaller main.spec
           mv dist/main dist/main-intel
 
       - name: Zip binary

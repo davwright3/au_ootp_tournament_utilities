@@ -33,9 +33,9 @@ class TreeviewTableFrame(ctk.CTkFrame):
 
         self.table = None
 
-    def load_dataframe(self, df: pd.DataFrame, min_pa=1):
+    def load_dataframe(self, df: pd.DataFrame, min_pa=1, passed_team=None):
         """Load dataframe for Treeview."""
-        print("Loading dataframe into table...")
+        print("Loading dataframe into table...Passed team:")
 
         for widget in self.tree_frame.winfo_children():
             widget.destroy()
@@ -49,6 +49,10 @@ class TreeviewTableFrame(ctk.CTkFrame):
             show="headings"
         )
 
+        self.tree.tag_configure('evenrow', background="#ffffff")
+        self.tree.tag_configure('oddrow', background="#f0f0f0")
+        self.tree.tag_configure('highlightrow', background="#c7f2c7")
+
         # Set column headers
         for col in df.columns:
             self.tree.heading(
@@ -57,7 +61,7 @@ class TreeviewTableFrame(ctk.CTkFrame):
                 command=lambda c=col: self.sort_by_column(c)
             )
 
-            if col == "Title":
+            if col == "Title" or col == "ORG":
                 self.tree.column(
                     col,
                     anchor="w",
@@ -65,7 +69,7 @@ class TreeviewTableFrame(ctk.CTkFrame):
                     minwidth=200,
                     stretch=True
                 )
-            elif col == 'PA':
+            elif col == 'PA' or col == 'IPC':
                 self.tree.column(
                     col,
                     anchor="center",
@@ -81,7 +85,7 @@ class TreeviewTableFrame(ctk.CTkFrame):
                 )
 
         # Insert data
-        self._insert_data(df)
+        self._insert_data(df, passed_team)
 
         scrollbar = ctk.CTkScrollbar(
             self.tree_frame,
@@ -95,13 +99,21 @@ class TreeviewTableFrame(ctk.CTkFrame):
         self.tree_frame.grid_columnconfigure(0, weight=1)
         self.tree.grid(row=0, column=0, sticky='nsew')
 
-    def _insert_data(self, df):
+    def _insert_data(self, df, selected_team=None):
         """Insert data into Treeview."""
         for row in self.tree.get_children():
             self.tree.delete(row)
 
-        for _, row in df.iterrows():
-            self.tree.insert('', 'end', values=list(row))
+        for i, (_, row) in enumerate(df.iterrows()):
+            org_value = str(row.get('ORG', '')).strip().lower()
+            selected_value = str(selected_team).strip().lower()
+
+            if selected_value and org_value == selected_value:
+                print("Matched highlighted row")
+                tag = 'highlightrow'
+            else:
+                tag = 'evenrow' if i % 2 == 0 else 'oddrow'
+            self.tree.insert('', 'end', values=list(row), tags=(tag,))
 
     def sort_by_column(self, col):
         """Sort by column."""

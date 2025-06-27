@@ -2,7 +2,7 @@
 import os.path
 import customtkinter as ctk
 from utils.config_utils import settings as settings_module
-from utils.view_utils.header_footer import Header, Footer
+from utils.view_utils.header_footer_frame import Header, Footer
 from utils.file_utils.file_selector import open_file
 from utils.file_utils.folder_selector import select_folder
 from utils.file_utils.create_new_target_file import create_file_from_template

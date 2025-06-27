@@ -1,10 +1,12 @@
-"""Frame for selecting which pitcher stats to view"""
+"""Frame for selecting which pitcher stats to view."""
 import customtkinter as ctk
 
+
 class PitcherStatSelectFrame(ctk.CTkFrame):
-    """View class for pitch stats"""
+    """View class for pitch stats."""
+
     def __init__(self, parent):
-        """Initialize the frame"""
+        """Initialize the frame."""
         ctk.CTkFrame.__init__(self, parent)
 
         available_stats = ['FIP', 'ERA', 'K/9', 'KPct', 'BB/9',
@@ -43,5 +45,5 @@ class PitcherStatSelectFrame(ctk.CTkFrame):
             stat_num += 1
 
     def get_active_stats(self):
-        """Return the active stats"""
+        """Return the active stats."""
         return self.stats_to_keep

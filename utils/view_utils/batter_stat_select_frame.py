@@ -1,5 +1,6 @@
-"""Modular app for checkboxes to select batter stats to view"""
+"""Modular app for checkboxes to select batter stats to view."""
 import customtkinter as ctk
+
 
 class BatterStatSelectFrame(ctk.CTkFrame):
     """View class for batter stats selection."""
@@ -11,7 +12,7 @@ class BatterStatSelectFrame(ctk.CTkFrame):
         available_stats = ['AVG', 'OBP', 'SLG', 'OPS', 'wOBA',
                            'HR/600', 'K/600', 'BB/600', 'SB/600',
                            'SBPct', 'RC/600', 'WAR/600', 'BsR/600',
-                           'ZR/600' ]
+                           'ZR/600']
 
         self.stats_to_keep = []
 
@@ -24,7 +25,7 @@ class BatterStatSelectFrame(ctk.CTkFrame):
 
         self.set_active_stats = set_active_stats
 
-        stat_num=0
+        stat_num = 0
 
         for stat in available_stats:
             checkbox = ctk.CTkCheckBox(
@@ -43,8 +44,6 @@ class BatterStatSelectFrame(ctk.CTkFrame):
             )
             stat_num += 1
 
-
     def get_active_stats(self):
+        """Get the selected stats."""
         return self.stats_to_keep
-
-

@@ -17,7 +17,7 @@ from utils.config_utils.get_base_sys_path import get_base_sys_path
 sys.path.insert(0, get_base_sys_path())
 from utils.interface_utils.app_select_button import AppSelectButton # noqa
 from utils.config_utils.settings import settings, reload_settings # noqa
-from utils.view_utils.header_footer import Header, Footer # noqa
+from utils.view_utils.header_footer_frame import Header, Footer # noqa
 from apps.file_processing import FileProcessor # noqa
 from utils.config_utils.confirm_display_path import confirm_display_path # noqa
 
