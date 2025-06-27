@@ -24,6 +24,7 @@ class BasicTeamStatsView(ctk.CTkToplevel):
         self.target_file = None
         self.stats_df = pd.DataFrame()
         self.team_list = ["No teams loaded"]
+        self.selected_team = ctk.StringVar(value="No teams loaded")
 
         self.height = int(page_settings['FileProcessor']['height'])
         self.width = int(page_settings['FileProcessor']['width'])
@@ -109,12 +110,12 @@ class BasicTeamStatsView(ctk.CTkToplevel):
             row=0, column=1, padx=10, pady=10, sticky='nsew'
         )
 
-        self.process_file_button = ctk.CTkButton(
+        self.generate_team_list_button = ctk.CTkButton(
             self.file_select_frame,
-            command=self.process_file,
-            text="Process File"
+            command=self.generate_team_list,
+            text="Get Team List"
         )
-        self.process_file_button.grid(
+        self.generate_team_list_button.grid(
             row=0,
             column=2,
             padx=10,
@@ -124,7 +125,8 @@ class BasicTeamStatsView(ctk.CTkToplevel):
 
         self.team_dropdown = ctk.CTkComboBox(
             self.file_select_frame,
-            values=self.team_list
+            values=self.team_list,
+            variable=self.selected_team
         )
         self.team_dropdown.set("No teams loaded")
         self.team_dropdown.grid(
@@ -192,24 +194,32 @@ class BasicTeamStatsView(ctk.CTkToplevel):
         else:
             self.log_message("File selection cancelled")
 
-    def process_file(self):
-        print("Processing file")
+    def generate_team_list(self):
+        """Process file for team list."""
         df = pd.read_csv(self.target_file)
         self.set_team_list(df)
         del df
 
     def set_team_list(self, df):
+        """Create list for team list."""
         self.team_list = get_team_list(df)
         self.team_dropdown.configure(values=self.team_list)
         del df
 
     def get_stats_to_display(self):
-        selected_batting_stats = self.batter_stat_select_frame.get_active_stats()
-        selected_pitching_stats = self.pitcher_stat_select_frame.get_active_stats()
-        df = display_basic_team_stats(pd.read_csv(self.target_file), selected_batting_stats, selected_pitching_stats)
-        self.data_view_frame.load_dataframe(df)
+        """Process file and display stats."""
+        selected_batting_stats = self.batter_stat_select_frame.get_active_stats() # noqa:
+        selected_pitching_stats = self.pitcher_stat_select_frame.get_active_stats() # noqa:
+        df = display_basic_team_stats(
+            pd.read_csv(self.target_file),
+            selected_batting_stats,
+            selected_pitching_stats
+        )
+        self.data_view_frame.load_dataframe(
+            df,
+            passed_team=self.selected_team.get()
+        )
         del df
-
 
     def log_message(self, message):
         """Update message label."""

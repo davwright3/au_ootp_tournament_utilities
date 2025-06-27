@@ -1,5 +1,6 @@
 """Calculate basic pitching stats."""
-import pandas as pd
+# import pandas as pd
+
 
 def calc_basic_pitching_stats(df, min_ip=200, inning_split=5, role=None):
     """Calculate basic batting stats and return a dataframe."""
@@ -66,8 +67,6 @@ def calc_basic_pitching_stats(df, min_ip=200, inning_split=5, role=None):
         lambda x: f"{x:.2f}" if x > 1 else f"{x:.2f}"[1:])
     df1['WAR/200'] = df1['WAR/200'].apply(
         lambda x: f"{x:.2f}" if x > 1 else f"{x:.2f}"[1:])
-
-
 
     del df
     import gc

@@ -1,6 +1,6 @@
 """Script for calcuating basic batting stats."""
 import pandas as pd
-import numpy as np
+# import numpy as np
 from utils.config_utils import settings as settings_module
 from utils.stats_utils.cull_teams import cull_teams
 from utils.stats_utils.calc_basic_batting_stats import calc_basic_batting_stats
@@ -73,7 +73,7 @@ def display_basic_batting_stats(
     else:
         df3 = df3[df3['Bats'] == batter_side]
 
-    df3 = df3.rename(columns={"Card Value" : 'Val'})
+    df3 = df3.rename(columns={"Card Value": 'Val'})
 
     if batter_name is not None:
         df3 = df3[df3['Title'].str.contains(batter_name, case=False, na=False)]

@@ -2,7 +2,8 @@
 import pandas as pd
 from utils.config_utils import settings as settings_module
 from utils.stats_utils.cull_teams import cull_teams
-from utils.stats_utils.calc_basic_pitching_stats import calc_basic_pitching_stats
+from utils.stats_utils.calc_basic_pitching_stats import (
+    calc_basic_pitching_stats)
 
 
 def display_basic_pitching_stats(
@@ -75,7 +76,6 @@ def display_basic_pitching_stats(
         how='inner'
     )
 
-
     df3['CID'] = df3['CID'].astype(str)
     df3['Title'] = df3['Title'].astype(str)
     df3['Throws'] = df3['Throws'].apply(
@@ -84,7 +84,6 @@ def display_basic_pitching_stats(
     df3['Card Value'] = df3['Card Value'].astype(str)
     df3['IPC'] = df3['IPC'].apply(lambda x: f"{float(x):.0f}")
     df3['IP/G'] = df3['IP/G'].apply(lambda x: f"{float(x):.2f}")
-
 
     df3 = df3[columns_to_keep]
 

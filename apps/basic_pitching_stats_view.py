@@ -396,4 +396,5 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
         self.file_select_label.configure(text=message)
 
     def get_pitching_stats_to_view(self):
+        """Get list of selected pitching stats."""
         return self.pitching_stats_select_frame.get_active_stats()

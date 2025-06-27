@@ -4,7 +4,8 @@ from utils.config_utils import settings as settings_module
 from utils.view_utils.header_footer_frame import Header, Footer
 from utils.view_utils.data_view_frame import TreeviewTableFrame
 from utils.file_utils.handle_select_file import handle_select_file
-from utils.stats_utils.display_basic_player_batting_stats import display_basic_batting_stats
+from utils.stats_utils.display_basic_player_batting_stats import (
+    display_basic_batting_stats)
 from utils.interface_utils.pos_select_button import CustomPositionButton
 from utils.view_utils.batter_stat_select_frame import BatterStatSelectFrame
 import pandas as pd
@@ -448,4 +449,5 @@ class BasicStatsView(ctk.CTkToplevel):
         self.file_select_label.configure(text=message)
 
     def get_active_stats(self):
+        """Get the list of selected stats."""
         return self.batter_stat_select_frame.get_active_stats()

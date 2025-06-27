@@ -1,13 +1,16 @@
-"""Calculate basic batting stats"""
+"""Calculate basic batting stats."""
 
-import pandas as pd
+# import pandas as pd
 import numpy as np
+
 
 def calc_basic_batting_stats(df):
     """Calculate basic batting stats and return a dataframe."""
     df1 = df.copy()
     df1['AVG'] = (df1['H']/df1['AB']).round(3)
-    df1['OBP'] = ((df1['H'] + df1['BB'] + df1['HP'])/(df1['AB'] + df1['BB'] + df1['HP'] + df1['SF'])).round(3)
+    df1['OBP'] = ((df1['H'] + df1['BB'] +
+                   df1['HP'])/(df1['AB'] + df1['BB'] +
+                               df1['HP'] + df1['SF'])).round(3)
     df1['SLG'] = (df1['TB']/df1['AB']).round(3)
     df1['OPS'] = df1['OBP'] + df1['SLG']
     df1['wOBA'] = (((.701*df1['BB']) + (.732*df1['HP']) + (.895*df1['1B']) +
