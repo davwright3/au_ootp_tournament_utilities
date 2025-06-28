@@ -3,19 +3,20 @@ import os
 import shutil
 import sys
 from configparser import ConfigParser
+from utils.config_utils.get_user_settings_path import get_user_settings_path
 
 APP_NAME = 'AU Tournament Utilities'
 
 
-def get_user_settings_path():
-    """Check OS and find settings path."""
-    if os.name == 'nt':
-        base_dir = os.getenv('APPDATA', os.path.expanduser('~'))
-    else:
-        base_dir = os.path.expanduser('~/config')
-    settings_dir = os.path.join(base_dir, APP_NAME)
-    os.makedirs(settings_dir, exist_ok=True)
-    return os.path.join(settings_dir, 'settings.ini')
+# def get_user_settings_path():
+#     """Check OS and find settings path."""
+#     if os.name == 'nt':
+#         base_dir = os.getenv('APPDATA', os.path.expanduser('~'))
+#     else:
+#         base_dir = os.path.expanduser('~/config')
+#     settings_dir = os.path.join(base_dir, APP_NAME)
+#     os.makedirs(settings_dir, exist_ok=True)
+#     return os.path.join(settings_dir, 'settings.ini')
 
 
 def get_default_settings_path():
@@ -29,7 +30,7 @@ def get_default_settings_path():
             'settings_default.ini')
 
 
-SETTINGS_PATH = get_user_settings_path()
+SETTINGS_PATH = get_user_settings_path(APP_NAME)
 DEFAULT_SETTINGS_PATH = get_default_settings_path()
 
 
