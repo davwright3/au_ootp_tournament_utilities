@@ -2,29 +2,41 @@
 
 Welcome to the home for my OOTP Tournament Tools.  
 
-This is a desktop utility for processing and analyzing OOTP Baseball tournament data.
+This is a desktop utility for processing and analyzing OOTP Baseball tournament data. 
 
 - Bug reports: [FORM](https://docs.google.com/forms/d/e/1FAIpQLSdAmXv6rTwoBw9ipBdeSc7qvyV7IO83CpIVkEX5_aEbgwpy6w/viewform?usp=sharing&ouid=112838883589285917619)
 - Feature requests: [FORM](https://docs.google.com/forms/d/e/1FAIpQLSftrpDw8ypLglDXteZAT0uo7H5NqkJf9UKdBCjX1OEvpKp66w/viewform?usp=sharing&ouid=112838883589285917619)
 
 ---
 
-## Current Features (v 0.1.1 early alpha)
+## Current Features (v 0.1.3 alpha)
 
-- 🗃️ (WIP) File Processing for OOTP CSV exports
+- 🗃️ File Processing for OOTP CSV exports
 - ⚙️ Editable settings with JSON-based configuration
 - ✨ CustomTkinter GUI with consistent header/footer layout
 - 📳 Modular app design using subprocess launching
 - ➡️ Linted with flake8 with docstring support
+- 🗿 Basic Batter and Pitcher stats with sorting, player search and role selection
+- 🫂 Basic team stats with highlighting of selected team
 
 
 ---
 
 ## Getting Started
 
+### Installation
+
+- Windows users should use the most up-to-date Windows installation from the releases section on the right
+
+  - The installer will run through prompts to get the application setup, and I recommend default settings
+
+- macOS users should use the most up-to-data macOS file based on their system (Intel based or non-Intel based)
+
+  - The zip file should be run from the file where it downloads and should extract into that folder
+
 ### Initial Startup
 
-- Set window sizes (1920x1080 recommended)
+- Set window sizes (1920x1080 minimum recommended)
 - Set target folders and files for file processing
 
   - RECOMMENDED:  Have one main folder for your processed files and individual raw data folders for each tournament
@@ -38,7 +50,7 @@ This is a desktop utility for processing and analyzing OOTP Baseball tournament 
 
 - By default, your target folders and files will be set to C:\, you will need to use the Edit Settings menu to move them
 
-- It is recommended that you set up a Raw Data and Ready Data folder (or similar names) and set your initial_target_folder and initial data folders to these
+- I recommended that you set up a Raw Data and Ready Data folder (or similar names) and set your initial_target_folder and initial data folders to these
 
   - The initial_target_folder is where the template will be sent to when you use the "New File" command in the File Processing App
 
@@ -69,6 +81,16 @@ this becomes obsolete.
 
 - Simply select the processed CSV you want to see the data for and process the file.  You can filter batters by position.  Starter/reliever filtering will be in the next update.
 - All columns can be sorted by clicking on the header and will reverse (ascending/descending) when sorted again.
+- By default, no stat columns will be selected, the user is able to select as few or as many columns to select as the want
+  - Default stats always visible are CID, Title, Bat/Pitch side, and Plate Appearances/Innings Pitched
+
+
+### Basic Team Stats
+
+- After selecting a file, using the "Get Teams List" button will populate the dropdown with all the teams found in the file
+- You do not have to select your team, but doing so will highlight your team in the list to make it easier to find
+- Similar to the batting and pitching stats, the user is able to select which stats they want to view
+  - Default stats always visible are team games play, wins, losses and winning percentage
 
 ___
 # Release Information
@@ -89,7 +111,8 @@ ___
 ### v0.1.2.19
 
 - Basic batting and pitching stat views
-- initial release of macOS compatible ZIP build
+- Initial release of macOS compatible ZIP build
+- Renamed release numbers to be more accurate with project progress
 
 ### v0.1.2.20
 
@@ -107,6 +130,11 @@ ___
 - Add player search function
 - Fix DPI scaling issue on Windows systems
 
+### v0.1.2.26 (Windows), v0.1.2.11 (macOS), v0.1.2.4 (macOS Intel)
+
+- Add basic team stat views
+- Fix potential pathing issue for macOS settings read/write
+- Refactor stats calculations and some frames for modularity
 
 ---
 
