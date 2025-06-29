@@ -32,6 +32,7 @@ class BasicStatsView(ctk.CTkToplevel):
         self.variant_select = ctk.BooleanVar(value=False)
         self.batter_side_select = ctk.StringVar(value='Any')
         self.batter_search_name = None
+        self.role = 'batter'
 
         self.height = int(page_settings['FileProcessor']['height'])
         self.width = int(page_settings['FileProcessor']['width'])

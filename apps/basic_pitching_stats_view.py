@@ -31,6 +31,7 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
         self.variant_select = ctk.BooleanVar(value=False)
         self.pitching_side_checkbox = ctk.StringVar(value='Any')
         self.player_search_name = None
+        self.role = 'pitcher'
 
         self.height = int(page_settings['FileProcessor']['height'])
         self.width = int(page_settings['FileProcessor']['width'])

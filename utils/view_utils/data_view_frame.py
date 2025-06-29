@@ -150,6 +150,11 @@ class TreeviewTableFrame(ctk.CTkFrame):
             print("No file path found")
             return
 
+        try:
+            role = self.parent.role
+        except ValueError:
+            role = "batter"
+
         values = self.tree.item(selected_item, 'values')
         columns = self.tree['columns']
 
@@ -160,7 +165,9 @@ class TreeviewTableFrame(ctk.CTkFrame):
         except ValueError:
             print("CID column not found")
             return
-
-        open_batter_view(cid_value, file_path)
+        if role == 'batter':
+            open_batter_view(cid_value, file_path)
+        elif role == 'pitcher':
+            print(role, ' selected')
 
 
