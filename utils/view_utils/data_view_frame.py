@@ -6,6 +6,11 @@ import pandas as pd
 from apps.batter_info_view import BatterInfoView
 
 
+def open_batter_view(cid, file_path):
+    from apps.batter_info_view import BatterInfoView
+    BatterInfoView(cid, file_path)
+
+
 class TreeviewTableFrame(ctk.CTkFrame):
     """Create frame for viewing data."""
 
@@ -156,10 +161,6 @@ class TreeviewTableFrame(ctk.CTkFrame):
             print("CID column not found")
             return
 
-        self.open_batter_view(cid_value, file_path)
-
-    def open_batter_view(self, cid, file_path):
-        from apps.batter_info_view import BatterInfoView
-        BatterInfoView(cid, file_path)
+        open_batter_view(cid_value, file_path)
 
 
