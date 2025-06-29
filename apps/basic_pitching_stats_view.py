@@ -9,6 +9,7 @@ from utils.view_utils.header_footer_frame import Header, Footer
 from utils.view_utils.data_view_frame import TreeviewTableFrame
 from utils.file_utils.handle_select_file import handle_select_file
 from utils.view_utils.pitcher_stat_select_frame import PitcherStatSelectFrame
+from utils.view_utils.card_value_select_frame import CardValueSelectFrame
 
 
 class BasicPitchingStatsView(ctk.CTkToplevel):
@@ -113,7 +114,8 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
         self.menu_frame.rowconfigure(6, weight=0)
         self.menu_frame.rowconfigure(7, weight=0)
         self.menu_frame.rowconfigure(8, weight=0)
-        self.menu_frame.rowconfigure(9, weight=1)
+        self.menu_frame.rowconfigure(9, weight=0)
+        self.menu_frame.rowconfigure(10, weight=1)
 
         self.footer_frame = Footer(
             self,
@@ -330,6 +332,18 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
             sticky="nsew"
         )
 
+        self.card_value_select_frame = CardValueSelectFrame(
+            self.menu_frame,
+        )
+        self.card_value_select_frame.grid(
+            row=9,
+            column=0,
+            columnspan=2,
+            padx=10,
+            pady=10,
+            sticky="nsew"
+        )
+
         self.lift()
         self.focus_force()
         self.attributes("-topmost", True)
@@ -371,6 +385,14 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
             self.player_search_name = None
 
         pitching_stats_to_view = self.get_pitching_stats_to_view()
+        min_value, max_value = self.card_value_select_frame.get_min_max_values()
+
+        try:
+            min_value = int(min_value)
+            max_value = int(max_value)
+        except ValueError:
+            min_value = 40
+            max_value = 105
 
         df = display_basic_pitching_stats(
             pd.read_csv(self.target_file),
@@ -381,6 +403,8 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
             pitching_side=self.pitching_side_checkbox.get(),
             player_name=self.player_search_name,
             pitching_stats_to_view=pitching_stats_to_view,
+            min_value=min_value,
+            max_value=max_value,
         )
 
         self.data_view_frame.load_dataframe(df)

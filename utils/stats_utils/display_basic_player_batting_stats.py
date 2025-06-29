@@ -13,7 +13,9 @@ def display_basic_batting_stats(
         variant_split=False,
         batter_side=None,
         batter_name=None,
-        stats_to_view=None):
+        stats_to_view=None,
+        min_value=40,
+        max_value=105,):
     """Calculate basic batting stats."""
     df1 = pd.DataFrame(df)
     script_settings = settings_module.settings
@@ -74,6 +76,7 @@ def display_basic_batting_stats(
         df3 = df3[df3['Bats'] == batter_side]
 
     df3 = df3.rename(columns={"Card Value": 'Val'})
+    df3 = df3[(df3['Val'] <= max_value) & (df3['Val'] >= min_value) ]
 
     if batter_name is not None:
         df3 = df3[df3['Title'].str.contains(batter_name, case=False, na=False)]
