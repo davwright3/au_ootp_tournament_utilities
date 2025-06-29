@@ -3,12 +3,15 @@ import tkinter as tk
 from tkinter import ttk
 import customtkinter as ctk
 import pandas as pd
-from apps.batter_info_view import BatterInfoView
 
 
 def open_batter_view(cid, file_path):
     from apps.batter_info_view import BatterInfoView
     BatterInfoView(cid, file_path)
+
+def open_pitcher_view(cid, file_path):
+    from apps.pitcher_info_view import PitcherInfoView
+    PitcherInfoView(cid, file_path)
 
 
 class TreeviewTableFrame(ctk.CTkFrame):
@@ -168,6 +171,6 @@ class TreeviewTableFrame(ctk.CTkFrame):
         if role == 'batter':
             open_batter_view(cid_value, file_path)
         elif role == 'pitcher':
-            print(role, ' selected')
+            open_pitcher_view(cid_value, file_path)
 
 
