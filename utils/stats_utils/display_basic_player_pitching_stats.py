@@ -14,7 +14,9 @@ def display_basic_pitching_stats(
         variant_split=False,
         pitching_side=None,
         player_name=None,
-        pitching_stats_to_view=None
+        pitching_stats_to_view=None,
+        min_value=40,
+        max_value=105
 ):
     """Calculate basic pitching stats for display in a data frame."""
     script_settings = settings_module.settings
@@ -81,7 +83,7 @@ def display_basic_pitching_stats(
     df3['Throws'] = df3['Throws'].apply(
         lambda x: 'R' if x == 1 else 'L'
     )
-    df3['Card Value'] = df3['Card Value'].astype(str)
+    df3['Card Value'] = df3['Card Value'].astype(int)
     df3['IPC'] = df3['IPC'].apply(lambda x: f"{float(x):.0f}")
     df3['IP/G'] = df3['IP/G'].apply(lambda x: f"{float(x):.2f}")
 
@@ -94,6 +96,7 @@ def display_basic_pitching_stats(
         df3 = df3[df3['Title'].str.contains(player_name, case=False, na=False)]
 
     df3 = df3.rename(columns={'Card Value': 'Val'})
+    df3 = df3[(df3['Val'] <= max_value) & (df3['Val'] >= min_value)]
 
     del df_to_load, df2, df1, removed
     import gc

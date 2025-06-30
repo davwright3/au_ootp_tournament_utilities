@@ -2,12 +2,13 @@
 import customtkinter as ctk
 from utils.config_utils import settings as settings_module
 from utils.view_utils.header_footer_frame import Header, Footer
-from utils.view_utils.data_view_frame import TreeviewTableFrame
+from utils.view_utils.all_player_data_view_frame import TreeviewTableFrame
 from utils.file_utils.handle_select_file import handle_select_file
 from utils.stats_utils.display_basic_player_batting_stats import (
     display_basic_batting_stats)
 from utils.interface_utils.pos_select_button import CustomPositionButton
 from utils.view_utils.batter_stat_select_frame import BatterStatSelectFrame
+from utils.view_utils.card_value_select_frame import CardValueSelectFrame
 import pandas as pd
 
 
@@ -31,6 +32,7 @@ class BasicStatsView(ctk.CTkToplevel):
         self.variant_select = ctk.BooleanVar(value=False)
         self.batter_side_select = ctk.StringVar(value='Any')
         self.batter_search_name = None
+        self.role = 'batter'
 
         self.height = int(page_settings['FileProcessor']['height'])
         self.width = int(page_settings['FileProcessor']['width'])
@@ -111,7 +113,8 @@ class BasicStatsView(ctk.CTkToplevel):
         self.menu_frame.rowconfigure(11, weight=0)
         self.menu_frame.rowconfigure(12, weight=0)
         self.menu_frame.rowconfigure(13, weight=0)
-        self.menu_frame.rowconfigure(14, weight=1)
+        self.menu_frame.rowconfigure(14, weight=0)
+        self.menu_frame.rowconfigure(15, weight=1)
 
         self.footer_frame = Footer(
             self,
@@ -171,8 +174,8 @@ class BasicStatsView(ctk.CTkToplevel):
         self.batter_search_label.grid(
             row=0,
             column=0,
-            padx=10,
-            pady=10
+            padx=5,
+            pady=5
         )
 
         self.batter_search_entry = ctk.CTkEntry(
@@ -181,8 +184,8 @@ class BasicStatsView(ctk.CTkToplevel):
         self.batter_search_entry.grid(
             row=0,
             column=1,
-            padx=10,
-            pady=10
+            padx=5,
+            pady=5
         )
 
         self.plate_app_label = ctk.CTkLabel(
@@ -192,8 +195,8 @@ class BasicStatsView(ctk.CTkToplevel):
         self.plate_app_label.grid(
             row=1,
             column=0,
-            padx=10,
-            pady=10
+            padx=5,
+            pady=5
         )
 
         self.plate_app_entry = ctk.CTkEntry(
@@ -202,8 +205,8 @@ class BasicStatsView(ctk.CTkToplevel):
         self.plate_app_entry.grid(
             row=1,
             column=1,
-            padx=10,
-            pady=10
+            padx=5,
+            pady=5
         )
 
         self.variant_checkbox = ctk.CTkCheckBox(
@@ -214,8 +217,8 @@ class BasicStatsView(ctk.CTkToplevel):
         self.variant_checkbox.grid(
             row=2,
             column=1,
-            padx=10,
-            pady=10
+            padx=5,
+            pady=5
         )
 
         self.batter_side_label = ctk.CTkLabel(
@@ -225,8 +228,8 @@ class BasicStatsView(ctk.CTkToplevel):
         self.batter_side_label.grid(
             row=3,
             column=0,
-            padx=10,
-            pady=10,
+            padx=5,
+            pady=5,
             sticky='nsew'
         )
 
@@ -243,8 +246,8 @@ class BasicStatsView(ctk.CTkToplevel):
         self.batter_side_checkbox.grid(
             row=3,
             column=1,
-            padx=10,
-            pady=10,
+            padx=5,
+            pady=5,
             sticky='nsew'
         )
 
@@ -258,8 +261,8 @@ class BasicStatsView(ctk.CTkToplevel):
             row=4,
             column=0,
             columnspan=2,
-            padx=10,
-            pady=10
+            padx=5,
+            pady=5
         )
 
         self.first_base_button = CustomPositionButton(
@@ -272,8 +275,8 @@ class BasicStatsView(ctk.CTkToplevel):
             row=5,
             column=0,
             columnspan=2,
-            padx=10,
-            pady=10
+            padx=5,
+            pady=5
         )
 
         self.second_base_button = CustomPositionButton(
@@ -286,8 +289,8 @@ class BasicStatsView(ctk.CTkToplevel):
             row=6,
             column=0,
             columnspan=2,
-            padx=10,
-            pady=10
+            padx=5,
+            pady=5
         )
 
         self.third_base_button = CustomPositionButton(
@@ -300,8 +303,8 @@ class BasicStatsView(ctk.CTkToplevel):
             row=7,
             column=0,
             columnspan=2,
-            padx=10,
-            pady=10
+            padx=5,
+            pady=5
         )
 
         self.shortstop_button = CustomPositionButton(
@@ -314,8 +317,8 @@ class BasicStatsView(ctk.CTkToplevel):
             row=8,
             column=0,
             columnspan=2,
-            padx=10,
-            pady=10
+            padx=5,
+            pady=5
         )
 
         self.left_field_button = CustomPositionButton(
@@ -328,8 +331,8 @@ class BasicStatsView(ctk.CTkToplevel):
             row=9,
             column=0,
             columnspan=2,
-            padx=10,
-            pady=10
+            padx=5,
+            pady=5
         )
 
         self.center_field_button = CustomPositionButton(
@@ -342,8 +345,8 @@ class BasicStatsView(ctk.CTkToplevel):
             row=10,
             column=0,
             columnspan=2,
-            padx=10,
-            pady=10
+            padx=5,
+            pady=5
         )
 
         self.right_field_button = CustomPositionButton(
@@ -356,8 +359,8 @@ class BasicStatsView(ctk.CTkToplevel):
             row=11,
             column=0,
             columnspan=2,
-            padx=10,
-            pady=10
+            padx=5,
+            pady=5
         )
 
         self.all_batters_button = CustomPositionButton(
@@ -370,8 +373,8 @@ class BasicStatsView(ctk.CTkToplevel):
             row=12,
             column=0,
             columnspan=2,
-            padx=10,
-            pady=10
+            padx=5,
+            pady=5
         )
 
         self.batter_stat_select_frame = BatterStatSelectFrame(
@@ -381,8 +384,20 @@ class BasicStatsView(ctk.CTkToplevel):
             row=13,
             column=0,
             columnspan=2,
-            padx=10,
-            pady=10
+            padx=5,
+            pady=5
+        )
+
+        self.card_value_frame = CardValueSelectFrame(
+            self.menu_frame
+        )
+        self.card_value_frame.grid(
+            row=14,
+            column=0,
+            columnspan=3,
+            padx=5,
+            pady=5,
+            sticky='nsew'
         )
 
         self.lift()
@@ -422,6 +437,15 @@ class BasicStatsView(ctk.CTkToplevel):
                 self.batter_search_name = None
 
             stats_to_view = self.get_active_stats()
+            min_value, max_value = self.card_value_frame.get_min_max_values()
+            try:
+                min_value = int(min_value)
+                max_value = int(max_value)
+            except (ValueError, TypeError):
+                min_value = 40
+                max_value = 105
+
+            print(min_value, max_value)
 
             df = display_basic_batting_stats(
                 pd.read_csv(self.target_file),
@@ -430,7 +454,9 @@ class BasicStatsView(ctk.CTkToplevel):
                 variant_split=self.variant_select.get(),
                 batter_side=self.batter_side_select.get(),
                 batter_name=self.batter_search_name,
-                stats_to_view=stats_to_view
+                stats_to_view=stats_to_view,
+                min_value=min_value,
+                max_value=max_value,
             )
 
             self.data_view_frame.load_dataframe(df)
