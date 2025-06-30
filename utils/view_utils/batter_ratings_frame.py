@@ -6,7 +6,13 @@ from utils.interface_utils.rating_label import RatingLabel
 import pandas as pd
 
 class BatterRatingsFrame(ctk.CTkFrame):
+    """Modular frame for displaying batter ratings.
+
+    Requires the file location for the card dump
+    from the OOTP card shop.
+    """
     def __init__(self, parent, cid_value):
+        """Initialize the frame."""
         super().__init__(parent)
         print("Cid value: ", cid_value)
         card_df_file_path = settings_module['InitialFileDirs']['target_card_list_file']
@@ -32,6 +38,7 @@ class BatterRatingsFrame(ctk.CTkFrame):
         self.title_label = RatingLabel(self, self.ratings_df.iloc[0]['Title'])
         self.title_label.grid(row=0, column=0, columnspan=3, sticky='nsew')
 
+        # Rating and side labels
         self.overall_label = RatingLabel(self, rating_to_display="OA")
         self.overall_label.grid(row=1, column=1, sticky='nsew')
 
@@ -55,3 +62,49 @@ class BatterRatingsFrame(ctk.CTkFrame):
 
         self.eye_label = RatingLabel(self, "Eye")
         self.eye_label.grid(row=6, column=0)
+
+        # ratings labels
+        self.babip_overall_rating = RatingLabel(self, self.ratings_df.iloc[0]['BABIP'])
+        self.babip_overall_rating.grid(row=2, column=1)
+
+        self.babip_v_left_rating = RatingLabel(self, self.ratings_df.iloc[0]['BABIP vL'])
+        self.babip_v_left_rating.grid(row=2, column=2)
+
+        self.babip_v_right_rating = RatingLabel(self, self.ratings_df.iloc[0]['BABIP vR'])
+        self.babip_v_right_rating.grid(row=2, column=3)
+
+        self.avoid_k_overall_rating = RatingLabel(self, self.ratings_df.iloc[0]['Avoid Ks'])
+        self.avoid_k_overall_rating.grid(row=3, column=1)
+
+        self.avoid_k_v_left_rating = RatingLabel(self, self.ratings_df.iloc[0]['Avoid K vL'])
+        self.avoid_k_v_left_rating.grid(row=3, column=2)
+
+        self.avoid_k_v_right_rating = RatingLabel(self, self.ratings_df.iloc[0]['Avoid K vR'])
+        self.avoid_k_v_right_rating.grid(row=3, column=3)
+
+        self.gap_overall_rating =  RatingLabel(self, self.ratings_df.iloc[0]['Gap'])
+        self.gap_overall_rating.grid(row=4, column=1)
+
+        self.gap_v_left_rating = RatingLabel(self, self.ratings_df.iloc[0]['Gap vL'])
+        self.gap_v_left_rating.grid(row=4, column=2)
+
+        self.gap_v_right_rating = RatingLabel(self, self.ratings_df.iloc[0]['Gap vR'])
+        self.gap_v_right_rating.grid(row=4, column=3)
+
+        self.power_overall_rating = RatingLabel(self, self.ratings_df.iloc[0]['Power'])
+        self.power_overall_rating.grid(row=5, column=1)
+
+        self.power_v_left_rating = RatingLabel(self, self.ratings_df.iloc[0]['Power vL'])
+        self.power_v_left_rating.grid(row=5, column=2)
+
+        self.power_v_right_rating = RatingLabel(self, self.ratings_df.iloc[0]['Power vR'])
+        self.power_v_right_rating.grid(row=5, column=3)
+
+        self.eye_overall_rating = RatingLabel(self, self.ratings_df.iloc[0]['Eye'])
+        self.eye_overall_rating.grid(row=6, column=1)
+
+        self.eye_v_left_rating = RatingLabel(self, self.ratings_df.iloc[0]['Eye vL'])
+        self.eye_v_left_rating.grid(row=6, column=2)
+
+        self.eye_v_right_rating = RatingLabel(self, self.ratings_df.iloc[0]['Eye vR'])
+        self.eye_v_right_rating.grid(row=6, column=3)

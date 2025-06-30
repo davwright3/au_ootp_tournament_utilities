@@ -2,7 +2,7 @@
 import customtkinter as ctk
 from utils.config_utils import settings as settings_module
 from utils.view_utils.header_footer_frame import Header, Footer
-from utils.view_utils.data_view_frame import TreeviewTableFrame
+from utils.view_utils.all_player_data_view_frame import TreeviewTableFrame
 from utils.file_utils.handle_select_file import handle_select_file
 from utils.stats_utils.display_basic_player_batting_stats import (
     display_basic_batting_stats)

@@ -8,7 +8,7 @@ from utils.view_utils.batter_stat_select_frame import BatterStatSelectFrame
 from utils.view_utils.pitcher_stat_select_frame import PitcherStatSelectFrame
 import pandas as pd
 
-from utils.view_utils.data_view_frame import TreeviewTableFrame
+from utils.view_utils.all_player_data_view_frame import TreeviewTableFrame
 from utils.view_utils.header_footer_frame import Header, Footer
 
 
