@@ -24,6 +24,10 @@ This is a desktop utility for processing and analyzing OOTP Baseball tournament 
 
 ## Getting Started
 
+### Tutorial Videos
+
+- Video 1: Installation and Settings: [Video](https://www.youtube.com/watch?v=qWl5mltpZhg)
+
 ### Installation
 
 - Windows users should use the most up-to-date Windows installation from the releases section on the right
