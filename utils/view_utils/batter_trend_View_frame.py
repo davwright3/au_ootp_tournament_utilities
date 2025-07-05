@@ -1,0 +1,1 @@
+"""Frame for displaying batter trend charts"""

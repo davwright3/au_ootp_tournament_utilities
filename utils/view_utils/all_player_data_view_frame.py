@@ -5,13 +5,13 @@ import customtkinter as ctk
 import pandas as pd
 
 
-def open_batter_view(cid, file_path):
+def open_batter_view(cid, file_path, selected_team=None):
     from apps.batter_info_view import BatterInfoView
-    BatterInfoView(cid, file_path)
+    BatterInfoView(cid, file_path, team=selected_team)
 
-def open_pitcher_view(cid, file_path):
+def open_pitcher_view(cid, file_path, selected_team=None):
     from apps.pitcher_info_view import PitcherInfoView
-    PitcherInfoView(cid, file_path)
+    PitcherInfoView(cid, file_path, team=selected_team)
 
 
 class TreeviewTableFrame(ctk.CTkFrame):
@@ -169,8 +169,8 @@ class TreeviewTableFrame(ctk.CTkFrame):
             print("CID column not found")
             return
         if role == 'batter':
-            open_batter_view(cid_value, file_path)
+            open_batter_view(cid_value, file_path, self.team_to_highlight)
         elif role == 'pitcher':
-            open_pitcher_view(cid_value, file_path)
+            open_pitcher_view(cid_value, file_path, self.team_to_highlight)
 
 

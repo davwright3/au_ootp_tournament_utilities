@@ -7,7 +7,7 @@ from utils.view_utils.header_footer_frame import Header, Footer
 class PitcherInfoView(ctk.CTkToplevel):
     """Class for viewing individual pitcher data."""
 
-    def __init__(self, cid_value, file_path):
+    def __init__(self, cid_value, file_path, selected_team=None):
         super().__init__()
 
         self.title('Pitcher Info')
