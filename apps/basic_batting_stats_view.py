@@ -10,6 +10,8 @@ from utils.stats_utils.display_basic_player_batting_stats import (
 from utils.interface_utils.pos_select_button import CustomPositionButton
 from utils.view_utils.batter_stat_select_frame import BatterStatSelectFrame
 from utils.view_utils.card_value_select_frame import CardValueSelectFrame
+from utils.data_utils.data_store import data_store
+from utils.data_utils.league_stats import league_stats, LeagueStats
 import pandas as pd
 
 
@@ -19,7 +21,6 @@ class BasicStatsView(ctk.CTkToplevel):
     Uses CTKTopLevel to create the basic
     tournament stats viewer.
     """
-
     data = pd.DataFrame()
 
     def __init__(self):
@@ -158,17 +159,6 @@ class BasicStatsView(ctk.CTkToplevel):
             pady=10
         )
 
-        self.generate_teams_list_button = ctk.CTkButton(
-            self.file_select_frame,
-            command=self.generate_team_list,
-            text="Get Team List"
-        )
-        self.generate_teams_list_button.grid(
-            row=0,
-            column=2,
-            padx=10,
-            pady=10
-        )
 
         self.team_dropdown = ctk.CTkComboBox(
             self.file_select_frame,
@@ -420,13 +410,34 @@ class BasicStatsView(ctk.CTkToplevel):
             sticky='nsew'
         )
 
-        self.lift()
-        self.focus_force()
-        self.attributes("-topmost", True)
+        # self.lift()
+        # self.focus_force()
+        # self.attributes("-topmost", True)
 
-        def release_topmost():
-            self.attributes("-topmost", False)
-        self.after(10, release_topmost)
+        # def release_topmost():
+        #     self.attributes("-topmost", False)
+        # self.after(100, lambda: self.winfo_exists() and self.attributes("-topmost", False))
+        def show_and_release_topmost():
+            """Lift window, set topmost and then release safely."""
+            if not self.winfo_exists():
+                return
+
+            try:
+                self.lift()
+                self.attributes("-topmost", True)
+            except Exception():
+                return
+
+            def release():
+                if self.winfo_exists():
+                    try:
+                        self.attributes("-topmost", False)
+                    except Exception:
+                        pass
+
+            self.after(100, release)
+
+        show_and_release_topmost()
 
     def select_file(self):
         """Select new csv for processing."""
@@ -436,6 +447,7 @@ class BasicStatsView(ctk.CTkToplevel):
             self.file_select_label.configure(
                 text=f"Selected: {selected.split('/')[-1]}"
             )
+            self.load_data_to_store()
         else:
             self.log_message("File selection cancelled")
 
@@ -465,10 +477,7 @@ class BasicStatsView(ctk.CTkToplevel):
                 min_value = 40
                 max_value = 105
 
-            print(min_value, max_value)
-
             df = display_basic_batting_stats(
-                pd.read_csv(self.target_file),
                 min_pa,
                 pos,
                 variant_split=self.variant_select.get(),
@@ -489,7 +498,6 @@ class BasicStatsView(ctk.CTkToplevel):
     def set_batter_side(self, choice):
         """Set batter handedness selection."""
         self.batter_side_select.set(choice)
-        print("Current batter side: ", self.batter_side_checkbox.cget("state"))
 
     def log_message(self, message):
         """Update message label."""
@@ -499,11 +507,16 @@ class BasicStatsView(ctk.CTkToplevel):
         """Get the list of selected stats."""
         return self.batter_stat_select_frame.get_active_stats()
 
-    def generate_team_list(self):
+    def load_data_to_store(self):
         """Process file for team list."""
-        df = pd.read_csv(self.target_file)
+        if not self.target_file:
+            print("No file selected")
+            return
+
+        data_store.load_data(self.target_file)
+        df = data_store.get_data()
         self.set_team_list(df)
-        del df
+        league_stats.set_league_stats()
 
     def set_team_list(self, df):
         """Create list for team list."""

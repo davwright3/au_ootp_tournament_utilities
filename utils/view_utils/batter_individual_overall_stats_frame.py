@@ -1,20 +1,25 @@
 """Frame for displaying individual batter stats."""
 import customtkinter as ctk
-from utils.stats_utils.get_league_batter_stats import get_league_batter_stats
 from utils.stats_utils.get_individual_batter_stats import get_individual_batter_stats
+import time
 
 
 class BatterIndividualStatsFrame(ctk.CTkFrame):
     """Frame for displaying individual batter stats."""
-    def __init__(self, parent, cid_value=None, df_target=None, passed_team=None):
-        super().__init__(parent)
+    def __init__(self, parent, cid_value=None, df_target=None, player_df=None, passed_team=None):
+        super().__init__(parent, border_width=2, border_color='black')
 
-        self.batter_stats = []
+        self.batter_stats = get_individual_batter_stats(cid_value, player_df)
 
         if passed_team != 'No teams loaded':
-            self.batter_stats = get_individual_batter_stats(cid_value, df_target, passed_team)
+            returned_stats = get_individual_batter_stats(cid_value, player_df, team=passed_team)
+            if returned_stats is None:
+                self.batter_stats = [.000, .000, .000, .000, .000, 0.0, 0.0, 0.0, 0]
+            else:
+                self.batter_stats = returned_stats
 
         self.font_style = ("Arial", 18, 'bold')
+
 
         average_display = f"{self.batter_stats[0]:.3f}"[1:]
         obp_display = f"{self.batter_stats[1]:.3f}"[1:]
@@ -218,7 +223,4 @@ class BatterIndividualStatsFrame(ctk.CTkFrame):
         self.plate_appearances_stat = ctk.CTkLabel(self, text=plate_app_display, font=self.font_style, justify="left")
         self.plate_appearances_stat.grid(row=row, column=1, padx=2, pady=2, sticky='nsew')
         row += 1
-
-
-
 

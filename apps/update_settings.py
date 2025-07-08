@@ -84,14 +84,35 @@ class SettingsEditor(ctk.CTkToplevel):
             command=self.save_settings)
         save_button.grid(row=row, column=0, pady=20)
 
-        self.lift()
-        self.focus_force()
-        self.attributes("-topmost", True)
+        # self.lift()
+        # self.focus_force()
+        # self.attributes("-topmost", True)
+        #
+        # def release_topmost():
+        #     self.attributes("-topmost", False)
+        #
+        # self.after(10, release_topmost)
+        def show_and_release_topmost():
+            """Lift window, set topmost and then release safely."""
+            if not self.winfo_exists():
+                return
 
-        def release_topmost():
-            self.attributes("-topmost", False)
+            try:
+                self.lift()
+                self.attributes("-topmost", True)
+            except Exception():
+                return
 
-        self.after(10, release_topmost)
+            def release():
+                if self.winfo_exists():
+                    try:
+                        self.attributes("-topmost", False)
+                    except Exception:
+                        pass
+
+            self.after(100, release)
+
+        show_and_release_topmost()
 
     def save_settings(self):
         """Write settings to settings.ini file."""

@@ -187,6 +187,28 @@ class MainApp(ctk.CTk):
             column=0, row=1, padx=10, pady=10, sticky='nsew'
         )
 
+        def show_and_release_topmost():
+            """Lift window, set topmost and then release safely."""
+            if not self.winfo_exists():
+                return
+
+            try:
+                self.lift()
+                self.attributes("-topmost", True)
+            except Exception():
+                return
+
+            def release():
+                if self.winfo_exists():
+                    try:
+                        self.attributes("-topmost", False)
+                    except Exception:
+                        pass
+
+            self.after(100, release)
+
+        show_and_release_topmost()
+
 
 def open_file_processing():
     """Open the file processing app in a new window."""

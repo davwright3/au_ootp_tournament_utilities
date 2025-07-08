@@ -46,7 +46,6 @@ class TreeviewTableFrame(ctk.CTkFrame):
 
     def load_dataframe(self, df: pd.DataFrame, min_pa=1, passed_team=None):
         """Load dataframe for Treeview."""
-        print("Loading dataframe into table...Passed team:")
 
         for widget in self.tree_frame.winfo_children():
             widget.destroy()
@@ -148,9 +147,7 @@ class TreeviewTableFrame(ctk.CTkFrame):
         selected_item = self.tree.focus()
         try:
             file_path = self.parent.target_file
-            print("File pah: ", file_path)
         except ValueError:
-            print("No file path found")
             return
 
         try:
@@ -164,9 +161,7 @@ class TreeviewTableFrame(ctk.CTkFrame):
         try:
             cid_index = columns.index("CID")
             cid_value = values[cid_index]
-            print(cid_value)
         except ValueError:
-            print("CID column not found")
             return
         if role == 'batter':
             open_batter_view(cid_value, file_path, self.team_to_highlight)

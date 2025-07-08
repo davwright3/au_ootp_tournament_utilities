@@ -2,9 +2,10 @@
 import pandas as pd
 from utils.stats_utils.cull_teams import cull_teams
 from utils.stats_utils.calculate_return_batting_stats import *
+import time
 
-def get_individual_batter_stats(cid_value, df_target, team=None):
-    df1, removed = cull_teams(pd.DataFrame(pd.read_csv(df_target)))
+def get_individual_batter_stats(cid_value, player_df, team=None):
+    df1= player_df.copy()
 
     df1 = df1[
         ['CID', 'ORG', 'PA', 'AB', 'H', '1B', '2B', '3B', 'HR', 'TB', 'RC', 'SB', 'CS', 'SO', 'ZR', 'BB', 'IBB', 'SF', 'HP']]
@@ -13,10 +14,11 @@ def get_individual_batter_stats(cid_value, df_target, team=None):
     if team:
         df2 = df1[df1['ORG']==team]
         if not df2.empty:
-            print(df2.head())
             df1 = df2
             del df2
-
+        else:
+            del df2, df1
+            return None
 
     df1 = df1.groupby(['CID']).sum()
 
@@ -25,14 +27,14 @@ def get_individual_batter_stats(cid_value, df_target, team=None):
     slg = calculate_slg(df1['TB'], df1['AB'])
     ops = calculate_ops(obp, slg)
     woba = calculate_woba(df1['BB'], df1['HP'], df1['1B'], df1['2B'], df1['3B'], df1['HR'], df1['AB'], df1['IBB'], df1['SF'])
-    hrRate = calculate_hr_rate(df1['HR'], df1['PA'])
-    kRate = calculate_k_rate(df1['SO'], df1['PA'])
-    bbRate = calculate_bb_rate(df1['BB'], df1['PA'])
+    hr_rate = calculate_hr_rate(df1['HR'], df1['PA'])
+    k_rate = calculate_k_rate(df1['SO'], df1['PA'])
+    bb_rate = calculate_bb_rate(df1['BB'], df1['PA'])
     plate_app = int(df1.iloc[0]['PA'])
 
-    batter_stats = [avg, obp, slg, ops, woba, hrRate, kRate, bbRate, plate_app]
+    batter_stats = [avg, obp, slg, ops, woba, hr_rate, k_rate, bb_rate, plate_app]
 
-    del df1, removed
+    del df1
     import gc
     gc.collect()
 

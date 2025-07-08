@@ -6,6 +6,7 @@ import numpy as np
 
 def calc_basic_batting_stats(df):
     """Calculate basic batting stats and return a dataframe."""
+    # This method does not use the data store.
     df1 = df.copy()
     df1['AVG'] = (df1['H']/df1['AB']).round(3)
     df1['OBP'] = ((df1['H'] + df1['BB'] +

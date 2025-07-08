@@ -4,10 +4,10 @@ import pandas as pd
 from utils.config_utils import settings as settings_module
 from utils.stats_utils.cull_teams import cull_teams
 from utils.stats_utils.calc_basic_batting_stats import calc_basic_batting_stats
+from utils.data_utils.data_store import data_store
 
 
 def display_basic_batting_stats(
-        df,
         min_pa=1,
         pos=None,
         variant_split=False,
@@ -17,7 +17,8 @@ def display_basic_batting_stats(
         min_value=40,
         max_value=105,):
     """Calculate basic batting stats."""
-    df1 = pd.DataFrame(df)
+    df = data_store.get_data()
+    df1 = df.copy()
     script_settings = settings_module.settings
     card_df_path = script_settings['InitialFileDirs']['target_card_list_file']
     card_df = pd.DataFrame(pd.read_csv(card_df_path))
@@ -29,7 +30,6 @@ def display_basic_batting_stats(
 
     columns_from_data = ['CID', 'Title', 'Card Value', 'Bats']
 
-    print("Variant split: ", variant_split)
     # Calculate the basic statistics
     if not variant_split:
         columns_to_keep = ['CID', 'Title', 'Bats', 'Card Value',
@@ -69,7 +69,6 @@ def display_basic_batting_stats(
     df3['PA'] = df3['PA'].astype(str)
 
     df3 = df3[columns_to_keep]
-    print(batter_side)
     if batter_side == 'Any':
         df3 = df3
     else:

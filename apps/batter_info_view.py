@@ -1,11 +1,15 @@
 """App for viewing individual player level data"""
 import customtkinter as ctk
+from pygments.lexers import q
+
 from utils.config_utils.settings import settings as settings_module
 from utils.view_utils.header_footer_frame import Header, Footer
 from utils.view_utils.batter_ratings_frame import BatterRatingsFrame
 from utils.view_utils.batter_individual_overall_stats_frame import BatterIndividualStatsFrame
 from utils.view_utils.league_batting_stats_frame import LeagueBattingStatsFrame
-
+from utils.view_utils.batter_stat_plot_frame import BatterStatPlotFrame
+from utils.stats_utils.get_player_df import get_player_df
+from utils.data_utils.data_store import data_store
 
 class BatterInfoView(ctk.CTkToplevel):
     """TopLevel view for BatterInfo.
@@ -16,7 +20,6 @@ class BatterInfoView(ctk.CTkToplevel):
 
     def __init__(self, cid, filepath=None, team=None):
         super().__init__()
-        print("Team: ", team)
         self.title(f'Details for Batter Card ID: {cid}')
         self.height = settings_module['FileProcessor']['height']
         self.width = settings_module['FileProcessor']['width']
@@ -29,7 +32,6 @@ class BatterInfoView(ctk.CTkToplevel):
         self.columnconfigure(2, weight=0)
         self.columnconfigure(3, weight=0)
         self.columnconfigure(4, weight=0)
-        self.columnconfigure(5, weight=1)
 
         self.rowconfigure(0, weight=0)
         self.rowconfigure(1, weight=0)
@@ -37,6 +39,7 @@ class BatterInfoView(ctk.CTkToplevel):
         self.rowconfigure(3, weight=0)
 
         self.filepath = filepath
+        self.player_df = get_player_df(self.filepath, cid)
 
         self.header_frame = Header(
             self,
@@ -65,7 +68,7 @@ class BatterInfoView(ctk.CTkToplevel):
         self.overall_statistics_frame = BatterIndividualStatsFrame(
             self,
             cid_value=cid,
-            df_target=self.filepath
+            player_df=self.player_df,
         )
         self.overall_statistics_frame.grid(
             row=1,
@@ -74,30 +77,44 @@ class BatterInfoView(ctk.CTkToplevel):
             sticky='nsew',
         )
 
-        self.league_stats_frame = LeagueBattingStatsFrame(
-            self,
-            df_target=self.filepath
-        )
-        self.league_stats_frame.grid(
-            row=1,
-            column=3,
-            columnspan=1,
-            sticky='nsew',
-        )
-
         if team != 'No teams loaded':
             self.player_team_stats_frame = BatterIndividualStatsFrame(
                 self,
                 cid_value=cid,
-                df_target=self.filepath,
+                player_df=self.player_df,
                 passed_team=team
             )
             self.player_team_stats_frame.grid(
                 row=1,
-                column=4,
+                column=3,
                 columnspan=1,
                 sticky='nsew',
             )
+
+        self.league_stats_frame = LeagueBattingStatsFrame(
+            self,
+        )
+        self.league_stats_frame.grid(
+            row=1,
+            column=4,
+            columnspan=1,
+            sticky='nsew',
+        )
+
+
+
+        self.batter_plot_frame = BatterStatPlotFrame(
+            self,
+            card_id=cid,
+        )
+        self.batter_plot_frame.grid(
+            row=2,
+            column=0,
+            columnspan=5,
+            sticky='nsew',
+        )
+
+
 
         self.footer_frame = Footer(
             self,
@@ -116,9 +133,38 @@ class BatterInfoView(ctk.CTkToplevel):
         self.focus_force()
         self.attributes("-topmost", True)
 
-        def release_topmost():
-            self.attributes("-topmost", False)
-        self.after(10, release_topmost)
+        def show_and_release_topmost():
+            """Lift window, set topmost and then release safely."""
+            if not self.winfo_exists():
+                return
+
+            try:
+                self.lift()
+                self.attributes("-topmost", True)
+            except Exception():
+                return
+
+            def release():
+                if self.winfo_exists():
+                    try:
+                        self.attributes("-topmost", False)
+                    except Exception:
+                        pass
+
+            self.after(100, release)
+
+        def on_app_close():
+            print("Running on app close")
+            try:
+                if hasattr(self, 'batter_plot_frame'):
+                    self.batter_plot_frame.destroy()
+            except Exception:
+                print("Error destroying batter_plot_frame")
+
+            self.destroy()
+
+        show_and_release_topmost()
+        self.protocol('WM_DELETE_WINDOW', on_app_close)
 
 
 

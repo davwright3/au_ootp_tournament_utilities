@@ -14,7 +14,6 @@ class BatterRatingsFrame(ctk.CTkFrame):
     def __init__(self, parent, cid_value):
         """Initialize the frame."""
         super().__init__(parent)
-        print("Cid value: ", cid_value)
         card_df_file_path = settings_module['InitialFileDirs']['target_card_list_file']
 
         self.font_style=('Arial', 18, 'bold')
