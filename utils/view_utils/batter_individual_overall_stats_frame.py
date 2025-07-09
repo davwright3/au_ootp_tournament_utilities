@@ -17,6 +17,8 @@ class BatterIndividualStatsFrame(ctk.CTkFrame):
                 self.batter_stats = [.000, .000, .000, .000, .000, 0.0, 0.0, 0.0, 0]
             else:
                 self.batter_stats = returned_stats
+        else:
+            self.batter_stats = [.000, .000, .000, .000, .000, 0.0, 0.0, 0.0, 0]
 
         self.font_style = ("Arial", 18, 'bold')
 

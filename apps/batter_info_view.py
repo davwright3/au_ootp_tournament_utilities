@@ -27,16 +27,16 @@ class BatterInfoView(ctk.CTkToplevel):
 
         self.geometry(f'{self.width}x{self.height}')
 
-        self.columnconfigure(0, weight=0)
+        self.columnconfigure(0, weight=1)
         self.columnconfigure(1, weight=0)
         self.columnconfigure(2, weight=0)
         self.columnconfigure(3, weight=0)
-        self.columnconfigure(4, weight=0)
+        # self.columnconfigure(4, weight=0)
 
-        self.rowconfigure(0, weight=0)
-        self.rowconfigure(1, weight=0)
+        self.rowconfigure(0, minsize=self.header_footer_height)
+        self.rowconfigure(1, weight=0, minsize=1)
         self.rowconfigure(2, weight=1)
-        self.rowconfigure(3, weight=0)
+        self.rowconfigure(3, minsize=self.header_footer_height)
 
         self.filepath = filepath
         self.player_df = get_player_df(self.filepath, cid)
@@ -50,53 +50,59 @@ class BatterInfoView(ctk.CTkToplevel):
         self.header_frame.grid(
             row=0,
             column=0,
-            columnspan=5,
+            columnspan=4,
             sticky='nsew',
         )
 
+        self.top_stats_frame = ctk.CTkFrame(self)
+        self.top_stats_frame.grid(row=1, column=0, columnspan=4, sticky='nsew')
+        for col in range(4):
+            self.top_stats_frame.columnconfigure(col, weight=1)
+
         self.ratings_frame = BatterRatingsFrame(
-            self,
+            self.top_stats_frame,
             cid_value=cid
         )
         self.ratings_frame.grid(
-            row=1,
+            row=0,
             column=0,
             columnspan=1,
-            sticky='nw',
+            sticky='n',
         )
 
         self.overall_statistics_frame = BatterIndividualStatsFrame(
-            self,
+            self.top_stats_frame,
             cid_value=cid,
             player_df=self.player_df,
         )
         self.overall_statistics_frame.grid(
-            row=1,
+            row=0,
+            column=1,
+            columnspan=1,
+            sticky='nsew',
+        )
+
+        # if team != 'No teams loaded':
+        self.player_team_stats_frame = BatterIndividualStatsFrame(
+            self.top_stats_frame,
+            cid_value=cid,
+            player_df=self.player_df,
+            passed_team=team
+        )
+        self.player_team_stats_frame.grid(
+            row=0,
             column=2,
             columnspan=1,
             sticky='nsew',
         )
 
-        if team != 'No teams loaded':
-            self.player_team_stats_frame = BatterIndividualStatsFrame(
-                self,
-                cid_value=cid,
-                player_df=self.player_df,
-                passed_team=team
-            )
-            self.player_team_stats_frame.grid(
-                row=1,
-                column=3,
-                columnspan=1,
-                sticky='nsew',
-            )
 
         self.league_stats_frame = LeagueBattingStatsFrame(
-            self,
+            self.top_stats_frame,
         )
         self.league_stats_frame.grid(
-            row=1,
-            column=4,
+            row=0,
+            column=3,
             columnspan=1,
             sticky='nsew',
         )
@@ -109,7 +115,7 @@ class BatterInfoView(ctk.CTkToplevel):
         self.batter_plot_frame.grid(
             row=2,
             column=0,
-            columnspan=5,
+            columnspan=4,
             sticky='nsew',
         )
 
@@ -123,7 +129,7 @@ class BatterInfoView(ctk.CTkToplevel):
         self.footer_frame.grid(
             row=3,
             column=0,
-            columnspan=5,
+            columnspan=4,
             sticky='nsew',
         )
 

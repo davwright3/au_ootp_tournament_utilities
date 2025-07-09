@@ -1,7 +1,7 @@
 """Utility for getting a player's plate appearance trend."""
 from utils.data_utils.get_woba_info import get_woba_weights, get_woba_columns
 
-def get_plate_appearance_trend(df):
+def get_player_trends(df):
     """Return a dataframe for displaying PA trend in matplotlib figure."""
     window = 5
     df1 = df.copy()

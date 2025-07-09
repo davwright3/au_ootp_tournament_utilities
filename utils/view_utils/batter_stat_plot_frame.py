@@ -4,7 +4,7 @@ from utils.data_utils.data_store import data_store
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
-from utils.trend_utils.batter_trends import get_plate_appearance_trend
+from utils.trend_utils.batter_trends import get_player_trends
 import matplotlib.dates as mdates
 import numpy as np
 
@@ -13,16 +13,19 @@ class BatterStatPlotFrame(ctk.CTkFrame):
         super().__init__(parent)
         df = data_store.get_data()
 
+
         # One df for the league and one for the player
         df1 = df.copy()
         player_df = df1[df1['CID'] == int(card_id)][['PA', 'AB', 'H', '1B', '2B', '3B', 'HR', 'BB', 'IBB', 'SO', 'HP', 'SF', 'Trny']]
         del df1
 
         # Get the proper dataframe and format it
-        woba_df, plate_app_df = get_plate_appearance_trend(player_df)
+        woba_df, plate_app_df = get_player_trends(player_df)
         del player_df
 
         self.plot_chart_working([woba_df, plate_app_df])
+
+
 
     # def plot_chart(self, df1):
     #     fig, ax = plt.subplots(figsize=(6,6))
@@ -52,8 +55,8 @@ class BatterStatPlotFrame(ctk.CTkFrame):
             self.canvas.get_tk_widget().destroy()
             self.canvas = None
 
-        fig = Figure(figsize=(6,6))
-        ax = fig.add_subplot(111)
+        self.figure = Figure(figsize=(5,4))
+        ax = self.figure.add_subplot(111)
 
         for idx, dataframe in enumerate(dataframes):
             x = dataframe.iloc[:,0]
@@ -67,19 +70,34 @@ class BatterStatPlotFrame(ctk.CTkFrame):
         ax.legend()
         ax.grid(True)
         ax.xaxis.set_major_locator(mdates.AutoDateLocator(minticks=5, maxticks=7))
+        self.figure.autofmt_xdate()
 
-        fig.autofmt_xdate()
-
-        self.canvas = FigureCanvasTkAgg(fig, master=self)
+        self.canvas = FigureCanvasTkAgg(self.figure, master=self)
         self.canvas.draw()
 
-        self.toolbar_frame = ctk.CTkFrame(self)
-        # self.toolbar_frame.grid(column=0, row=0, sticky='nsew')
-        self.toolbar = NavigationToolbar2Tk(self.canvas, self.toolbar_frame)
-        self.toolbar.update()
+        # self.toolbar_frame = ctk.CTkFrame(self)
+        # # self.toolbar_frame.grid(column=0, row=0, sticky='nsew')
+        # self.toolbar = NavigationToolbar2Tk(self.canvas, self.toolbar_frame)
+        # self.toolbar.update()
 
-        self.canvas.get_tk_widget().grid(row=1, column=1, sticky='nsew')
-        plt.close(fig)
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_columnconfigure(0, weight=1)
+
+        # self.canvas.get_tk_widget().grid(row=1, column=1, sticky='nsew')
+        self.canvas.get_tk_widget().grid(row=1, column=0, sticky='nsew')
+        plt.close(self.figure)
+
+
+        self.bind("<Configure>", self._resize)
+
+    def _resize(self, event=None):
+        if hasattr(self, 'canvas') and self.canvas:
+            try:
+                self.canvas.figure.tight_layout()
+                self.canvas.draw()
+            except Exception as e:
+                pass
+
 
 
 
@@ -93,13 +111,13 @@ class BatterStatPlotFrame(ctk.CTkFrame):
                 except Exception as e:
                     print("Error clearing observers", e)
 
-            if hasattr(self, 'toolbar'):
-                self.toolbar.update = lambda: None
-                self.toolbar.set_history_buttons= lambda *args, **kwargs: None
-                self.toolbar._Button = lambda *args, **kwargs: None
-
-                self.toolbar.destroy()
-                self.toolbar = None
+            # if hasattr(self, 'toolbar'):
+            #     self.toolbar.update = lambda: None
+            #     self.toolbar.set_history_buttons= lambda *args, **kwargs: None
+            #     self.toolbar._Button = lambda *args, **kwargs: None
+            #
+            #     self.toolbar.destroy()
+            #     self.toolbar = None
 
             if hasattr(self, 'toolbar_frame'):
                 self.toolbar_frame.destroy()
