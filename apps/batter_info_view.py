@@ -102,7 +102,6 @@ class BatterInfoView(ctk.CTkToplevel):
         )
 
 
-
         self.batter_plot_frame = BatterStatPlotFrame(
             self,
             card_id=cid,

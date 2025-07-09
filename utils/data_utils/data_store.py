@@ -30,7 +30,6 @@ class DataStore:
                 parsed_dates = parsed_dates.apply(lambda d: d.replace(year=current_year) if pd.notnull(d) else d)
                 df[column_name] = parsed_dates
                 self.trny_format = 'date_format'
-                print(df[column_name].head())
                 return df
             except Exception:
                 pass
@@ -38,13 +37,11 @@ class DataStore:
             # Check if it is int format
             if isinstance(sample, np.integer):
                 self.trny_format = 'int_format'
-                print('Int format detected')
                 print(df[column_name].head())
                 return df
 
             # Fallback for unknown type
             self.trny_format = 'unknown_format'
-            print('Unknown format detected')
             print(df[column_name].head())
             return df
 
