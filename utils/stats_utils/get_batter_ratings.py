@@ -13,7 +13,11 @@ def get_batter_ratings(file_path, passed_cid):
         'CID', 'Title', 'Val', 'Bats', 'Throws', 'Gap',
         'Power', 'Eye', 'Avoid Ks', 'BABIP', 'BABIP vL',
         'Gap vL', 'Power vL', 'Eye vL', 'Avoid K vL',
-        'BABIP vR', 'Gap vR', 'Power vR', 'Eye vR', 'Avoid K vR'
+        'BABIP vR', 'Gap vR', 'Power vR', 'Eye vR', 'Avoid K vR',
+        'Speed', 'Steal Rate', 'Baserunning', 'Sac bunt',
+        'Bunt for hit', 'CatcherAbil', 'CatcherFrame', 'Catcher Arm',
+        'Infield Range', 'Infield Error', 'Infield Arm', 'DP',
+        'OF Range', 'OF Error', 'OF Arm'
     ]])
 
     return df1

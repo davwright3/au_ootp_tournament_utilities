@@ -24,13 +24,14 @@ class BatterInfoView(ctk.CTkToplevel):
         self.height = settings_module['FileProcessor']['height']
         self.width = settings_module['FileProcessor']['width']
         self.header_footer_height = int(self.height*.1)
+        self.minsize(1920, 1080)
 
-        self.geometry(f'{self.width}x{self.height}')
+        self.geometry('1920x1080')
 
         self.columnconfigure(0, weight=1)
-        self.columnconfigure(1, weight=0)
-        self.columnconfigure(2, weight=0)
-        self.columnconfigure(3, weight=0)
+        self.columnconfigure(1, weight=1)
+        self.columnconfigure(2, weight=1)
+        self.columnconfigure(3, weight=1)
         # self.columnconfigure(4, weight=0)
 
         self.rowconfigure(0, minsize=self.header_footer_height)

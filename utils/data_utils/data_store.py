@@ -23,6 +23,11 @@ class DataStore:
         try:
             sample = df[column_name].dropna().iloc[0]
 
+            # Check if it is int format
+            if isinstance(sample, np.integer):
+                self.trny_format = 'int_format'
+                return df
+
             # Try DD MMM format
             try:
                 current_year = datetime.datetime.now().year
@@ -34,11 +39,7 @@ class DataStore:
             except Exception:
                 pass
 
-            # Check if it is int format
-            if isinstance(sample, np.integer):
-                self.trny_format = 'int_format'
-                print(df[column_name].head())
-                return df
+
 
             # Fallback for unknown type
             self.trny_format = 'unknown_format'
@@ -58,5 +59,8 @@ class DataStore:
 
     def clear_data(self):
         self._main_dataframe = None
+
+    def get_tourney_format(self):
+        return self.trny_format
 
 data_store = DataStore()

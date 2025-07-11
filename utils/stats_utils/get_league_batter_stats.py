@@ -8,8 +8,8 @@ def get_league_batter_stats():
     """Get league stats from a dataframe."""
     df = data_store.get_data()
     df1 = df.copy()
-
     df1, removed = cull_teams(df1)
+    # df1 to get league stats
     # df1 to get league stats
     df1 = df1[['PA', 'AB', 'H', '1B', '2B', '3B', 'HR', 'TB', 'RC', 'SB', 'CS', 'SO', 'ZR', 'BB', 'IBB', 'SF', 'HP']].sum()
 
