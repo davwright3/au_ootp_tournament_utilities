@@ -1,6 +1,7 @@
 """App for viewing the basic tournament stats."""
 import customtkinter as ctk
 from utils.config_utils import settings as settings_module
+from utils.data_utils.get_team_list import get_team_list
 from utils.view_utils.header_footer_frame import Header, Footer
 from utils.view_utils.all_player_data_view_frame import TreeviewTableFrame
 from utils.file_utils.handle_select_file import handle_select_file
@@ -9,6 +10,8 @@ from utils.stats_utils.display_basic_player_batting_stats import (
 from utils.interface_utils.pos_select_button import CustomPositionButton
 from utils.view_utils.batter_stat_select_frame import BatterStatSelectFrame
 from utils.view_utils.card_value_select_frame import CardValueSelectFrame
+from utils.data_utils.data_store import data_store
+from utils.data_utils.league_batting_stats import league_stats
 import pandas as pd
 
 
@@ -33,6 +36,8 @@ class BasicStatsView(ctk.CTkToplevel):
         self.batter_side_select = ctk.StringVar(value='Any')
         self.batter_search_name = None
         self.role = 'batter'
+        self.team_list = ['No teams loaded']
+        self.selected_team = ctk.StringVar(value="No teams loaded")
 
         self.height = int(page_settings['FileProcessor']['height'])
         self.width = int(page_settings['FileProcessor']['width'])
@@ -146,7 +151,8 @@ class BasicStatsView(ctk.CTkToplevel):
 
         self.file_select_label = ctk.CTkLabel(
             self.file_select_frame,
-            text="No File Selected")
+            text="No File Selected"
+        )
         self.file_select_label.grid(
             row=0,
             column=1,
@@ -154,16 +160,18 @@ class BasicStatsView(ctk.CTkToplevel):
             pady=10
         )
 
-        self.process_button = ctk.CTkButton(
+        self.team_dropdown = ctk.CTkComboBox(
             self.file_select_frame,
-            text="Process",
-            command=self.run_position_file
+            values=self.team_list,
+            variable=self.selected_team
         )
-        self.process_button.grid(
+        self.team_dropdown.set("No teams loaded")
+        self.team_dropdown.grid(
             row=0,
-            column=2,
+            column=3,
             padx=10,
-            pady=10
+            pady=10,
+            sticky='nsew'
         )
 
         # Menu frame buttons and entries
@@ -400,13 +408,27 @@ class BasicStatsView(ctk.CTkToplevel):
             sticky='nsew'
         )
 
-        self.lift()
-        self.focus_force()
-        self.attributes("-topmost", True)
+        def show_and_release_topmost():
+            """Lift window, set topmost and then release safely."""
+            if not self.winfo_exists():
+                return
 
-        def release_topmost():
-            self.attributes("-topmost", False)
-        self.after(10, release_topmost)
+            try:
+                self.lift()
+                self.attributes("-topmost", True)
+            except Exception():
+                return
+
+            def release():
+                if self.winfo_exists():
+                    try:
+                        self.attributes("-topmost", False)
+                    except Exception:
+                        pass
+
+            self.after(100, release)
+
+        show_and_release_topmost()
 
     def select_file(self):
         """Select new csv for processing."""
@@ -416,6 +438,7 @@ class BasicStatsView(ctk.CTkToplevel):
             self.file_select_label.configure(
                 text=f"Selected: {selected.split('/')[-1]}"
             )
+            self.load_data_to_store()
         else:
             self.log_message("File selection cancelled")
 
@@ -445,10 +468,7 @@ class BasicStatsView(ctk.CTkToplevel):
                 min_value = 40
                 max_value = 105
 
-            print(min_value, max_value)
-
             df = display_basic_batting_stats(
-                pd.read_csv(self.target_file),
                 min_pa,
                 pos,
                 variant_split=self.variant_select.get(),
@@ -459,7 +479,10 @@ class BasicStatsView(ctk.CTkToplevel):
                 max_value=max_value,
             )
 
-            self.data_view_frame.load_dataframe(df)
+            self.data_view_frame.load_dataframe(
+                df,
+                passed_team=self.selected_team.get()
+            )
             self.update_idletasks()
             self.log_message("Data loaded")
         except Exception as e:
@@ -468,7 +491,6 @@ class BasicStatsView(ctk.CTkToplevel):
     def set_batter_side(self, choice):
         """Set batter handedness selection."""
         self.batter_side_select.set(choice)
-        print("Current batter side: ", self.batter_side_checkbox.cget("state"))
 
     def log_message(self, message):
         """Update message label."""
@@ -477,3 +499,20 @@ class BasicStatsView(ctk.CTkToplevel):
     def get_active_stats(self):
         """Get the list of selected stats."""
         return self.batter_stat_select_frame.get_active_stats()
+
+    def load_data_to_store(self):
+        """Process file for team list."""
+        if not self.target_file:
+            print("No file selected")
+            return
+
+        data_store.load_data(self.target_file)
+        df = data_store.get_data()
+        self.set_team_list(df)
+        league_stats.set_league_stats()
+
+    def set_team_list(self, df):
+        """Create list for team list."""
+        self.team_list = get_team_list(df)
+        self.team_dropdown.configure(values=self.team_list)
+        del df

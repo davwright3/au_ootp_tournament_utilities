@@ -4,10 +4,10 @@ from utils.config_utils import settings as settings_module
 from utils.stats_utils.cull_teams import cull_teams
 from utils.stats_utils.calc_basic_pitching_stats import (
     calc_basic_pitching_stats)
+from utils.data_utils.data_store import data_store
 
 
 def display_basic_pitching_stats(
-        df_to_load,
         min_ip=100,
         role=None,
         inning_split=4,
@@ -42,7 +42,7 @@ def display_basic_pitching_stats(
 
     columns_to_keep.extend(pitching_stats_to_view)
 
-    df1, removed = cull_teams(pd.DataFrame(df_to_load))
+    df1, removed = cull_teams(data_store.get_data())
     print("Removed: ", removed)
     df1['IPC'] = (df1['IP'].apply(innings_calc))
 
@@ -98,7 +98,7 @@ def display_basic_pitching_stats(
     df3 = df3.rename(columns={'Card Value': 'Val'})
     df3 = df3[(df3['Val'] <= max_value) & (df3['Val'] >= min_value)]
 
-    del df_to_load, df2, df1, removed
+    del df2, df1, removed
     import gc
     gc.collect()
 

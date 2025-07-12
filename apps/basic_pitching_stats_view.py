@@ -10,6 +10,8 @@ from utils.view_utils.all_player_data_view_frame import TreeviewTableFrame
 from utils.file_utils.handle_select_file import handle_select_file
 from utils.view_utils.pitcher_stat_select_frame import PitcherStatSelectFrame
 from utils.view_utils.card_value_select_frame import CardValueSelectFrame
+from utils.data_utils.data_store import data_store
+from utils.data_utils.get_team_list import get_team_list
 
 
 class BasicPitchingStatsView(ctk.CTkToplevel):
@@ -32,6 +34,7 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
         self.pitching_side_checkbox = ctk.StringVar(value='Any')
         self.player_search_name = None
         self.role = 'pitcher'
+        self.team_list = ['No team selected']
 
         self.height = int(page_settings['FileProcessor']['height'])
         self.width = int(page_settings['FileProcessor']['width'])
@@ -169,6 +172,14 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
             padx=10,
             pady=10,
             sticky="w"
+        )
+
+        self.team_dropdown = ctk.CTkComboBox(
+            self.file_select_frame,
+        )
+        self.team_dropdown.set("No team selected")
+        self.team_dropdown.grid(
+            row=0, column=2
         )
 
         # Menu frame data
@@ -345,13 +356,27 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
             sticky="nsew"
         )
 
-        self.lift()
-        self.focus_force()
-        self.attributes("-topmost", True)
+        def show_and_release_topmost():
+            """Lift window, set topmost and then release safely."""
+            if not self.winfo_exists():
+                return
 
-        def release_topmost():
-            self.attributes("-topmost", False)
-        self.after(10, release_topmost)
+            try:
+                self.lift()
+                self.attributes("-topmost", True)
+            except Exception():
+                return
+
+            def release():
+                if self.winfo_exists():
+                    try:
+                        self.attributes("-topmost", False)
+                    except Exception:
+                        pass
+
+            self.after(100, release)
+
+        show_and_release_topmost()
 
     def select_file(self):
         """Select csv file for processing."""
@@ -361,6 +386,7 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
             self.file_select_label.configure(
                 text=f"Selected: {selected.split('/')[-1]}"
             )
+            self.load_data_to_store()
         else:
             self.log_message("File selection cancelled")
 
@@ -386,7 +412,9 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
             self.player_search_name = None
 
         pitching_stats_to_view = self.get_pitching_stats_to_view()
-        min_value, max_value = self.card_value_select_frame.get_min_max_values()
+        min_value, max_value = (
+            self.card_value_select_frame.get_min_max_values()
+        )
 
         try:
             min_value = int(min_value)
@@ -396,7 +424,6 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
             max_value = 105
 
         df = display_basic_pitching_stats(
-            pd.read_csv(self.target_file),
             self.min_ip,
             role=pos,
             inning_split=self.inning_split,
@@ -423,3 +450,13 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
     def get_pitching_stats_to_view(self):
         """Get list of selected pitching stats."""
         return self.pitching_stats_select_frame.get_active_stats()
+
+    def load_data_to_store(self):
+        """Load data to stats singleton."""
+        data_store.load_data(self.target_file)
+        self.set_team_list()
+
+    def set_team_list(self):
+        """Set team list for dropdown."""
+        self.team_list = get_team_list(data_store.get_data())
+        self.team_dropdown.configure(values=self.team_list)
