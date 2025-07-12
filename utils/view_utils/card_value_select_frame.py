@@ -1,12 +1,12 @@
 """Frame for selecting min and max card values."""
-from tkinter import StringVar
-
 import customtkinter as ctk
 
 
 class CardValueSelectFrame(ctk.CTkFrame):
     """Frame for selecting min and max card values."""
+
     def __init__(self, parent):
+        """Initialize the frame."""
         ctk.CTkFrame.__init__(self, parent)
 
         self.min_val = ctk.StringVar(self, value='40')
@@ -59,4 +59,5 @@ class CardValueSelectFrame(ctk.CTkFrame):
         )
 
     def get_min_max_values(self):
+        """Get min and max selected values."""
         return self.min_val.get(), self.max_val.get()

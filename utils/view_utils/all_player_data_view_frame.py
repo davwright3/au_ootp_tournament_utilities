@@ -6,10 +6,13 @@ import pandas as pd
 
 
 def open_batter_view(cid, file_path, selected_team=None):
+    """Open a batter view."""
     from apps.batter_info_view import BatterInfoView
     BatterInfoView(cid, file_path, team=selected_team)
 
+
 def open_pitcher_view(cid, file_path, selected_team=None):
+    """Open a pitcher view."""
     from apps.pitcher_info_view import PitcherInfoView
     PitcherInfoView(cid, file_path, team=selected_team)
 
@@ -46,7 +49,6 @@ class TreeviewTableFrame(ctk.CTkFrame):
 
     def load_dataframe(self, df: pd.DataFrame, min_pa=1, passed_team=None):
         """Load dataframe for Treeview."""
-
         for widget in self.tree_frame.winfo_children():
             widget.destroy()
 
@@ -144,6 +146,7 @@ class TreeviewTableFrame(ctk.CTkFrame):
         self._insert_data(sorted_df)
 
     def on_row_double_click(self, event):
+        """Open batter or pitcher view."""
         selected_item = self.tree.focus()
         try:
             file_path = self.parent.target_file
@@ -167,5 +170,3 @@ class TreeviewTableFrame(ctk.CTkFrame):
             open_batter_view(cid_value, file_path, self.team_to_highlight)
         elif role == 'pitcher':
             open_pitcher_view(cid_value, file_path, self.team_to_highlight)
-
-

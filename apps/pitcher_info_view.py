@@ -8,6 +8,7 @@ class PitcherInfoView(ctk.CTkToplevel):
     """Class for viewing individual pitcher data."""
 
     def __init__(self, cid_value, file_path, selected_team=None):
+        """Initialize the pitcher view."""
         super().__init__()
 
         self.title('Pitcher Info')
@@ -32,7 +33,7 @@ class PitcherInfoView(ctk.CTkToplevel):
             title=f'Pitcher Info for {cid_value}',
         )
         self.header_frame.grid(
-            row =0,
+            row=0,
             column=0,
             columnspan=3,
             sticky='nsew',
@@ -50,14 +51,6 @@ class PitcherInfoView(ctk.CTkToplevel):
             sticky='nsew',
         )
 
-
-        # self.lift()
-        # self.focus_force()
-        # self.attributes("-topmost", True)
-        #
-        # def release_topmost():
-        #     self.attributes("-topmost", False)
-        # self.after(10, release_topmost)
         def show_and_release_topmost():
             """Lift window, set topmost and then release safely."""
             if not self.winfo_exists():

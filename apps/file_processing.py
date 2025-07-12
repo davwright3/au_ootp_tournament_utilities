@@ -159,9 +159,6 @@ class FileProcessor(ctk.CTkToplevel):
         self.focus_force()
         self.attributes("-topmost", True)
 
-        # def release_topmost():
-        #     self.attributes("-topmost", False)
-        # self.after(100, lambda: self.winfo_exists() and self.attributes("-topmost", False))
         def show_and_release_topmost():
             """Lift window, set topmost and then release safely."""
             if not self.winfo_exists():

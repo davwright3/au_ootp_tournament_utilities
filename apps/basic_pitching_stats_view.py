@@ -356,13 +356,6 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
             sticky="nsew"
         )
 
-        # self.lift()
-        # self.focus_force()
-        # self.attributes("-topmost", True)
-
-        # def release_topmost():
-        #     self.attributes("-topmost", False)
-        # self.after(100, lambda: self.winfo_exists() and self.attributes("-topmost", False))
         def show_and_release_topmost():
             """Lift window, set topmost and then release safely."""
             if not self.winfo_exists():
@@ -419,7 +412,9 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
             self.player_search_name = None
 
         pitching_stats_to_view = self.get_pitching_stats_to_view()
-        min_value, max_value = self.card_value_select_frame.get_min_max_values()
+        min_value, max_value = (
+            self.card_value_select_frame.get_min_max_values()
+        )
 
         try:
             min_value = int(min_value)
@@ -457,9 +452,11 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
         return self.pitching_stats_select_frame.get_active_stats()
 
     def load_data_to_store(self):
+        """Load data to stats singleton."""
         data_store.load_data(self.target_file)
         self.set_team_list()
 
     def set_team_list(self):
+        """Set team list for dropdown."""
         self.team_list = get_team_list(data_store.get_data())
         self.team_dropdown.configure(values=self.team_list)

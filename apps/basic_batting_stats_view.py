@@ -11,7 +11,7 @@ from utils.interface_utils.pos_select_button import CustomPositionButton
 from utils.view_utils.batter_stat_select_frame import BatterStatSelectFrame
 from utils.view_utils.card_value_select_frame import CardValueSelectFrame
 from utils.data_utils.data_store import data_store
-from utils.data_utils.league_stats import league_stats, LeagueStats
+from utils.data_utils.league_batting_stats import league_stats
 import pandas as pd
 
 
@@ -21,6 +21,7 @@ class BasicStatsView(ctk.CTkToplevel):
     Uses CTKTopLevel to create the basic
     tournament stats viewer.
     """
+
     data = pd.DataFrame()
 
     def __init__(self):
@@ -159,7 +160,6 @@ class BasicStatsView(ctk.CTkToplevel):
             pady=10
         )
 
-
         self.team_dropdown = ctk.CTkComboBox(
             self.file_select_frame,
             values=self.team_list,
@@ -173,8 +173,6 @@ class BasicStatsView(ctk.CTkToplevel):
             pady=10,
             sticky='nsew'
         )
-
-
 
         # Menu frame buttons and entries
         self.batter_search_label = ctk.CTkLabel(
@@ -410,13 +408,6 @@ class BasicStatsView(ctk.CTkToplevel):
             sticky='nsew'
         )
 
-        # self.lift()
-        # self.focus_force()
-        # self.attributes("-topmost", True)
-
-        # def release_topmost():
-        #     self.attributes("-topmost", False)
-        # self.after(100, lambda: self.winfo_exists() and self.attributes("-topmost", False))
         def show_and_release_topmost():
             """Lift window, set topmost and then release safely."""
             if not self.winfo_exists():
@@ -488,8 +479,10 @@ class BasicStatsView(ctk.CTkToplevel):
                 max_value=max_value,
             )
 
-
-            self.data_view_frame.load_dataframe(df, passed_team=self.selected_team.get())
+            self.data_view_frame.load_dataframe(
+                df,
+                passed_team=self.selected_team.get()
+            )
             self.update_idletasks()
             self.log_message("Data loaded")
         except Exception as e:

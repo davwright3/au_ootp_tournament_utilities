@@ -75,7 +75,7 @@ def display_basic_batting_stats(
         df3 = df3[df3['Bats'] == batter_side]
 
     df3 = df3.rename(columns={"Card Value": 'Val'})
-    df3 = df3[(df3['Val'] <= max_value) & (df3['Val'] >= min_value) ]
+    df3 = df3[(df3['Val'] <= max_value) & (df3['Val'] >= min_value)]
 
     if batter_name is not None:
         df3 = df3[df3['Title'].str.contains(batter_name, case=False, na=False)]

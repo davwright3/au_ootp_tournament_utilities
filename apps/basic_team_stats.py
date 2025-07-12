@@ -174,16 +174,6 @@ class BasicTeamStatsView(ctk.CTkToplevel):
             sticky='nsew'
         )
 
-        # self.lift()
-        # self.focus_force()
-        # self.attributes("-topmost", True)
-        #
-        # def release_topmost():
-        #     self.attributes("-topmost", False)
-        #
-        # # self.after(10, release_topmost)
-        # self.after(100, lambda: self.winfo_exists() and self.attributes("-topmost", False))
-
         def show_and_release_topmost():
             """Lift window, set topmost and then release safely."""
             if not self.winfo_exists():
@@ -205,7 +195,6 @@ class BasicTeamStatsView(ctk.CTkToplevel):
             self.after(100, release)
 
         show_and_release_topmost()
-
 
     def select_file(self):
         """Select new csv for processing."""

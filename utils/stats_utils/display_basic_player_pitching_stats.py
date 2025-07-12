@@ -6,6 +6,7 @@ from utils.stats_utils.calc_basic_pitching_stats import (
     calc_basic_pitching_stats)
 from utils.data_utils.data_store import data_store
 
+
 def display_basic_pitching_stats(
         min_ip=100,
         role=None,

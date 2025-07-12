@@ -1,11 +1,10 @@
 """Check for teams to remove due to outlier statistics."""
-import time
-import pandas as pd
 
 
 def cull_teams(df):
     """Cull teams that have more than the given number of runs."""
-    team_stats = df.groupby(['ORG', 'Trny'], as_index=False)[['GS.1', 'R']].sum()
+    team_stats = df.groupby(['ORG', 'Trny'],
+                            as_index=False)[['GS.1', 'R']].sum()
     team_stats['R/G'] = team_stats['R'] / team_stats['GS.1']
 
     # Identify teams to remove

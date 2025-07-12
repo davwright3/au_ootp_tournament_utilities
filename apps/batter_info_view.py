@@ -1,15 +1,15 @@
-"""App for viewing individual player level data"""
+"""App for viewing individual player level data."""
 import customtkinter as ctk
-from pygments.lexers import q
-
 from utils.config_utils.settings import settings as settings_module
 from utils.view_utils.header_footer_frame import Header, Footer
 from utils.view_utils.batter_ratings_frame import BatterRatingsFrame
-from utils.view_utils.batter_individual_overall_stats_frame import BatterIndividualStatsFrame
+from utils.view_utils.batter_individual_overall_stats_frame import (
+    BatterIndividualStatsFrame
+)
 from utils.view_utils.league_batting_stats_frame import LeagueBattingStatsFrame
 from utils.view_utils.batter_stat_plot_frame import BatterStatPlotFrame
 from utils.stats_utils.get_player_df import get_player_df
-from utils.data_utils.data_store import data_store
+
 
 class BatterInfoView(ctk.CTkToplevel):
     """TopLevel view for BatterInfo.
@@ -19,6 +19,7 @@ class BatterInfoView(ctk.CTkToplevel):
     """
 
     def __init__(self, cid, filepath=None, team=None):
+        """Initialize BatterInfoView."""
         super().__init__()
         self.title(f'Details for Batter Card ID: {cid}')
         self.height = settings_module['FileProcessor']['height']
@@ -46,7 +47,7 @@ class BatterInfoView(ctk.CTkToplevel):
             self,
             height=self.header_footer_height,
             width=self.width,
-            title= f'Details for Card ID: {cid}'
+            title=f'Details for Card ID: {cid}'
         )
         self.header_frame.grid(
             row=0,
@@ -62,13 +63,14 @@ class BatterInfoView(ctk.CTkToplevel):
 
         self.ratings_frame = BatterRatingsFrame(
             self.top_stats_frame,
-            cid_value=cid
+            cid_value=cid,
         )
         self.ratings_frame.grid(
             row=0,
             column=0,
             columnspan=1,
             sticky='n',
+
         )
 
         self.overall_statistics_frame = BatterIndividualStatsFrame(
@@ -97,7 +99,6 @@ class BatterInfoView(ctk.CTkToplevel):
             sticky='nsew',
         )
 
-
         self.league_stats_frame = LeagueBattingStatsFrame(
             self.top_stats_frame,
         )
@@ -107,7 +108,6 @@ class BatterInfoView(ctk.CTkToplevel):
             columnspan=1,
             sticky='nsew',
         )
-
 
         self.batter_plot_frame = BatterStatPlotFrame(
             self,
@@ -120,8 +120,6 @@ class BatterInfoView(ctk.CTkToplevel):
             sticky='nsew',
         )
 
-
-
         self.footer_frame = Footer(
             self,
             height=self.header_footer_height,
@@ -133,7 +131,6 @@ class BatterInfoView(ctk.CTkToplevel):
             columnspan=4,
             sticky='nsew',
         )
-
 
         self.lift()
         self.focus_force()
@@ -171,9 +168,3 @@ class BatterInfoView(ctk.CTkToplevel):
 
         show_and_release_topmost()
         self.protocol('WM_DELETE_WINDOW', on_app_close)
-
-
-
-
-
-
