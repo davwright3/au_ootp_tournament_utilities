@@ -2,14 +2,18 @@
 import customtkinter as ctk
 from utils.config_utils.settings import settings as settings_module
 from utils.view_utils.header_footer_frame import Header, Footer
+from utils.data_utils.card_list_store import card_store
+from utils.view_utils.pitcher_ratings_frame import PitcherRatingsFrame
 
 
 class PitcherInfoView(ctk.CTkToplevel):
     """Class for viewing individual pitcher data."""
 
-    def __init__(self, cid_value, file_path, selected_team=None):
+    def __init__(self, cid_value, file_path, team=None):
         """Initialize the pitcher view."""
         super().__init__()
+
+        card_store.load_card_list()
 
         self.title('Pitcher Info')
         self.height = settings_module['FileProcessor']['height']
@@ -18,9 +22,10 @@ class PitcherInfoView(ctk.CTkToplevel):
 
         self.geometry(f'{self.width}x{self.height}')
 
-        self.columnconfigure(0, weight=0)
-        self.columnconfigure(1, weight=0)
+        self.columnconfigure(0, weight=1)
+        self.columnconfigure(1, weight=1)
         self.columnconfigure(2, weight=1)
+        self.columnconfigure(3, weight=1)
 
         self.rowconfigure(0, weight=0)
         self.rowconfigure(1, weight=0)
@@ -36,6 +41,16 @@ class PitcherInfoView(ctk.CTkToplevel):
             row=0,
             column=0,
             columnspan=3,
+            sticky='nsew',
+        )
+
+        self.pitcher_ratings_frame = PitcherRatingsFrame(
+            self,
+            cid_value=cid_value,
+        )
+        self.pitcher_ratings_frame.grid(
+            row=1,
+            column=0,
             sticky='nsew',
         )
 
