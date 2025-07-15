@@ -35,6 +35,7 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
         self.player_search_name = None
         self.role = 'pitcher'
         self.team_list = ['No team selected']
+        self.selected_team = ctk.StringVar(value=self.team_list[0])
 
         self.height = int(page_settings['FileProcessor']['height'])
         self.width = int(page_settings['FileProcessor']['width'])
@@ -176,6 +177,8 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
 
         self.team_dropdown = ctk.CTkComboBox(
             self.file_select_frame,
+            values=self.team_list,
+            variable=self.selected_team,
         )
         self.team_dropdown.set("No team selected")
         self.team_dropdown.grid(
@@ -435,7 +438,10 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
             max_value=max_value,
         )
 
-        self.data_view_frame.load_dataframe(df)
+        self.data_view_frame.load_dataframe(
+            df,
+            passed_team=self.selected_team.get()
+        )
         self.update_idletasks()
         self.log_message("Pitcher file loaded")
 

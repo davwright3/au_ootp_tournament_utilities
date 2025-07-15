@@ -4,6 +4,7 @@ from utils.config_utils.settings import settings as settings_module
 from utils.view_utils.header_footer_frame import Header, Footer
 from utils.data_utils.card_list_store import card_store
 from utils.view_utils.pitcher_ratings_frame import PitcherRatingsFrame
+from utils.view_utils.pitcher_individual_stats_frame import PitcherIndividualStatsFrame
 
 
 class PitcherInfoView(ctk.CTkToplevel):
@@ -19,6 +20,8 @@ class PitcherInfoView(ctk.CTkToplevel):
         self.height = settings_module['FileProcessor']['height']
         self.width = settings_module['FileProcessor']['width']
         self.header_footer_height = int(self.height * 0.1)
+        self.passed_team = team
+        print("Passed team: ", self.passed_team)
 
         self.geometry(f'{self.width}x{self.height}')
 
@@ -51,6 +54,27 @@ class PitcherInfoView(ctk.CTkToplevel):
         self.pitcher_ratings_frame.grid(
             row=1,
             column=0,
+            sticky='nsew',
+        )
+
+        self.pitcher_stats_frame_overall = PitcherIndividualStatsFrame(
+            self,
+            cid_value=cid_value,
+        )
+        self.pitcher_stats_frame_overall.grid(
+            row=1,
+            column=1,
+            sticky='nsew',
+        )
+
+        self.pitcher_stats_frame_team = PitcherIndividualStatsFrame(
+            self,
+            cid_value=cid_value,
+            team=self.passed_team,
+        )
+        self.pitcher_stats_frame_team.grid(
+            row=1,
+            column=2,
             sticky='nsew',
         )
 
