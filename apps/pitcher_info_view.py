@@ -5,6 +5,8 @@ from utils.view_utils.header_footer_frame import Header, Footer
 from utils.data_utils.card_list_store import card_store
 from utils.view_utils.pitcher_ratings_frame import PitcherRatingsFrame
 from utils.view_utils.pitcher_individual_stats_frame import PitcherIndividualStatsFrame
+from utils.view_utils.league_pitching_stats_frame import LeaguePitchingStatsFrame
+from utils.view_utils.pitcher_stat_plot_frame import PitcherStatPlotFrame
 
 
 class PitcherInfoView(ctk.CTkToplevel):
@@ -43,7 +45,7 @@ class PitcherInfoView(ctk.CTkToplevel):
         self.header_frame.grid(
             row=0,
             column=0,
-            columnspan=3,
+            columnspan=4,
             sticky='nsew',
         )
 
@@ -78,6 +80,25 @@ class PitcherInfoView(ctk.CTkToplevel):
             sticky='nsew',
         )
 
+        self.league_pitching_stats_frame = LeaguePitchingStatsFrame(
+            self,
+        )
+        self.league_pitching_stats_frame.grid(
+            row=1,
+            column=3,
+            sticky='nsew',
+        )
+
+        self.pitcher_stats_plot_frame = PitcherStatPlotFrame(
+            self
+        )
+        self.pitcher_stats_plot_frame.grid(
+            row=2,
+            column=0,
+            columnspan=4,
+            sticky='nsew',
+        )
+
         self.footer_frame = Footer(
             self,
             height=self.header_footer_height,
@@ -86,7 +107,7 @@ class PitcherInfoView(ctk.CTkToplevel):
         self.footer_frame.grid(
             row=3,
             column=0,
-            columnspan=3,
+            columnspan=4,
             sticky='nsew',
         )
 

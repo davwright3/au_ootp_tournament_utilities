@@ -10,7 +10,7 @@ class LeagueBattingStatsFrame(ctk.CTkFrame):
         """Initialize the frame."""
         super().__init__(parent)
 
-        league_stats_display = league_stats.get_league_stats()
+        league_stats_display = league_stats.get_league_pitching_stats()
         self.font_style = ("Arial", 18, 'bold')
 
         row = 0
