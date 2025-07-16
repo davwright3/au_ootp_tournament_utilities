@@ -90,7 +90,8 @@ class PitcherInfoView(ctk.CTkToplevel):
         )
 
         self.pitcher_stats_plot_frame = PitcherStatPlotFrame(
-            self
+            self,
+            cid_value=cid_value,
         )
         self.pitcher_stats_plot_frame.grid(
             row=2,
