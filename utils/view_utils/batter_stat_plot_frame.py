@@ -15,6 +15,19 @@ class BatterStatPlotFrame(ctk.CTkFrame):
         """Initialize batters stats plotting frame."""
         super().__init__(parent)
         df = data_store.get_data()
+        self.is_closing = False
+
+        # One df for the league and one for the player
+        df1 = df.copy()
+        self.player_df = (
+            df1[df1['CID'] == int(card_id)][['PA', 'AB', 'H',
+                                             '1B', '2B', '3B',
+                                             'HR', 'BB', 'IBB',
+                                             'SO', 'HP', 'SF',
+                                             'TB', 'Trny']]
+        )
+
+        del df1
 
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
@@ -27,12 +40,14 @@ class BatterStatPlotFrame(ctk.CTkFrame):
 
         # create the checkbox
         self.stat_options = {
+            'PA': ctk.BooleanVar(value=True),
             'wOBA': ctk.BooleanVar(value=True),
             'OBP': ctk.BooleanVar(value=True),
             'SLG': ctk.BooleanVar(value=True),
             'AVG': ctk.BooleanVar(value=True)
         }
 
+        self.checkboxes = []
         for idx, stat in enumerate(self.stat_options):
             cb = ctk.CTkCheckBox(
                 self.checkbox_frame,
@@ -41,18 +56,12 @@ class BatterStatPlotFrame(ctk.CTkFrame):
                 command=self.update_plot
             )
             cb.grid(row=idx, column=0, sticky='nsew')
-
-        # One df for the league and one for the player
-        df1 = df.copy()
-        player_df = df1[df1['CID'] == int(card_id)][['PA', 'AB', 'H', '1B',
-                                                     '2B', '3B', 'HR', 'BB',
-                                                     'IBB', 'SO', 'HP', 'SF',
-                                                     'TB', 'Trny']]
-        del df1
+            self.checkboxes.append(cb)
 
         # Get the proper dataframe and format it
-        dataframes = get_player_trends(player_df)
-        del player_df
+        dataframes = get_player_trends(
+            self.player_df, self.get_selected_stats()
+        )
 
         self.plot_chart(dataframes)
 
@@ -60,7 +69,6 @@ class BatterStatPlotFrame(ctk.CTkFrame):
         """Plot the chart into the CTKFrame using matplotlib."""
         # Clear a canvas if it already exists
         if hasattr(self, 'canvas') and self.canvas:
-            print("Destroying old canvas")
             self.canvas.get_tk_widget().destroy()
             self.canvas = None
 
@@ -91,23 +99,50 @@ class BatterStatPlotFrame(ctk.CTkFrame):
 
         self.bind("<Configure>", self._resize)
 
+    def get_selected_stats(self):
+        """Get stats that user selects."""
+        pa = self.stat_options['PA'].get()
+        woba = self.stat_options['wOBA'].get()
+        obp = self.stat_options['OBP'].get()
+        slg = self.stat_options['SLG'].get()
+        avg = self.stat_options['AVG'].get()
+
+        return {'pa': pa,
+                'woba': woba,
+                'obp': obp,
+                'slg': slg,
+                'avg': avg
+                }
+
     def update_plot(self):
         """Update plot on stat select (placeholder)."""
-        print("Updating plot")
+        if self.is_closing:
+            return
+
+        selected_stats = self.get_selected_stats()
+        new_stats = get_player_trends(
+            selected_stats=selected_stats,
+            df=self.player_df
+        )
+        self.plot_chart(new_stats)
 
     def _resize(self, event=None):
-        if hasattr(self, 'canvas') and self.canvas:
-            print("Resizing canvas")
-            try:
-                # self.canvas.figure.tight_layout()
-                print("Set tight layout")
-                self.canvas.draw()
-            except Exception as e:
-                print("Failed to set tight layout: ", e)
+        if self.is_closing or not hasattr(self, 'canvas') or not self.canvas:
+            return
+        try:
+            # self.canvas.figure.tight_layout()
+            self.canvas.draw()
+        except Exception as e:
+            print("Failed to set tight layout: ", e)
 
     def destroy(self):
         """Override destroy function for plot cleanup."""
-        print("Destroying parent batter plot frame")
+        self.is_closing = True
+        self.unbind("<Configure>")
+
+        for cb in self.checkboxes:
+            cb.configure(command=lambda: None)
+
         try:
             if self.canvas and self.canvas.figure:
                 try:
@@ -119,11 +154,18 @@ class BatterStatPlotFrame(ctk.CTkFrame):
                 self.toolbar_frame.destroy()
                 self.toolbar_frame = None
 
-            if hasattr(self, 'canvas'):
-                self.canvas.get_tk_widget().destroy()
-                self.canvas.figure.clf()
-                self.canvas.figure = None
+            if hasattr(self, 'canvas') and self.canvas:
+                widget = self.canvas.get_tk_widget()
+                if widget.winfo_exists():
+                    widget.destroy()
+                if hasattr(self.canvas, 'figure') and self.canvas.figure:
+                    self.canvas.figure.clf()
+                    self.canvas.figure = None
                 self.canvas = None
+                # self.canvas.get_tk_widget().destroy()
+                # self.canvas.figure.clf()
+                # self.canvas.figure = None
+                # self.canvas = None
         except Exception as e:
             print("Exception: ", e)
             pass

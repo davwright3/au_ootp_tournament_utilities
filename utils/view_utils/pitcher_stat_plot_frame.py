@@ -10,7 +10,10 @@ from utils.trend_utils.pitcher_trends import get_pitcher_trends
 
 
 class PitcherStatPlotFrame(ctk.CTkFrame):
+    """Frame for displaying trend lines for pitcher stats."""
+
     def __init__(self, parent, cid_value):
+        """Initialize the frame."""
         super().__init__(parent)
 
         test_label = ctk.CTkLabel(self, text='Pitcher Stat Plot Frame')
@@ -51,14 +54,19 @@ class PitcherStatPlotFrame(ctk.CTkFrame):
             )
         df = data_store.get_data().copy()
         self.player_df, removed = cull_teams(df)
-        self.player_df = self.player_df[self.player_df['CID'] == int(cid_value)][['CID', 'IP', 'HR.1', 'BB.1', 'K', 'ER', 'Trny']]
-        dataframes = get_pitcher_trends(self.player_df, stat_options=self.get_selected_stats())
+        self.player_df = (
+            self.player_df[self.player_df['CID'] == int(cid_value)][
+                ['CID', 'IP', 'HR.1', 'BB.1', 'K', 'ER', 'Trny']]
+        )
+        dataframes = get_pitcher_trends(
+            self.player_df,
+            stat_options=self.get_selected_stats()
+        )
         self.plot_chart(dataframes)
         del df
 
-
-
     def plot_chart(self, dataframes):
+        """Plot the chart using selected dataframes."""
         # clear canvas if it exists
         if hasattr(self, 'canvas') and self.canvas:
             self.canvas.get_tk_widget().destroy()
@@ -86,24 +94,16 @@ class PitcherStatPlotFrame(ctk.CTkFrame):
         self.canvas.get_tk_widget().grid(row=0, column=1, sticky='nsew')
         plt.close(self.figure)
 
-        self.bind("<Configure>", self._resize)
-
-
-
     def update_plot(self):
-        dataframes = get_pitcher_trends(self.player_df, stat_options=self.get_selected_stats())
+        """Get new dataframe and update chart."""
+        dataframes = get_pitcher_trends(
+            self.player_df,
+            stat_options=self.get_selected_stats()
+        )
         self.plot_chart(dataframes)
 
-    def _resize(self, event=None):
-        if hasattr(self, 'canvas') and self.canvas:
-            print("Resizing canvas")
-            try:
-                self.canvas.figure.tight_layout()
-                self.canvas.draw()
-            except Exception as e:
-                print("Failed to set tight layout". e)
-
     def get_selected_stats(self):
+        """Get selected stats to view."""
         innings_select = self.stat_options['IPC'].get()
         era_select = self.stat_options['ERA'].get()
         bb_select = self.stat_options['BB/9'].get()
@@ -114,16 +114,12 @@ class PitcherStatPlotFrame(ctk.CTkFrame):
                 'era': era_select,
                 'bb': bb_select,
                 'k9': k9_select,
-                'hr': hr_select,}
+                'hr': hr_select,
+                }
 
     def destroy(self):
+        """Override destroy method to safely destroy chart."""
         try:
-            if self.canvas and self.canvas.figure:
-                try:
-                    self.canvas.figure._axoberservers.callbacks.clear()
-                except Exception as e:
-                    print("Error clearing axoberserver", e)
-
             if hasattr(self, 'toolbar_frame'):
                 self.toolbar_frame.destroy()
                 self.toolbar_frame = None
@@ -137,4 +133,3 @@ class PitcherStatPlotFrame(ctk.CTkFrame):
             print("Exception: ", e)
             pass
         super().destroy()
-

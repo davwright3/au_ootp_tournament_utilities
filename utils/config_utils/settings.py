@@ -85,9 +85,9 @@ def ensure_settings_up_to_date():
     if updated:
         with open(SETTINGS_PATH, 'w') as configfile:
             user_config.write(configfile)
-        print("User settings updated with missing defaults")
-    else:
-        print("User settings already up to date")
+    #     print("User settings updated with missing defaults")
+    # else:
+    #     print("User settings already up to date")
 
 
 def _load():

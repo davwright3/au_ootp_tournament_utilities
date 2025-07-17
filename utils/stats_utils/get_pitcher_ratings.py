@@ -1,9 +1,9 @@
 """Retrieve pitcher ratings from card dump."""
-import pandas as pd
 from utils.data_utils.card_list_store import card_store
 
 
 def get_pitcher_ratings(card_id):
+    """Get ratings for selected pitcher card."""
     pitcher_ratings = card_store.get_card_ratings(card_id=card_id)
 
     cols = ['//Card Title', 'Stuff', 'Movement', 'Control', 'pHR',
@@ -17,9 +17,3 @@ def get_pitcher_ratings(card_id):
     del pitcher_ratings
 
     return return_pitcher_ratings
-
-
-
-
-
-

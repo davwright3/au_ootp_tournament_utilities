@@ -9,7 +9,6 @@ class PitcherRatingsFrame(ctk.CTkFrame):
 
     def __init__(self, parent, cid_value):
         """Initialize the pitcher view."""
-
         super().__init__(parent, fg_color='white')
 
         self.pitcher_ratings = get_pitcher_ratings(card_id=cid_value)
@@ -25,7 +24,14 @@ class PitcherRatingsFrame(ctk.CTkFrame):
             self,
             self.pitcher_ratings.iloc[0]['//Card Title'],
         )
-        self.card_title_frame.grid(row=0, column=0, columnspan=7, padx=10, pady=10, sticky='nsew')
+        self.card_title_frame.grid(
+            row=0,
+            column=0,
+            columnspan=7,
+            padx=10,
+            pady=10,
+            sticky='nsew'
+        )
 
         # Frames for the rating labels
         self.stuff_label = RatingLabel(
@@ -117,7 +123,6 @@ class PitcherRatingsFrame(ctk.CTkFrame):
             column=4,
             sticky='nsew'
         )
-
 
         # Get the ratings to display
         self.stuff_rating_label = RatingLabel(
@@ -279,8 +284,8 @@ class PitcherRatingsFrame(ctk.CTkFrame):
                 'FB: '
             )
             self.fastball_label.grid(
-                row=(row%4) + 7,
-                column=(stat_count//4)*2,
+                row=(row % 4) + 7,
+                column=(stat_count // 4) * 2,
                 sticky='nsew'
             )
             self.fastball_rating_label = RatingLabel(
@@ -288,8 +293,8 @@ class PitcherRatingsFrame(ctk.CTkFrame):
                 self.pitcher_ratings.iloc[0]['Fastball'],
             )
             self.fastball_rating_label.grid(
-                row=(row%4) + 7,
-                column=(stat_count//4)*2 + 1,
+                row=(row % 4) + 7,
+                column=(stat_count // 4) * 2 + 1,
                 sticky='nsew'
             )
             row += 1
@@ -301,8 +306,8 @@ class PitcherRatingsFrame(ctk.CTkFrame):
                 'SI: '
             )
             self.sinker_label.grid(
-                row=(row%4) + 7,
-                column=(stat_count//4)*2,
+                row=(row % 4) + 7,
+                column=(stat_count // 4) * 2,
                 sticky='nsew'
             )
             self.sinker_rating_label = RatingLabel(
@@ -310,8 +315,8 @@ class PitcherRatingsFrame(ctk.CTkFrame):
                 self.pitcher_ratings.iloc[0]['Sinker'],
             )
             self.sinker_rating_label.grid(
-                row=(row%4) + 7,
-                column=(stat_count//4)*2 + 1,
+                row=(row % 4) + 7,
+                column=(stat_count // 4) * 2 + 1,
                 sticky='nsew'
             )
             row += 1
@@ -323,8 +328,8 @@ class PitcherRatingsFrame(ctk.CTkFrame):
                 'Slider: '
             )
             self.slider_label.grid(
-                row=(row%4) + 7,
-                column=(stat_count//4)*2,
+                row=(row % 4) + 7,
+                column=(stat_count // 4) * 2,
                 sticky='nsew'
             )
 
@@ -333,8 +338,8 @@ class PitcherRatingsFrame(ctk.CTkFrame):
                 self.pitcher_ratings.iloc[0]['Slider'],
             )
             self.slider_rating_label.grid(
-                row=(row%4) + 7,
-                column=(stat_count//4)*2 + 1,
+                row=(row % 4) + 7,
+                column=(stat_count // 4) * 2 + 1,
                 sticky='nsew'
             )
             row += 1
@@ -346,19 +351,18 @@ class PitcherRatingsFrame(ctk.CTkFrame):
                 'Curveball: '
             )
             self.curveball_label.grid(
-                row=(row%4) + 7,
-                column=(stat_count//4)*2,
+                row=(row % 4) + 7,
+                column=(stat_count // 4) * 2,
                 sticky='nsew'
             )
-
 
             self.curveball_rating_label = RatingLabel(
                 self,
                 self.pitcher_ratings.iloc[0]['Curveball'],
             )
             self.curveball_rating_label.grid(
-                row=(row%4) + 7,
-                column=(stat_count//4)*2 + 1,
+                row=(row % 4) + 7,
+                column=(stat_count // 4) * 2 + 1,
                 sticky='nsew'
             )
             row += 1
@@ -370,8 +374,8 @@ class PitcherRatingsFrame(ctk.CTkFrame):
                 'Changeup: '
             )
             self.changeup_label.grid(
-                row=(row%4) + 7,
-                column=(stat_count//4)*2,
+                row=(row % 4) + 7,
+                column=(stat_count // 4) * 2,
                 sticky='nsew'
             )
 
@@ -380,8 +384,8 @@ class PitcherRatingsFrame(ctk.CTkFrame):
                 self.pitcher_ratings.iloc[0]['Changeup'],
             )
             self.changeup_rating_label.grid(
-                row=(row%4) + 7,
-                column=(stat_count//4)*2 + 1,
+                row=(row % 4) + 7,
+                column=(stat_count // 4) * 2 + 1,
                 sticky='nsew'
             )
             row += 1
@@ -393,8 +397,8 @@ class PitcherRatingsFrame(ctk.CTkFrame):
                 'Cutter: '
             )
             self.cutter_label.grid(
-                row=(row%4) + 7,
-                column=(stat_count//4)*2,
+                row=(row % 4) + 7,
+                column=(stat_count // 4) * 2,
                 sticky='nsew'
             )
 
@@ -403,8 +407,8 @@ class PitcherRatingsFrame(ctk.CTkFrame):
                 self.pitcher_ratings.iloc[0]['Cutter'],
             )
             self.cutter_rating_label.grid(
-                row=(row%4) + 7,
-                column=(stat_count//4)*2 + 1,
+                row=(row % 4) + 7,
+                column=(stat_count // 4) * 2 + 1,
                 sticky='nsew'
             )
             row += 1
@@ -416,8 +420,8 @@ class PitcherRatingsFrame(ctk.CTkFrame):
                 'Splitter: '
             )
             self.splitter_label.grid(
-                row=(row%4) + 7,
-                column=(stat_count//4)*2,
+                row=(row % 4) + 7,
+                column=(stat_count // 4) * 2,
                 sticky='nsew'
             )
 
@@ -426,8 +430,8 @@ class PitcherRatingsFrame(ctk.CTkFrame):
                 self.pitcher_ratings.iloc[0]['Splitter'],
             )
             self.splitter_rating_label.grid(
-                row=(row%4) + 7,
-                column=(stat_count//4)*2 + 1,
+                row=(row % 4) + 7,
+                column=(stat_count // 4) * 2 + 1,
                 sticky='nsew'
             )
             row += 1
@@ -439,8 +443,8 @@ class PitcherRatingsFrame(ctk.CTkFrame):
                 'Forkball: '
             )
             self.forkball_label.grid(
-                row=(row%4) + 7,
-                column=(stat_count//4)*2,
+                row=(row % 4) + 7,
+                column=(stat_count // 4) * 2,
                 sticky='nsew'
             )
 
@@ -449,8 +453,8 @@ class PitcherRatingsFrame(ctk.CTkFrame):
                 self.pitcher_ratings.iloc[0]['Forkball'],
             )
             self.forkball_rating_label.grid(
-                row=(row%4) + 7,
-                column=(stat_count//4)*2 + 1,
+                row=(row % 4) + 7,
+                column=(stat_count // 4) * 2 + 1,
                 sticky='nsew'
             )
             row += 1
@@ -462,8 +466,8 @@ class PitcherRatingsFrame(ctk.CTkFrame):
                 'Screwball: '
             )
             self.screwball_label.grid(
-                row=(row%4) + 7,
-                column=(stat_count//4)*2,
+                row=(row % 4) + 7,
+                column=(stat_count // 4) * 2,
                 sticky='nsew'
             )
 
@@ -472,8 +476,8 @@ class PitcherRatingsFrame(ctk.CTkFrame):
                 self.pitcher_ratings.iloc[0]['Screwball'],
             )
             self.screwball_rating_label.grid(
-                row=(row%4) + 7,
-                column=(stat_count//4)*2 + 1,
+                row=(row % 4) + 7,
+                column=(stat_count // 4) * 2 + 1,
                 sticky='nsew'
             )
             row += 1
@@ -485,8 +489,8 @@ class PitcherRatingsFrame(ctk.CTkFrame):
                 'Circlechange: '
             )
             self.circlechange_label.grid(
-                row=(row%4) + 7,
-                column=(stat_count//4)*2,
+                row=(row % 4) + 7,
+                column=(stat_count // 4) * 2,
                 sticky='nsew'
             )
 
@@ -495,21 +499,21 @@ class PitcherRatingsFrame(ctk.CTkFrame):
                 self.pitcher_ratings.iloc[0]['Circlechange'],
             )
             self.circlechange_rating_label.grid(
-                row=(row%4) + 7,
-                column=(stat_count//4)*2 + 1,
+                row=(row % 4) + 7,
+                column=(stat_count // 4) * 2 + 1,
                 sticky='nsew'
             )
             row += 1
             stat_count += 1
 
-        if self.pitcher_ratings.iloc[0]['Knucklecurve'] !=0:
+        if self.pitcher_ratings.iloc[0]['Knucklecurve'] != 0:
             self.knucklecurve_label = RatingLabel(
                 self,
                 'Knucklecurve: '
             )
             self.knucklecurve_label.grid(
-                row=(row%4) + 7,
-                column=(stat_count//4)*2,
+                row=(row % 4) + 7,
+                column=(stat_count // 4) * 2,
                 sticky='nsew'
             )
 
@@ -518,8 +522,8 @@ class PitcherRatingsFrame(ctk.CTkFrame):
                 self.pitcher_ratings.iloc[0]['Knucklecurve'],
             )
             self.knucklecurve_rating_label.grid(
-                row=(row%4) + 7,
-                column=(stat_count//4)*2 + 1,
+                row=(row % 4) + 7,
+                column=(stat_count // 4) * 2 + 1,
                 sticky='nsew'
             )
             row += 1
@@ -531,8 +535,8 @@ class PitcherRatingsFrame(ctk.CTkFrame):
                 'Knuckleball: '
             )
             self.knuckleball_label.grid(
-                row=(row%4) + 7,
-                column=(stat_count//4)*2,
+                row=(row % 4) + 7,
+                column=(stat_count // 4) * 2,
                 sticky='nsew'
             )
 
@@ -541,7 +545,7 @@ class PitcherRatingsFrame(ctk.CTkFrame):
                 self.pitcher_ratings.iloc[0]['Knuckleball'],
             )
             self.knuckleball_rating_label.grid(
-                row=(row%4) + 7,
-                column=(stat_count//4)*2 + 1,
+                row=(row % 4) + 7,
+                column=(stat_count // 4) * 2 + 1,
                 sticky='nsew'
             )

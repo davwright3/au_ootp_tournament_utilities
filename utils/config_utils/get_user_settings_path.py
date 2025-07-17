@@ -17,7 +17,9 @@ def get_user_settings_path(app_name):
                                 app_name)
     elif sys.platform == 'darwin':
         # macos
-        base_dir = os.path.expanduser(f'~/Library/Application Support/{app_name}')
+        base_dir = os.path.expanduser(
+            f'~/Library/Application Support/{app_name}'
+        )
     else:
         # Running in linux or other
         base_dir = os.path.expanduser(f'~/.config/{app_name}')

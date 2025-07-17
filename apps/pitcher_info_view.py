@@ -4,8 +4,12 @@ from utils.config_utils.settings import settings as settings_module
 from utils.view_utils.header_footer_frame import Header, Footer
 from utils.data_utils.card_list_store import card_store
 from utils.view_utils.pitcher_ratings_frame import PitcherRatingsFrame
-from utils.view_utils.pitcher_individual_stats_frame import PitcherIndividualStatsFrame
-from utils.view_utils.league_pitching_stats_frame import LeaguePitchingStatsFrame
+from utils.view_utils.pitcher_individual_stats_frame import (
+    PitcherIndividualStatsFrame
+)
+from utils.view_utils.league_pitching_stats_frame import (
+    LeaguePitchingStatsFrame
+)
 from utils.view_utils.pitcher_stat_plot_frame import PitcherStatPlotFrame
 
 
@@ -23,7 +27,6 @@ class PitcherInfoView(ctk.CTkToplevel):
         self.width = settings_module['FileProcessor']['width']
         self.header_footer_height = int(self.height * 0.1)
         self.passed_team = team
-        print("Passed team: ", self.passed_team)
 
         self.geometry(f'{self.width}x{self.height}')
 

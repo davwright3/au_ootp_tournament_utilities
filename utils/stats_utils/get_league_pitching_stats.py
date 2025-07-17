@@ -5,6 +5,7 @@ from utils.stats_utils.convert_innings import innings_calc
 
 
 def get_league_pitching_stats():
+    """Return pitchign stats for league."""
     df1 = data_store.get_data().copy()
 
     df1, removed = cull_teams(df1)
