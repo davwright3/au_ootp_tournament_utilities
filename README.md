@@ -84,6 +84,15 @@ this becomes obsolete.
 - By default, no stat columns will be selected, the user is able to select as few or as many columns to select as the want
   - Default stats always visible are CID, Title, Bat/Pitch side, and Plate Appearances/Innings Pitched
 
+### Individual Batter and Pitcher Stats
+
+- Double-clicking on a player on the basic stats page will open a player card allowing the user to view:
+
+  - Player ratings including offense, defense, pitching and individual pitches
+  - Individual player stats for all instances of the player
+  - Individual player stats for selected team, if applicable
+  - A chart displaying player trends, with selectable stats (more to be added in the future)
+
 
 ### Basic Team Stats
 
@@ -135,6 +144,15 @@ ___
 - Add basic team stat views
 - Fix potential pathing issue for macOS settings read/write
 - Refactor stats calculations and some frames for modularity
+
+### v0.1.2.32 (Windows), v0.1.2.17 (macOS), v0.1.2.9 (macOS Intel release)
+
+- Add basic player card functionality for batters and pitcher
+
+  - Show player ratings and stats for all instances and for selected team
+
+- Display trends for individual batters and pitchers over time
+- Add card rating min and max tool on main stats page
 
 ---
 
