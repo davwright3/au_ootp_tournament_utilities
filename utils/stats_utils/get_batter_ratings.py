@@ -5,7 +5,6 @@ import pandas as pd
 def get_batter_ratings(file_path, passed_cid):
     """Return df with singular batter ratings."""
     df1 = pd.DataFrame(pd.read_csv(file_path))
-    print("Passed cid: ", passed_cid)
     df1 = df1.rename(columns={'Card ID': 'CID',
                               '//Card Title': 'Title',
                               'Card Value': 'Val'})

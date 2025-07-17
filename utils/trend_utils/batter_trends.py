@@ -8,11 +8,20 @@ def get_player_trends(df, selected_stats=None, window=5):
     dataframes = []
     df1 = df.copy()
 
-    get_rolling_pa(df1, dataframes, window=selected_window)
-    get_rolling_woba(df1, dataframes, window=selected_window)
-    get_rolling_avg(df1, dataframes, window=selected_window)
-    get_rolling_slg(df1, dataframes, window=selected_window)
-    get_rolling_obp(df1, dataframes, window=selected_window)
+    if selected_stats['pa']:
+        get_rolling_pa(df1, dataframes, window=selected_window)
+
+    if selected_stats['woba']:
+        get_rolling_woba(df1, dataframes, window=selected_window)
+
+    if selected_stats['avg']:
+        get_rolling_avg(df1, dataframes, window=selected_window)
+
+    if selected_stats['slg']:
+        get_rolling_slg(df1, dataframes, window=selected_window)
+
+    if selected_stats['obp']:
+        get_rolling_obp(df1, dataframes, window=selected_window)
 
     del df1
     return dataframes

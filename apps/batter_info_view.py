@@ -157,7 +157,6 @@ class BatterInfoView(ctk.CTkToplevel):
             self.after(100, release)
 
         def on_app_close():
-            print("Running on app close")
             try:
                 if hasattr(self, 'batter_plot_frame'):
                     self.batter_plot_frame.destroy()

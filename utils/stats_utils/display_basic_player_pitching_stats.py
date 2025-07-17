@@ -31,8 +31,6 @@ def display_basic_pitching_stats(
         fractional_innings = (innings - whole_innings) / .3
         return whole_innings + fractional_innings
 
-    print("Running basic pitching stat calculation...")
-
     # Set columns for whether variants will be split or not
     if variant_split:
         columns_to_keep = ['CID', 'Title', 'VLvl', 'Card Value', 'Throws',
@@ -43,7 +41,6 @@ def display_basic_pitching_stats(
     columns_to_keep.extend(pitching_stats_to_view)
 
     df1, removed = cull_teams(data_store.get_data())
-    print("Removed: ", removed)
     df1['IPC'] = (df1['IP'].apply(innings_calc))
 
     if variant_split:
