@@ -15,6 +15,7 @@ def display_basic_pitching_stats(
         pitching_side=None,
         player_name=None,
         pitching_stats_to_view=None,
+        general_stats_to_view=None,
         min_value=40,
         max_value=105
 ):
@@ -23,7 +24,8 @@ def display_basic_pitching_stats(
     card_df_path = script_settings['InitialFileDirs']['target_card_list_file']
     card_df = pd.DataFrame(pd.read_csv(card_df_path))
     card_df = card_df.rename(
-        columns={'Card ID': 'CID', '//Card Title': 'Title'}
+        columns={'Card ID': 'CID', '//Card Title': 'Title', 'Last 10 Price': 'L10',
+                 'Last 10 Price(VAR)': 'L10V'}
     )
 
     def innings_calc(innings):
@@ -33,11 +35,11 @@ def display_basic_pitching_stats(
 
     # Set columns for whether variants will be split or not
     if variant_split:
-        columns_to_keep = ['CID', 'Title', 'VLvl', 'Card Value', 'Throws',
-                           'IPC']
+        columns_to_keep = ['CID', 'Title', 'VLvl', 'Card Value', 'Throws', 'IPC']
     else:
         columns_to_keep = ['CID', 'Title', 'Card Value', 'Throws', 'IPC']
 
+    columns_to_keep.extend(general_stats_to_view)
     columns_to_keep.extend(pitching_stats_to_view)
 
     df1, removed = cull_teams(data_store.get_data())
@@ -69,7 +71,7 @@ def display_basic_pitching_stats(
     df2 = calc_basic_pitching_stats(df2, min_ip, inning_split, role)
 
     df3 = pd.merge(
-        card_df[['CID', 'Title', 'Card Value', 'Throws']],
+        card_df[['CID', 'Title', 'Card Value', 'Throws', 'owned', 'L10', 'L10V']],
         df2,
         on='CID',
         how='inner'
