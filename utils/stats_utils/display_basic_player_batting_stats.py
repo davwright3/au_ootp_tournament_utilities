@@ -14,6 +14,7 @@ def display_basic_batting_stats(
         batter_side=None,
         batter_name=None,
         stats_to_view=None,
+        general_stats_to_view=None,
         min_value=40,
         max_value=105,):
     """Calculate basic batting stats."""
@@ -23,31 +24,30 @@ def display_basic_batting_stats(
     card_df_path = script_settings['InitialFileDirs']['target_card_list_file']
     card_df = pd.DataFrame(pd.read_csv(card_df_path))
     card_df = card_df.rename(
-        columns={'Card ID': 'CID', '//Card Title': 'Title'}
+        columns={'Card ID': 'CID', '//Card Title': 'Title', 'Last 10 Price': 'L10',
+                 'Last 10 Price(VAR)': 'L10V'}
     )
 
     df2, removed = cull_teams(pd.DataFrame(df1))
 
-    columns_from_data = ['CID', 'Title', 'Card Value', 'Bats']
+    columns_from_data = ['CID', 'Title', 'Card Value', 'Bats', 'owned', 'L10', 'L10V']
 
     # Calculate the basic statistics
     if not variant_split:
-        columns_to_keep = ['CID', 'Title', 'Bats', 'Card Value',
-                           'PA']
+        columns_to_keep = ['CID', 'Title', 'Bats', 'Card Value', 'PA']
         df2 = df2.groupby(
             ['CID'],
             as_index=False)[['PA', 'AB', 'H', '1B', '2B', '3B', 'HR',
                              'IBB', 'BB', 'HP', 'SH', 'SF', 'SO', 'TB',
                              'RC', 'WAR', 'SB', 'CS', 'BsR', 'ZR']].sum()
     else:
-        columns_to_keep = ['CID', 'Title', 'VLvl', 'Bats', 'Card Value',
-                           'PA']
+        columns_to_keep = ['CID', 'Title', 'VLvl', 'Bats', 'Card Value', 'PA']
         df2 = df2.groupby(
             ['CID', 'VLvl'],
             as_index=False)[['PA', 'AB', 'H', '1B', '2B', '3B', 'HR',
                              'IBB', 'BB', 'HP', 'SH', 'SF', 'SO', 'TB',
                              'RC', 'WAR', 'SB', 'CS', 'BsR', 'ZR']].sum()
-
+    columns_to_keep.extend(general_stats_to_view)
     columns_to_keep.extend(stats_to_view)
 
     if pos is None:

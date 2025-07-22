@@ -11,6 +11,7 @@ from utils.file_utils.handle_select_file import handle_select_file
 from utils.view_utils.pitcher_stat_select_frame import PitcherStatSelectFrame
 from utils.view_utils.card_value_select_frame import CardValueSelectFrame
 from utils.data_utils.data_store import data_store
+from utils.view_utils.general_stat_select_frame import GeneralStatSelectFrame
 from utils.data_utils.get_team_list import get_team_list
 
 
@@ -359,6 +360,18 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
             sticky="nsew"
         )
 
+        self.general_stats_select_frame = GeneralStatSelectFrame(
+            self.menu_frame,
+        )
+        self.general_stats_select_frame.grid(
+            row=10,
+            column=0,
+            columnspan=3,
+            padx=10,
+            pady=10,
+            sticky="nsew"
+        )
+
         def show_and_release_topmost():
             """Lift window, set topmost and then release safely."""
             if not self.winfo_exists():
@@ -414,6 +427,7 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
         else:
             self.player_search_name = None
 
+        general_stats_to_view = self.get_general_stats_to_view()
         pitching_stats_to_view = self.get_pitching_stats_to_view()
         min_value, max_value = (
             self.card_value_select_frame.get_min_max_values()
@@ -434,6 +448,7 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
             pitching_side=self.pitching_side_checkbox.get(),
             player_name=self.player_search_name,
             pitching_stats_to_view=pitching_stats_to_view,
+            general_stats_to_view=general_stats_to_view,
             min_value=min_value,
             max_value=max_value,
         )
@@ -456,6 +471,10 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
     def get_pitching_stats_to_view(self):
         """Get list of selected pitching stats."""
         return self.pitching_stats_select_frame.get_active_stats()
+
+    def get_general_stats_to_view(self):
+        """Get general stats to view."""
+        return self.general_stats_select_frame.get_selected_general_stats()
 
     def load_data_to_store(self):
         """Load data to stats singleton."""

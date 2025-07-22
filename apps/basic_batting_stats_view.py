@@ -10,6 +10,7 @@ from utils.stats_utils.display_basic_player_batting_stats import (
 from utils.interface_utils.pos_select_button import CustomPositionButton
 from utils.view_utils.batter_stat_select_frame import BatterStatSelectFrame
 from utils.view_utils.card_value_select_frame import CardValueSelectFrame
+from utils.view_utils.general_stat_select_frame import GeneralStatSelectFrame
 from utils.data_utils.data_store import data_store
 from utils.data_utils.league_batting_stats import league_stats
 import pandas as pd
@@ -100,9 +101,9 @@ class BasicStatsView(ctk.CTkToplevel):
         self.menu_frame.grid(
             row=2,
             column=2,
-            padx=10,
+            padx=20,
             pady=10,
-            sticky='nsw'
+            sticky='nsew'
         )
         self.menu_frame.rowconfigure(0, weight=0)
         self.menu_frame.rowconfigure(1, weight=0)
@@ -120,6 +121,10 @@ class BasicStatsView(ctk.CTkToplevel):
         self.menu_frame.rowconfigure(13, weight=0)
         self.menu_frame.rowconfigure(14, weight=0)
         self.menu_frame.rowconfigure(15, weight=1)
+
+        self.menu_frame.columnconfigure(0, weight=1)
+        self.menu_frame.columnconfigure(1, weight=1)
+        self.menu_frame.columnconfigure(2, weight=1)
 
         self.footer_frame = Footer(
             self,
@@ -261,126 +266,126 @@ class BasicStatsView(ctk.CTkToplevel):
 
         self.catcher_button = CustomPositionButton(
             self.menu_frame,
-            text="Catcher",
+            width=50,
+            text="C",
             command=lambda: (self.run_position_file(pos='LearnC'),
                              self.log_message("Catchers"))
         )
         self.catcher_button.grid(
             row=4,
             column=0,
-            columnspan=2,
             padx=5,
-            pady=5
+            pady=5,
         )
 
         self.first_base_button = CustomPositionButton(
             self.menu_frame,
-            text="First Base",
+            text="1B",
+            width=50,
             command=lambda: (self.run_position_file(pos='Learn1B'),
                              self.log_message("First Base"))
         )
         self.first_base_button.grid(
-            row=5,
-            column=0,
-            columnspan=2,
+            row=4,
+            column=1,
             padx=5,
-            pady=5
+            pady=5,
         )
 
         self.second_base_button = CustomPositionButton(
             self.menu_frame,
-            text="Second Base",
+            text="2B",
+            width=50,
             command=lambda: (self.run_position_file(pos='Learn2B'),
                              self.log_message("Second Base"))
         )
         self.second_base_button.grid(
-            row=6,
-            column=0,
-            columnspan=2,
+            row=4,
+            column=2,
             padx=5,
-            pady=5
+            pady=5,
         )
 
         self.third_base_button = CustomPositionButton(
             self.menu_frame,
-            text="Third Base",
+            text="3B",
+            width=50,
             command=lambda: (self.run_position_file(pos='Learn3B'),
                              self.log_message("Third Base"))
         )
         self.third_base_button.grid(
-            row=7,
+            row=5,
             column=0,
-            columnspan=2,
             padx=5,
             pady=5
         )
 
         self.shortstop_button = CustomPositionButton(
             self.menu_frame,
-            text="Shortstop",
+            text="SS",
+            width=50,
             command=lambda: (self.run_position_file(pos='LearnSS'),
                              self.log_message("Shortstop"))
         )
         self.shortstop_button.grid(
-            row=8,
-            column=0,
-            columnspan=2,
+            row=5,
+            column=1,
             padx=5,
             pady=5
         )
 
         self.left_field_button = CustomPositionButton(
             self.menu_frame,
-            text="Left Field",
+            text="LF",
+            width=50,
             command=lambda: (self.run_position_file(pos='LearnLF'),
                              self.log_message("Left Field"))
         )
         self.left_field_button.grid(
-            row=9,
-            column=0,
-            columnspan=2,
+            row=5,
+            column=2,
             padx=5,
             pady=5
         )
 
         self.center_field_button = CustomPositionButton(
             self.menu_frame,
-            text="Center Field",
+            text="CF",
+            width=50,
             command=lambda: (self.run_position_file(pos='LearnCF'),
                              self.log_message("Center Field"))
         )
         self.center_field_button.grid(
-            row=10,
+            row=6,
             column=0,
-            columnspan=2,
             padx=5,
             pady=5
         )
 
         self.right_field_button = CustomPositionButton(
             self.menu_frame,
-            text="Right Field",
+            text="RF",
+            width=50,
             command=lambda: (self.run_position_file(pos='LearnRF'),
                              self.log_message("Right Field"))
         )
         self.right_field_button.grid(
-            row=11,
-            column=0,
-            columnspan=2,
+            row=6,
+            column=1,
             padx=5,
             pady=5
         )
 
         self.all_batters_button = CustomPositionButton(
             self.menu_frame,
-            text="Batters",
+            text="ALL",
+            width=50,
             command=lambda: (self.run_position_file(pos=None),
                              self.log_message("All Batters"))
         )
         self.all_batters_button.grid(
-            row=12,
-            column=0,
-            columnspan=2,
+            row=6,
+            column=2,
             padx=5,
             pady=5
         )
@@ -389,9 +394,9 @@ class BasicStatsView(ctk.CTkToplevel):
             self.menu_frame
         )
         self.batter_stat_select_frame.grid(
-            row=13,
+            row=7,
             column=0,
-            columnspan=2,
+            columnspan=3,
             padx=5,
             pady=5
         )
@@ -400,7 +405,19 @@ class BasicStatsView(ctk.CTkToplevel):
             self.menu_frame
         )
         self.card_value_frame.grid(
-            row=14,
+            row=8,
+            column=0,
+            columnspan=3,
+            padx=5,
+            pady=5,
+            sticky='nsew'
+        )
+
+        self.general_stats_select_frame = GeneralStatSelectFrame(
+            self.menu_frame
+        )
+        self.general_stats_select_frame.grid(
+            row=9,
             column=0,
             columnspan=3,
             padx=5,
@@ -460,6 +477,7 @@ class BasicStatsView(ctk.CTkToplevel):
                 self.batter_search_name = None
 
             stats_to_view = self.get_active_stats()
+            general_stats_to_view = self.get_active_general_stats()
             min_value, max_value = self.card_value_frame.get_min_max_values()
             try:
                 min_value = int(min_value)
@@ -475,6 +493,7 @@ class BasicStatsView(ctk.CTkToplevel):
                 batter_side=self.batter_side_select.get(),
                 batter_name=self.batter_search_name,
                 stats_to_view=stats_to_view,
+                general_stats_to_view=general_stats_to_view,
                 min_value=min_value,
                 max_value=max_value,
             )
@@ -499,6 +518,11 @@ class BasicStatsView(ctk.CTkToplevel):
     def get_active_stats(self):
         """Get the list of selected stats."""
         return self.batter_stat_select_frame.get_active_stats()
+
+    def get_active_general_stats(self):
+        """Get the list of selected general stats."""
+        return self.general_stats_select_frame.get_selected_general_stats()
+
 
     def load_data_to_store(self):
         """Process file for team list."""
