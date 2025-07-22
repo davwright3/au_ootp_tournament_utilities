@@ -35,8 +35,8 @@ class GeneralStatSelectFrame(ctk.CTkFrame):
                 command=set_selected_general_stats
             )
             checkbox.grid(
-                row = stat_num % 3,
-                column = stat_num // 3,
+                row = stat_num // 3,
+                column = stat_num % 3,
                 padx = 3,
                 pady = 3,
                 sticky = 'nsew'

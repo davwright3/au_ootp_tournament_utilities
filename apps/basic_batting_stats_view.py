@@ -478,7 +478,6 @@ class BasicStatsView(ctk.CTkToplevel):
 
             stats_to_view = self.get_active_stats()
             general_stats_to_view = self.get_active_general_stats()
-            print("General stats: ", general_stats_to_view)
             min_value, max_value = self.card_value_frame.get_min_max_values()
             try:
                 min_value = int(min_value)
