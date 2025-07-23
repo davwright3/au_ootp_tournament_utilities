@@ -14,7 +14,7 @@ class CardValueSelectFrame(ctk.CTkFrame):
 
         self.min_value_label = ctk.CTkLabel(
             self,
-            text="Min Value"
+            text="Min"
         )
         self.min_value_label.grid(
             row=0,
@@ -26,7 +26,8 @@ class CardValueSelectFrame(ctk.CTkFrame):
         self.min_value_input = ctk.CTkEntry(
             self,
             textvariable=self.min_val,
-            placeholder_text='40'
+            placeholder_text='40',
+            width=45,
         )
         self.min_value_input.grid(
             row=0,
@@ -37,11 +38,11 @@ class CardValueSelectFrame(ctk.CTkFrame):
 
         self.max_value_label = ctk.CTkLabel(
             self,
-            text="Max Value"
+            text="Max",
         )
         self.max_value_label.grid(
-            row=1,
-            column=0,
+            row=0,
+            column=2,
             padx=5,
             pady=5
         )
@@ -49,11 +50,12 @@ class CardValueSelectFrame(ctk.CTkFrame):
         self.max_value_input = ctk.CTkEntry(
             self,
             textvariable=self.max_val,
-            placeholder_text='105'
+            placeholder_text='105',
+            width=45
         )
         self.max_value_input.grid(
-            row=1,
-            column=1,
+            row=0,
+            column=3,
             padx=5,
             pady=5
         )

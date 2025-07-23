@@ -39,6 +39,7 @@ def display_basic_team_stats(df,
     df3 = calc_basic_batting_stats(df3)
     df3 = calc_basic_pitching_stats(df3)
 
+
     df4 = pd.merge(df1, df3, on='ORG', how='left')
 
     df4 = df4[columns_to_keep]

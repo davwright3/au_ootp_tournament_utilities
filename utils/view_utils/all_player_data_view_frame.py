@@ -156,7 +156,7 @@ class TreeviewTableFrame(ctk.CTkFrame):
         try:
             role = self.parent.role
         except ValueError:
-            role = "batter"
+            role = None
 
         values = self.tree.item(selected_item, 'values')
         columns = self.tree['columns']
@@ -164,9 +164,12 @@ class TreeviewTableFrame(ctk.CTkFrame):
         try:
             cid_index = columns.index("CID")
             cid_value = values[cid_index]
-        except ValueError:
+        except Exception as e:
+            print("Index error on player select: ", e)
             return
         if role == 'batter':
             open_batter_view(cid_value, file_path, self.team_to_highlight)
         elif role == 'pitcher':
             open_pitcher_view(cid_value, file_path, self.team_to_highlight)
+        elif role is None:
+            return

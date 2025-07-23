@@ -27,5 +27,9 @@ class CardListStore:
 
         return df1
 
+    def get_all_card_ratings(self):
+        """Get a dataframe of all card ratings."""
+        return self._card_list_dataframe
+
 
 card_store = CardListStore()
