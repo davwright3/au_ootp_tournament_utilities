@@ -12,6 +12,7 @@ import customtkinter as ctk
 from apps.basic_batting_stats_view import BasicStatsView
 from apps.basic_pitching_stats_view import BasicPitchingStatsView
 from apps.basic_team_stats import BasicTeamStatsView
+from apps.player_rating_tool_view import PlayerRatingToolView
 from utils.config_utils.get_base_sys_path import get_base_sys_path
 
 sys.path.insert(0, get_base_sys_path())
@@ -187,6 +188,17 @@ class MainApp(ctk.CTk):
             column=0, row=1, padx=10, pady=10, sticky='nsew'
         )
 
+        self.rating_comparison_view_button = (
+            AppSelectButton(
+                self.main_frame,
+                command=open_rating_comparison_stats_view,
+                text="Rating Comparison View"
+            )
+        )
+        self.rating_comparison_view_button.grid(
+            column=1, row=1, padx=10, pady=10, sticky='nsew'
+        )
+
         def show_and_release_topmost():
             """Lift window, set topmost and then release safely."""
             if not self.winfo_exists():
@@ -228,6 +240,11 @@ def open_basic_pitching_stats_view():
 def open_basic_teams_stats_view():
     """Open the basic teams stats view app in a new window."""
     BasicTeamStatsView()
+
+
+def open_rating_comparison_stats_view():
+    """Open the rating comparison stats view app in a new window."""
+    PlayerRatingToolView()
 
 
 if __name__ == "__main__":
