@@ -1,5 +1,4 @@
 """Menu for selecting which ratings to view and their weights."""
-from tkinter import BooleanVar
 from utils.view_utils.batting_weights_frame import BattingWeightsFrame
 from utils.view_utils.defense_weights_frame import DefenseWeightsFrame
 from utils.view_utils.pitcher_weights_frame import PitcherWeightsFrame
@@ -9,23 +8,26 @@ from utils.view_utils.position_select_frame import PositionSelectFrame
 from utils.view_utils.card_type_select_frame import CardTypeSelectFrame
 import customtkinter as ctk
 
+
 class RatingsMenuFrame(ctk.CTkFrame):
     """Frame for getting needed information from user."""
+
     def __init__(self, parent):
+        """Frame for getting needed information from user."""
         ctk.CTkFrame.__init__(self, parent)
 
         self.columnconfigure(0, weight=1)
         self.columnconfigure(1, weight=1)
         self.columnconfigure(2, weight=1)
         # Set up check boxes
-        available_ratings = ['BatOA', 'BatvL', 'BatvR', 'BSplit', 'BSR', 'Catch Def',
-                             'IF Def', 'OF Def', 'PitOA', 'PitvL', 'PitvR', 'PSplit', 'date']
+        available_ratings = ['BatOA', 'BatvL', 'BatvR', 'BSplit', 'BSR',
+                             'Catch Def', 'IF Def', 'OF Def', 'PitOA',
+                             'PitvL', 'PitvR', 'PSplit', 'date']
 
         self.ratings_to_keep = []
 
         def set_active_ratings():
             self.ratings_to_keep.clear()
-            all_checkboxes = self.winfo_children()
             for widget in self.winfo_children():
                 if isinstance(widget, ctk.CTkCheckBox):
                     if widget.get() != 'off':
@@ -136,7 +138,6 @@ class RatingsMenuFrame(ctk.CTkFrame):
         )
         row += 1
 
-
     def get_active_ratings(self):
         """Return the selected ratings to view."""
         return self.ratings_to_keep
@@ -147,10 +148,12 @@ class RatingsMenuFrame(ctk.CTkFrame):
         return batting_weights
 
     def get_pitching_weights(self):
+        """Get the weights for pitching."""
         pitching_weights = self.pitcher_weights_frame.get_pitching_weights()
         return pitching_weights
 
     def get_defense_weights(self):
+        """Get defense weights."""
         defense_weights = self.defense_weights_frame.get_defense_weights()
         return defense_weights
 
@@ -171,5 +174,7 @@ class RatingsMenuFrame(ctk.CTkFrame):
 
     def get_selected_card_type(self):
         """Return the selected card_type for batting."""
-        selected_card_types = self.card_type_select_frame.get_selected_card_types()
+        selected_card_types = (
+            self.card_type_select_frame.get_selected_card_types()
+        )
         return selected_card_types

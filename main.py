@@ -241,9 +241,11 @@ def open_basic_teams_stats_view():
     """Open the basic teams stats view app in a new window."""
     BasicTeamStatsView()
 
+
 def open_rating_comparison_stats_view():
     """Open the rating comparison stats view app in a new window."""
     PlayerRatingToolView()
+
 
 if __name__ == "__main__":
     app = MainApp()

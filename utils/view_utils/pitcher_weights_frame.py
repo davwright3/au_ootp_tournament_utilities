@@ -6,6 +6,7 @@ class PitcherWeightsFrame(ctk.CTkFrame):
     """Custom frame for pitcher weights."""
 
     def __init__(self, parent):
+        """Frame for setting pitcher rating weights."""
         super().__init__(parent)
 
         self.columnconfigure(0, weight=1)
@@ -163,8 +164,8 @@ class PitcherWeightsFrame(ctk.CTkFrame):
         )
         self.control_v_right_input.grid(row=5, column=3, sticky='nsew')
 
-
     def get_pitching_weights(self):
+        """Return the selected pitching weights."""
         weights = {}
 
         def parse(var):

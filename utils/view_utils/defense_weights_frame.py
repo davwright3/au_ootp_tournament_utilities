@@ -4,7 +4,9 @@ import customtkinter as ctk
 
 class DefenseWeightsFrame(ctk.CTkFrame):
     """Frame class for defense weights."""
+
     def __init__(self, parent):
+        """Initialize the frame."""
         ctk.CTkFrame.__init__(self, parent)
 
         self.columnconfigure(0, weight=1)
@@ -24,7 +26,6 @@ class DefenseWeightsFrame(ctk.CTkFrame):
         self.outfield_range_var = ctk.StringVar(value='1')
         self.outfield_error_var = ctk.StringVar(value='1')
         self.outfield_arm_var = ctk.StringVar(value='1')
-
 
         # Frame label
         self.frame_label = ctk.CTkLabel(
@@ -94,7 +95,6 @@ class DefenseWeightsFrame(ctk.CTkFrame):
             text='DP'
         )
         self.turn_dp_label.grid(row=3, column=4, sticky='nsew')
-
 
         # Input boxes
         self.catcher_abil_input = ctk.CTkEntry(
@@ -168,6 +168,7 @@ class DefenseWeightsFrame(ctk.CTkFrame):
         self.outfield_arm_input.grid(row=5, column=3, sticky='nsew')
 
     def get_defense_weights(self):
+        """Get the weights for defense used in other scripts."""
         defense_weights = {}
 
         def parse(var):

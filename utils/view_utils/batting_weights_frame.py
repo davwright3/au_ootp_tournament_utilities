@@ -1,10 +1,12 @@
 """Custom frame for users to enter batting weights."""
 import customtkinter as ctk
 
+
 class BattingWeightsFrame(ctk.CTkFrame):
     """Frame for users to enter batting weights."""
 
     def __init__(self, parent):
+        """Frame for users to enter batting weights."""
         ctk.CTkFrame.__init__(self, parent)
 
         self.columnconfigure(0, weight=1)
@@ -28,7 +30,6 @@ class BattingWeightsFrame(ctk.CTkFrame):
         self.eye_overall_var = ctk.StringVar(value='1')
         self.eye_v_left_var = ctk.StringVar(value='1')
         self.eye_v_right_var = ctk.StringVar(value='1')
-
 
         # Left side labels
         frame_label = ctk.CTkLabel(self, text='Bat Weights')
@@ -167,7 +168,6 @@ class BattingWeightsFrame(ctk.CTkFrame):
 
     def get_batting_weights(self):
         """Get the weights from the inputs."""
-
         weights = {}
 
         def parse(var):

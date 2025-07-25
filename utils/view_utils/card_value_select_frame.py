@@ -7,7 +7,10 @@ class CardValueSelectFrame(ctk.CTkFrame):
 
     def __init__(self, parent):
         """Initialize the frame."""
-        ctk.CTkFrame.__init__(self, parent, border_color='gray', border_width=2)
+        ctk.CTkFrame.__init__(self, parent,
+                              border_color='gray',
+                              border_width=2
+                              )
 
         self.columnconfigure(0, weight=1)
         self.columnconfigure(1, weight=1)
@@ -21,7 +24,7 @@ class CardValueSelectFrame(ctk.CTkFrame):
             self,
             text='Card Values'
         )
-        self.frame_label.grid(row=0, column=0, columnspan=4,sticky='nsew')
+        self.frame_label.grid(row=0, column=0, columnspan=4, sticky='nsew')
 
         self.min_value_label = ctk.CTkLabel(
             self,

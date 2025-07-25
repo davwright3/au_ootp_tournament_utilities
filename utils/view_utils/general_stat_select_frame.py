@@ -6,6 +6,7 @@ class GeneralStatSelectFrame(ctk.CTkFrame):
     """Frame for selecting general stat options to show."""
 
     def __init__(self, parent):
+        """Frame for selecting general stat options to show."""
         super().__init__(parent)
 
         available_general_stats = ['owned', 'L10', 'L10V']
@@ -35,14 +36,15 @@ class GeneralStatSelectFrame(ctk.CTkFrame):
                 command=set_selected_general_stats
             )
             checkbox.grid(
-                row = stat_num // 3,
-                column = stat_num % 3,
-                padx = 3,
-                pady = 3,
-                sticky = 'nsew'
+                row=stat_num // 3,
+                column=stat_num % 3,
+                padx=3,
+                pady=3,
+                sticky='nsew'
             )
             self.checkbox_vars[stat] = var
             stat_num += 1
 
     def get_selected_general_stats(self):
+        """Return the selected general stats."""
         return self.general_stats_to_keep

@@ -4,8 +4,15 @@ import customtkinter as ctk
 
 class YearValueSelectFrame(ctk.CTkFrame):
     """Frame for getting needed information from user."""
+
     def __init__(self, parent):
-        ctk.CTkFrame.__init__(self, parent, border_color='gray', border_width=2)
+        """Initialize of frame for selecting card years."""
+        ctk.CTkFrame.__init__(
+            self,
+            parent,
+            border_color='gray',
+            border_width=2
+        )
 
         self.columnconfigure(0, weight=1)
         self.columnconfigure(1, weight=1)
@@ -49,6 +56,7 @@ class YearValueSelectFrame(ctk.CTkFrame):
         self.max_entry.grid(row=1, column=3, padx=10, pady=10, sticky='nsew')
 
     def get_min_max_year(self):
+        """Return the minimum year and maximum year."""
         try:
             min_year = int(self.min_year.get())
         except ValueError:

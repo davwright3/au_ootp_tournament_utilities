@@ -523,7 +523,6 @@ class BasicStatsView(ctk.CTkToplevel):
         """Get the list of selected general stats."""
         return self.general_stats_select_frame.get_selected_general_stats()
 
-
     def load_data_to_store(self):
         """Process file for team list."""
         if not self.target_file:

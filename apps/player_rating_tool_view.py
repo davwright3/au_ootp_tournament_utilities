@@ -5,7 +5,9 @@ from utils.view_utils.header_footer_frame import Header, Footer
 from utils.view_utils.all_player_data_view_frame import TreeviewTableFrame
 from utils.data_utils.card_list_store import card_store
 from utils.view_utils.ratings_menu_frame import RatingsMenuFrame
-from utils.stats_utils.calculate_return_rating_values import calculate_return_rating_values
+from utils.stats_utils.calculate_return_rating_values import (
+    calculate_return_rating_values
+)
 
 
 class PlayerRatingToolView(ctk.CTkToplevel):
@@ -79,7 +81,6 @@ class PlayerRatingToolView(ctk.CTkToplevel):
         self.menu_frame.columnconfigure(0, weight=1)
         self.menu_frame.columnconfigure(1, weight=0)
 
-
         self.footer_frame = Footer(
             self,
             height=header_footer_height,
@@ -141,7 +142,6 @@ class PlayerRatingToolView(ctk.CTkToplevel):
             self.after(100, release)
 
         show_and_release_topmost()
-
 
     def update_view(self):
         """Update the view."""

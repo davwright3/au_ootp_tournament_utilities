@@ -24,13 +24,14 @@ def display_basic_batting_stats(
     card_df_path = script_settings['InitialFileDirs']['target_card_list_file']
     card_df = pd.DataFrame(pd.read_csv(card_df_path))
     card_df = card_df.rename(
-        columns={'Card ID': 'CID', '//Card Title': 'Title', 'Last 10 Price': 'L10',
-                 'Last 10 Price(VAR)': 'L10V'}
+        columns={'Card ID': 'CID', '//Card Title': 'Title',
+                 'Last 10 Price': 'L10', 'Last 10 Price(VAR)': 'L10V'}
     )
 
     df2, removed = cull_teams(pd.DataFrame(df1))
 
-    columns_from_data = ['CID', 'Title', 'Card Value', 'Bats', 'owned', 'L10', 'L10V']
+    columns_from_data = ['CID', 'Title', 'Card Value', 'Bats',
+                         'owned', 'L10', 'L10V']
 
     # Calculate the basic statistics
     if not variant_split:

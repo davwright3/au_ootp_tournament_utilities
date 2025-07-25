@@ -7,6 +7,7 @@ class CardTypeSelectFrame(ctk.CTkFrame):
     """Custom class for card type selection."""
 
     def __init__(self, parent):
+        """Frame for selecting card type."""
         ctk.CTkFrame.__init__(self, parent)
 
         self.columnconfigure(0, weight=1)
@@ -49,7 +50,10 @@ class CardTypeSelectFrame(ctk.CTkFrame):
             offvalue=0,
             command=set_selected_card_types
         )
-        live_checkbox.grid(row=rating_num // 3, column=rating_num % 3, sticky='nsew')
+        live_checkbox.grid(row=rating_num // 3,
+                           column=rating_num % 3,
+                           sticky='nsew'
+                           )
         rating_num += 1
 
         nl_checkbox = ctk.CTkCheckBox(
@@ -60,7 +64,10 @@ class CardTypeSelectFrame(ctk.CTkFrame):
             offvalue=0,
             command=set_selected_card_types
         )
-        nl_checkbox.grid(row=rating_num // 3, column=rating_num % 3, sticky='nsew')
+        nl_checkbox.grid(row=rating_num // 3,
+                         column=rating_num % 3,
+                         sticky='nsew'
+                         )
         rating_num += 1
 
         rookie_checkbox = ctk.CTkCheckBox(
@@ -71,7 +78,10 @@ class CardTypeSelectFrame(ctk.CTkFrame):
             offvalue=0,
             command=set_selected_card_types
         )
-        rookie_checkbox.grid(row=rating_num // 3, column=rating_num % 3, sticky='nsew')
+        rookie_checkbox.grid(row=rating_num // 3,
+                             column=rating_num % 3,
+                             sticky='nsew'
+                             )
         rating_num += 1
 
         legend_checkbox = ctk.CTkCheckBox(
@@ -82,7 +92,10 @@ class CardTypeSelectFrame(ctk.CTkFrame):
             offvalue=0,
             command=set_selected_card_types
         )
-        legend_checkbox.grid(row=rating_num // 3, column=rating_num % 3, sticky='nsew')
+        legend_checkbox.grid(row=rating_num // 3,
+                             column=rating_num % 3,
+                             sticky='nsew'
+                             )
         rating_num += 1
 
         allstar_checkbox = ctk.CTkCheckBox(
@@ -93,7 +106,10 @@ class CardTypeSelectFrame(ctk.CTkFrame):
             offvalue=0,
             command=set_selected_card_types
         )
-        allstar_checkbox.grid(row=rating_num // 3, column=rating_num % 3, sticky='nsew')
+        allstar_checkbox.grid(row=rating_num // 3,
+                              column=rating_num % 3,
+                              sticky='nsew'
+                              )
         rating_num += 1
 
         future_checkbox = ctk.CTkCheckBox(
@@ -104,7 +120,10 @@ class CardTypeSelectFrame(ctk.CTkFrame):
             offvalue=0,
             command=set_selected_card_types
         )
-        future_checkbox.grid(row=rating_num // 3, column=rating_num % 3, sticky='nsew')
+        future_checkbox.grid(row=rating_num // 3,
+                             column=rating_num % 3,
+                             sticky='nsew'
+                             )
         rating_num += 1
 
         snapshot_checkbox = ctk.CTkCheckBox(
@@ -115,7 +134,10 @@ class CardTypeSelectFrame(ctk.CTkFrame):
             offvalue=0,
             command=set_selected_card_types
         )
-        snapshot_checkbox.grid(row=rating_num // 3, column=rating_num % 3, sticky='nsew')
+        snapshot_checkbox.grid(row=rating_num // 3,
+                               column=rating_num % 3,
+                               sticky='nsew'
+                               )
         rating_num += 1
 
         unsung_checkbox = ctk.CTkCheckBox(
@@ -126,7 +148,10 @@ class CardTypeSelectFrame(ctk.CTkFrame):
             offvalue=0,
             command=set_selected_card_types
         )
-        unsung_checkbox.grid(row=rating_num // 3, column=rating_num % 3, sticky='nsew')
+        unsung_checkbox.grid(row=rating_num // 3,
+                             column=rating_num % 3,
+                             sticky='nsew'
+                             )
         rating_num += 1
 
         hardware_checkbox = ctk.CTkCheckBox(
@@ -137,10 +162,11 @@ class CardTypeSelectFrame(ctk.CTkFrame):
             offvalue=0,
             command=set_selected_card_types
         )
-        hardware_checkbox.grid(row=rating_num // 3, column=rating_num % 3, sticky='nsew')
+        hardware_checkbox.grid(row=rating_num // 3,
+                               column=rating_num % 3,
+                               sticky='nsew'
+                               )
         rating_num += 1
-
-
 
     def get_selected_card_types(self):
         """Return the selected card types."""
