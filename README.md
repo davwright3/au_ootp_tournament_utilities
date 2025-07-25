@@ -106,6 +106,12 @@ this becomes obsolete.
 - Similar to the batting and pitching stats, the user is able to select which stats they want to view
   - Default stats always visible are team games play, wins, losses and winning percentage
 
+
+### Rating Comparison Tool
+
+- The rating comparison tool allows the user to compare ratings across various categories and to select which cards are eligible.
+- The settings for target_card_list_file MUST be directed to the dump from the OOTP card shop.
+
 ___
 # Release Information
 
@@ -159,13 +165,18 @@ ___
 - Display trends for individual batters and pitchers over time
 - Add card rating min and max tool on main stats page
 
+### v0.1.4.34 (Windows), v0.1.4.18 (macOS), v0.1.4.10 (macOS Intel)
+
+- Add functionality for comparing card ratings from card shop and ability to weight ratings for the user's intended tournament  format.
+- Fixed issue where team stats would not populate for small volume datasets.
+
 ---
 
 ## Upcoming Features and Improvements
 
 - Team analysis
-- Player comparison tool
-- Player and tournament statistics over time
+- Player comparison tool (Complete v0.1.4)
+- Player and tournament statistics over time (baseline complete v0.1.2)
 
 ### Authored By
 - David Wright
