@@ -192,7 +192,7 @@ class MainApp(ctk.CTk):
             AppSelectButton(
                 self.main_frame,
                 command=open_rating_comparison_stats_view,
-                text="Rating Comparison Stats View"
+                text="Rating Comparison View"
             )
         )
         self.rating_comparison_view_button.grid(

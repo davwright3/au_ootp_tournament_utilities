@@ -63,8 +63,10 @@ class PlayerRatingToolView(ctk.CTkToplevel):
             pady=10,
             sticky='nsew')
 
-        self.menu_frame = ctk.CTkFrame(
-            self
+        self.menu_frame = ctk.CTkScrollableFrame(
+            self,
+            width=300,
+            height=self.height,
         )
         self.menu_frame.grid(
             row=1,
@@ -102,7 +104,7 @@ class PlayerRatingToolView(ctk.CTkToplevel):
             column=0,
             padx=0,
             pady=20,
-            sticky='nsew'
+            sticky='ns'
         )
 
         self.update_button = ctk.CTkButton(
@@ -148,13 +150,20 @@ class PlayerRatingToolView(ctk.CTkToplevel):
         pitcher_weights = self.ratings_menu.get_pitching_weights()
         defense_weights = self.ratings_menu.get_defense_weights()
         min_value, max_value = self.ratings_menu.get_min_max_values()
+        min_year, max_year = self.ratings_menu.get_min_max_year()
+        selected_position = self.ratings_menu.get_selected_position()
+        selected_card_type = self.ratings_menu.get_selected_card_type()
         ratings_df = calculate_return_rating_values(
             self.card_df,
             ratings_to_view=ratings_to_view,
             min_rating=min_value,
             max_rating=max_value,
+            min_year=min_year,
+            max_year=max_year,
             batting_weights=batter_weights,
             pitching_weights=pitcher_weights,
             defense_weights=defense_weights,
+            position=selected_position,
+            selected_card_types=selected_card_type,
         )
         self.data_view_frame.load_dataframe(ratings_df)

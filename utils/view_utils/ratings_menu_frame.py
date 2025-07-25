@@ -4,6 +4,9 @@ from utils.view_utils.batting_weights_frame import BattingWeightsFrame
 from utils.view_utils.defense_weights_frame import DefenseWeightsFrame
 from utils.view_utils.pitcher_weights_frame import PitcherWeightsFrame
 from utils.view_utils.card_value_select_frame import CardValueSelectFrame
+from utils.view_utils.year_value_select_frame import YearValueSelectFrame
+from utils.view_utils.position_select_frame import PositionSelectFrame
+from utils.view_utils.card_type_select_frame import CardTypeSelectFrame
 import customtkinter as ctk
 
 class RatingsMenuFrame(ctk.CTkFrame):
@@ -11,9 +14,12 @@ class RatingsMenuFrame(ctk.CTkFrame):
     def __init__(self, parent):
         ctk.CTkFrame.__init__(self, parent)
 
+        self.columnconfigure(0, weight=1)
+        self.columnconfigure(1, weight=1)
+        self.columnconfigure(2, weight=1)
         # Set up check boxes
-        available_ratings = ['BatOA', 'BatvL', 'BatvR', 'BSR', 'Catch Def',
-                             'IF Def', 'OF Def', 'PitOA', 'PitvL', 'PitvR']
+        available_ratings = ['BatOA', 'BatvL', 'BatvR', 'BSplit', 'BSR', 'Catch Def',
+                             'IF Def', 'OF Def', 'PitOA', 'PitvL', 'PitvR', 'PSplit', 'date']
 
         self.ratings_to_keep = []
 
@@ -29,7 +35,6 @@ class RatingsMenuFrame(ctk.CTkFrame):
 
         stat_num = 0
         for rating in available_ratings:
-            var = BooleanVar(value=True)
             checkbox = ctk.CTkCheckBox(
                 master=self,
                 text=rating,
@@ -54,6 +59,7 @@ class RatingsMenuFrame(ctk.CTkFrame):
             row=row,
             column=0,
             columnspan=3,
+            pady=5,
             sticky='nsew'
         )
         row += 1
@@ -65,6 +71,7 @@ class RatingsMenuFrame(ctk.CTkFrame):
             row=row,
             column=0,
             columnspan=3,
+            pady=5,
             sticky='nsew'
         )
         row += 1
@@ -76,6 +83,7 @@ class RatingsMenuFrame(ctk.CTkFrame):
             row=row,
             column=0,
             columnspan=3,
+            pady=5,
             sticky='nsew'
         )
         row += 1
@@ -87,10 +95,46 @@ class RatingsMenuFrame(ctk.CTkFrame):
             row=row,
             column=0,
             columnspan=3,
+            pady=5,
             sticky='nsew'
         )
         row += 1
 
+        self.year_select_frame = YearValueSelectFrame(
+            self,
+        )
+        self.year_select_frame.grid(
+            row=row,
+            column=0,
+            columnspan=3,
+            pady=5,
+            sticky='nsew'
+        )
+        row += 1
+
+        self.position_select_frame = PositionSelectFrame(
+            self,
+        )
+        self.position_select_frame.grid(
+            row=row,
+            column=0,
+            columnspan=3,
+            pady=5,
+            sticky='nsew'
+        )
+        row += 1
+
+        self.card_type_select_frame = CardTypeSelectFrame(
+            self
+        )
+        self.card_type_select_frame.grid(
+            row=row,
+            column=0,
+            columnspan=3,
+            pady=5,
+            sticky='nsew'
+        )
+        row += 1
 
 
     def get_active_ratings(self):
@@ -114,3 +158,18 @@ class RatingsMenuFrame(ctk.CTkFrame):
         """Return the min and max values for batting."""
         min_value, max_value = self.card_value_frame.get_min_max_values()
         return min_value, max_value
+
+    def get_min_max_year(self):
+        """Return the min and max year for batting."""
+        min_year, max_year = self.year_select_frame.get_min_max_year()
+        return min_year, max_year
+
+    def get_selected_position(self):
+        """Return the selected position for batting."""
+        position = self.position_select_frame.get_selected_position()
+        return position
+
+    def get_selected_card_type(self):
+        """Return the selected card_type for batting."""
+        selected_card_types = self.card_type_select_frame.get_selected_card_types()
+        return selected_card_types

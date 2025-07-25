@@ -3,7 +3,6 @@
 
 def cull_teams(df):
     """Cull teams that have more than the given number of runs."""
-    print("Total length: ", len(df))
     team_stats = df.groupby(['ORG', 'Trny'],
                             as_index=False)[['GS.1', 'R']].sum()
     team_stats['R/G'] = team_stats['R'] / team_stats['GS.1']
@@ -14,7 +13,5 @@ def cull_teams(df):
     # Merge to flag rows to drop
     df1_filtered = df.merge(teams_ok, on=['ORG', 'Trny'], how='inner')
     removed_count = len(df) - len(df1_filtered)
-
-    print("removed count: ", removed_count)
 
     return df1_filtered, removed_count
