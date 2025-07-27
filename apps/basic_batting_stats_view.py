@@ -192,6 +192,7 @@ class BasicStatsView(ctk.CTkToplevel):
             pady=10,
             sticky='nsew'
         )
+        self.team_search_entry.bind('<Return>', self.set_team_list)
 
         # Menu frame buttons and entries
         self.batter_search_label = ctk.CTkLabel(
@@ -550,6 +551,10 @@ class BasicStatsView(ctk.CTkToplevel):
 
     def set_team_list(self, df):
         """Create list for team list."""
+        if self.target_file is None:
+            self.log_message("No file selected")
+            return
+
         if self.team_search_name.get() != '':
             team_search = self.team_search_name.get()
         else:

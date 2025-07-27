@@ -73,6 +73,7 @@ class FileProcessor(ctk.CTkToplevel):
         self.file_select_frame.rowconfigure(0, weight=1)
         self.file_select_frame.rowconfigure(1, weight=1)
         self.file_select_frame.rowconfigure(2, weight=1)
+        self.file_select_frame.rowconfigure(3, weight=1)
 
         # Main frame
         self.main_frame = ctk.CTkFrame(
@@ -95,7 +96,10 @@ class FileProcessor(ctk.CTkToplevel):
         self.target_file_select_button = ctk.CTkButton(
             self.file_select_frame,
             text="Select target file",
-            command=self.select_file
+            command=self.select_file,
+            fg_color='gray',
+            border_color='black',
+            border_width=1,
         )
         self.target_file_select_button.grid(column=0, row=0)
 
@@ -108,7 +112,10 @@ class FileProcessor(ctk.CTkToplevel):
         self.data_folder_select_button = ctk.CTkButton(
             self.file_select_frame,
             text="Select data folder",
-            command=self.select_folder_handler
+            command=self.select_folder_handler,
+            fg_color='gray',
+            border_color='black',
+            border_width=1,
         )
         self.data_folder_select_button.grid(column=0, row=1, padx=2, pady=2)
 
@@ -121,18 +128,25 @@ class FileProcessor(ctk.CTkToplevel):
         self.data_folder_make_new_target_file_button = ctk.CTkButton(
             self.file_select_frame,
             text="New File",
-            command=self.create_new_file
+            command=self.create_new_file,
+            fg_color='gray',
+            border_color='black',
+            border_width=1,
         )
         self.data_folder_make_new_target_file_button.grid(
-            column=3,
-            row=0,
-            padx=2,
-            pady=2)
+            column=0,
+            row=3,
+            padx=5,
+            pady=5)
 
         self.process_files_button = ctk.CTkButton(
             self.file_select_frame,
             text="Process files",
-            command=self.process_files
+            command=self.process_files,
+            fg_color='green',
+            border_color='black',
+            border_width=1,
+
         )
         self.process_files_button.grid(
             column=0,
@@ -142,7 +156,7 @@ class FileProcessor(ctk.CTkToplevel):
 
         self.status_label = ctk.CTkLabel(
             self.file_select_frame,
-            text="Select target file and raw folder"
+            text="Select target file and raw folder, or create new file"
         )
         self.status_label.grid(column=2, row=0)
 
@@ -154,6 +168,8 @@ class FileProcessor(ctk.CTkToplevel):
             wrap="word"
         )
         self.output_textbox.pack(padx=10, pady=10, fill="both", expand=True)
+
+        self.log_message('Select target file and raw folder, or create new file')
 
         self.lift()
         self.focus_force()
@@ -191,7 +207,7 @@ class FileProcessor(ctk.CTkToplevel):
                 self.log_message(
                     f"Target file: {self.selected_target_file} selected")
                 self.target_file_label.configure(
-                    text=self.selected_target_file)
+                    text=os.path.basename(self.selected_target_file))
         else:
             print("Invalid start directory")
             self.log_message("Invalid start directory")
@@ -210,7 +226,7 @@ class FileProcessor(ctk.CTkToplevel):
             self.selected_raw_dir = data_directory
             self.log_message(
                 f"Selected raw data directory: {self.selected_raw_dir}")
-            self.data_folder_select_label.configure(text=self.selected_raw_dir)
+            self.data_folder_select_label.configure(text=os.path.basename(self.selected_raw_dir))
 
     def process_files(self):
         """Process files into the ready CSV."""
@@ -249,8 +265,11 @@ class FileProcessor(ctk.CTkToplevel):
                 output_folder=self.initial_target_dir,
                 new_name=user_input
             )
-            self.target_file_label.configure(text=f"Created: {new_file}")
+            # self.target_file_label.configure(text=f"Created: {new_file}")
+            self.log_message(f"Created new file {new_file}")
         except FileExistsError:
-            self.target_file_label.configure(text="File already exists")
+            # self.target_file_label.configure(text="File already exists")
+            self.log_message(f"File already exists, choose another name")
         except Exception as e:
-            self.target_file_label.configure(text=str(e))
+            # self.target_file_label.configure(text=str(e))
+            self.log_message(str(e))

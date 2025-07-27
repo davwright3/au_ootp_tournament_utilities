@@ -1,9 +1,9 @@
 """Utility for getting list of teams from dataframe."""
-# import pandas as pd
-
+from utils.data_utils.data_store import data_store
 
 def get_team_list(df, team_search_name=None):
     """Get unique teams from dataframe."""
+    df = data_store.get_data().copy()
     team_list = df['ORG'].dropna().astype(str).unique().tolist()
 
     if team_search_name is not None:

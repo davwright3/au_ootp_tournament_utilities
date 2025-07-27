@@ -199,6 +199,7 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
             pady=10,
             sticky='nsew'
         )
+        self.team_search_entry.bind('<Return>', self.set_team_list)
 
         # Menu frame data
         self.player_search_label = ctk.CTkLabel(
@@ -495,7 +496,7 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
         data_store.load_data(self.target_file)
         self.set_team_list()
 
-    def set_team_list(self):
+    def set_team_list(self, event=None):
         """Set team list for dropdown."""
         if self.team_search_name.get() != '':
             team_name = self.team_search_name.get()
