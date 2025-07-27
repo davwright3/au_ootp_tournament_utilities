@@ -39,6 +39,7 @@ class BasicStatsView(ctk.CTkToplevel):
         self.role = 'batter'
         self.team_list = ['No teams loaded']
         self.selected_team = ctk.StringVar(value="No teams loaded")
+        self.team_search_name = ctk.StringVar(value=None)
 
         self.height = int(page_settings['FileProcessor']['height'])
         self.width = int(page_settings['FileProcessor']['width'])
@@ -174,6 +175,19 @@ class BasicStatsView(ctk.CTkToplevel):
         self.team_dropdown.grid(
             row=0,
             column=3,
+            padx=10,
+            pady=10,
+            sticky='nsew'
+        )
+
+        self.team_search_entry = ctk.CTkEntry(
+            self.file_select_frame,
+            textvariable=self.team_search_name,
+            placeholder_text='Enter team name'
+        )
+        self.team_search_entry.grid(
+            row=0,
+            column=2,
             padx=10,
             pady=10,
             sticky='nsew'
@@ -536,6 +550,11 @@ class BasicStatsView(ctk.CTkToplevel):
 
     def set_team_list(self, df):
         """Create list for team list."""
-        self.team_list = get_team_list(df)
+        if self.team_search_name.get() != '':
+            team_search = self.team_search_name.get()
+        else:
+            team_search = None
+
+        self.team_list = get_team_list(df, team_search)
         self.team_dropdown.configure(values=self.team_list)
         del df

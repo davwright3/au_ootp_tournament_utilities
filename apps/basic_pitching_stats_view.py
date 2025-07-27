@@ -37,6 +37,7 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
         self.role = 'pitcher'
         self.team_list = ['No team selected']
         self.selected_team = ctk.StringVar(value=self.team_list[0])
+        self.team_search_name = ctk.StringVar(value=None)
 
         self.height = int(page_settings['FileProcessor']['height'])
         self.width = int(page_settings['FileProcessor']['width'])
@@ -183,7 +184,20 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
         )
         self.team_dropdown.set("No team selected")
         self.team_dropdown.grid(
-            row=0, column=2
+            row=0, column=3
+        )
+
+        self.team_search_entry = ctk.CTkEntry(
+            self.file_select_frame,
+            textvariable=self.team_search_name,
+            placeholder_text='Enter team name'
+        )
+        self.team_search_entry.grid(
+            row=0,
+            column=2,
+            padx=10,
+            pady=10,
+            sticky='nsew'
         )
 
         # Menu frame data
@@ -483,5 +497,10 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
 
     def set_team_list(self):
         """Set team list for dropdown."""
-        self.team_list = get_team_list(data_store.get_data())
+        if self.team_search_name.get() != '':
+            team_name = self.team_search_name.get()
+        else:
+            team_name = None
+
+        self.team_list = get_team_list(data_store.get_data(), team_name)
         self.team_dropdown.configure(values=self.team_list)

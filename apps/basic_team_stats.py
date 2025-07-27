@@ -25,6 +25,7 @@ class BasicTeamStatsView(ctk.CTkToplevel):
         self.stats_df = pd.DataFrame()
         self.team_list = ["No teams loaded"]
         self.selected_team = ctk.StringVar(value="No teams loaded")
+        self.team_search_name = ctk.StringVar(value=None)
 
         self.height = int(page_settings['FileProcessor']['height'])
         self.width = int(page_settings['FileProcessor']['width'])
@@ -123,6 +124,19 @@ class BasicTeamStatsView(ctk.CTkToplevel):
             sticky='nsew'
         )
 
+        self.team_search_name_entry = ctk.CTkEntry(
+            self.file_select_frame,
+            textvariable=self.team_search_name,
+        )
+        self.team_search_name_entry.grid(
+            row=0,
+            column=3,
+            padx=10,
+            pady=10,
+            sticky='nsew'
+        )
+
+
         self.team_dropdown = ctk.CTkComboBox(
             self.file_select_frame,
             values=self.team_list,
@@ -131,7 +145,7 @@ class BasicTeamStatsView(ctk.CTkToplevel):
         self.team_dropdown.set("No teams loaded")
         self.team_dropdown.grid(
             row=0,
-            column=3,
+            column=4,
             padx=10,
             pady=10,
             sticky='nsew'
@@ -215,7 +229,12 @@ class BasicTeamStatsView(ctk.CTkToplevel):
 
     def set_team_list(self, df):
         """Create list for team list."""
-        self.team_list = get_team_list(df)
+        if self.team_search_name.get() != '':
+            team_name = self.team_search_name.get()
+        else:
+            team_name = None
+
+        self.team_list = get_team_list(df, team_name)
         self.team_dropdown.configure(values=self.team_list)
         del df
 
