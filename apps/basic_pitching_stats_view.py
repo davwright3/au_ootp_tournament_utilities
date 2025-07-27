@@ -182,6 +182,7 @@ class BasicPitchingStatsView(ctk.CTkToplevel):
             self.file_select_frame,
             values=self.team_list,
             variable=self.selected_team,
+            command=lambda event: self.run_pitcher_file(event, pos=self.selected_role)
         )
         self.team_dropdown.set("No team selected")
         self.team_dropdown.grid(

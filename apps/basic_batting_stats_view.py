@@ -170,7 +170,8 @@ class BasicStatsView(ctk.CTkToplevel):
         self.team_dropdown = ctk.CTkComboBox(
             self.file_select_frame,
             values=self.team_list,
-            variable=self.selected_team
+            variable=self.selected_team,
+            command=lambda event: self.run_position_file(event, pos=self.selected_position)
         )
         self.team_dropdown.set("No teams loaded")
         self.team_dropdown.grid(
