@@ -129,7 +129,7 @@ class FileProcessor(ctk.CTkToplevel):
             self.file_select_frame,
             text="New File",
             command=self.create_new_file,
-            fg_color='gray',
+            fg_color='blue',
             border_color='black',
             border_width=1,
         )
