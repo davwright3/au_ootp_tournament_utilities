@@ -40,6 +40,7 @@ class BasicStatsView(ctk.CTkToplevel):
         self.team_list = ['No teams loaded']
         self.selected_team = ctk.StringVar(value="No teams loaded")
         self.team_search_name = ctk.StringVar(value=None)
+        self.selected_position = None
 
         self.height = int(page_settings['FileProcessor']['height'])
         self.width = int(page_settings['FileProcessor']['width'])
@@ -215,6 +216,7 @@ class BasicStatsView(ctk.CTkToplevel):
             padx=5,
             pady=5
         )
+        self.batter_search_entry.bind('<Return>', lambda event: self.run_position_file(self.selected_position))
 
         self.plate_app_label = ctk.CTkLabel(
             self.menu_frame,
@@ -474,11 +476,13 @@ class BasicStatsView(ctk.CTkToplevel):
         else:
             self.log_message("File selection cancelled")
 
-    def run_position_file(self, pos=None):
+    def run_position_file(self, event=None, pos=None):
         """Run the calculations for selected position."""
         if not self.target_file:
             self.log_message("No file selected")
             return
+
+        self.selected_position = pos
 
         try:
             try:
