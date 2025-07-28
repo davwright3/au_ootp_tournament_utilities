@@ -42,7 +42,7 @@ class TreeviewTableFrame(ctk.CTkFrame):
             font=("Arial", 16, "bold")
         )
 
-        self.tree_frame = tk.Frame(self, bg="red")
+        self.tree_frame = tk.Frame(self, bg="gray")
         self.tree_frame.pack(fill="both", expand=True)
 
         self.table = None

@@ -39,6 +39,8 @@ class BasicStatsView(ctk.CTkToplevel):
         self.role = 'batter'
         self.team_list = ['No teams loaded']
         self.selected_team = ctk.StringVar(value="No teams loaded")
+        self.team_search_name = ctk.StringVar(value=None)
+        self.selected_position = None
 
         self.height = int(page_settings['FileProcessor']['height'])
         self.width = int(page_settings['FileProcessor']['width'])
@@ -168,7 +170,8 @@ class BasicStatsView(ctk.CTkToplevel):
         self.team_dropdown = ctk.CTkComboBox(
             self.file_select_frame,
             values=self.team_list,
-            variable=self.selected_team
+            variable=self.selected_team,
+            command=lambda event: self.run_position_file(event, pos=self.selected_position)
         )
         self.team_dropdown.set("No teams loaded")
         self.team_dropdown.grid(
@@ -178,6 +181,20 @@ class BasicStatsView(ctk.CTkToplevel):
             pady=10,
             sticky='nsew'
         )
+
+        self.team_search_entry = ctk.CTkEntry(
+            self.file_select_frame,
+            textvariable=self.team_search_name,
+            placeholder_text='Enter team name'
+        )
+        self.team_search_entry.grid(
+            row=0,
+            column=2,
+            padx=10,
+            pady=10,
+            sticky='nsew'
+        )
+        self.team_search_entry.bind('<Return>', self.set_team_list)
 
         # Menu frame buttons and entries
         self.batter_search_label = ctk.CTkLabel(
@@ -200,6 +217,7 @@ class BasicStatsView(ctk.CTkToplevel):
             padx=5,
             pady=5
         )
+        self.batter_search_entry.bind('<Return>', lambda event: self.run_position_file(self.selected_position))
 
         self.plate_app_label = ctk.CTkLabel(
             self.menu_frame,
@@ -459,11 +477,13 @@ class BasicStatsView(ctk.CTkToplevel):
         else:
             self.log_message("File selection cancelled")
 
-    def run_position_file(self, pos=None):
+    def run_position_file(self, event=None, pos=None):
         """Run the calculations for selected position."""
         if not self.target_file:
             self.log_message("No file selected")
             return
+
+        self.selected_position = pos
 
         try:
             try:
@@ -536,6 +556,15 @@ class BasicStatsView(ctk.CTkToplevel):
 
     def set_team_list(self, df):
         """Create list for team list."""
-        self.team_list = get_team_list(df)
+        if self.target_file is None:
+            self.log_message("No file selected")
+            return
+
+        if self.team_search_name.get() != '':
+            team_search = self.team_search_name.get()
+        else:
+            team_search = None
+
+        self.team_list = get_team_list(df, team_search)
         self.team_dropdown.configure(values=self.team_list)
         del df

@@ -6,6 +6,7 @@ from utils.data_utils.get_team_list import get_team_list
 from utils.stats_utils.display_basic_team_stats import display_basic_team_stats
 from utils.view_utils.batter_stat_select_frame import BatterStatSelectFrame
 from utils.view_utils.pitcher_stat_select_frame import PitcherStatSelectFrame
+from utils.data_utils.data_store import data_store
 import pandas as pd
 
 from utils.view_utils.all_player_data_view_frame import TreeviewTableFrame
@@ -25,6 +26,7 @@ class BasicTeamStatsView(ctk.CTkToplevel):
         self.stats_df = pd.DataFrame()
         self.team_list = ["No teams loaded"]
         self.selected_team = ctk.StringVar(value="No teams loaded")
+        self.team_search_name = ctk.StringVar(value=None)
 
         self.height = int(page_settings['FileProcessor']['height'])
         self.width = int(page_settings['FileProcessor']['width'])
@@ -110,18 +112,19 @@ class BasicTeamStatsView(ctk.CTkToplevel):
             row=0, column=1, padx=10, pady=10, sticky='nsew'
         )
 
-        self.generate_team_list_button = ctk.CTkButton(
+        self.team_search_name_entry = ctk.CTkEntry(
             self.file_select_frame,
-            command=self.generate_team_list,
-            text="Get Team List"
+            textvariable=self.team_search_name,
         )
-        self.generate_team_list_button.grid(
+        self.team_search_name_entry.grid(
             row=0,
-            column=2,
+            column=3,
             padx=10,
             pady=10,
             sticky='nsew'
         )
+        self.team_search_name_entry.bind('<Return>', lambda event: self.set_team_list(event, self.target_file))
+
 
         self.team_dropdown = ctk.CTkComboBox(
             self.file_select_frame,
@@ -131,7 +134,7 @@ class BasicTeamStatsView(ctk.CTkToplevel):
         self.team_dropdown.set("No teams loaded")
         self.team_dropdown.grid(
             row=0,
-            column=3,
+            column=4,
             padx=10,
             pady=10,
             sticky='nsew'
@@ -201,6 +204,7 @@ class BasicTeamStatsView(ctk.CTkToplevel):
         selected = handle_select_file(self, self.initial_target_dir)
         if selected:
             self.target_file = selected
+            self.load_data_to_store()
             self.file_select_label.configure(
                 text=f"Selected: {selected.split('/')[-1]}"
             )
@@ -210,12 +214,18 @@ class BasicTeamStatsView(ctk.CTkToplevel):
     def generate_team_list(self):
         """Process file for team list."""
         df = pd.read_csv(self.target_file)
-        self.set_team_list(df)
+        print(df.head())
+        self.set_team_list(df=df)
         del df
 
-    def set_team_list(self, df):
+    def set_team_list(self, event=None, df=None):
         """Create list for team list."""
-        self.team_list = get_team_list(df)
+        if self.team_search_name.get() != '':
+            team_name = self.team_search_name.get()
+        else:
+            team_name = None
+
+        self.team_list = get_team_list(df, team_name)
         self.team_dropdown.configure(values=self.team_list)
         del df
 
@@ -224,7 +234,7 @@ class BasicTeamStatsView(ctk.CTkToplevel):
         selected_batting_stats = self.batter_stat_select_frame.get_active_stats() # noqa:
         selected_pitching_stats = self.pitcher_stat_select_frame.get_active_stats() # noqa:
         df = display_basic_team_stats(
-            pd.read_csv(self.target_file),
+            data_store.get_data(),
             selected_batting_stats,
             selected_pitching_stats
         )
@@ -237,3 +247,14 @@ class BasicTeamStatsView(ctk.CTkToplevel):
     def log_message(self, message):
         """Update message label."""
         self.file_select_label.configure(text=message)
+
+    def load_data_to_store(self):
+        """Process file for team list."""
+        if not self.target_file:
+            print("No file selected")
+            return
+
+        data_store.load_data(self.target_file)
+        df = data_store.get_data()
+        self.set_team_list(df)
+
