@@ -39,8 +39,8 @@ jobs:
       - name: Upload to Github Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: macos-intel-v0.1.2.${{ github.run_number }}
-          name: macOS Intel Release v0.1.2.${{ github.run_number }}
+          tag_name: macos-intel-v0.1.4.${{ github.run_number }}
+          name: macOS Intel Release v0.1.4.${{ github.run_number }}
           files: dist/main-macos-intel.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

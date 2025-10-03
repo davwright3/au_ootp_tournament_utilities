@@ -14,9 +14,10 @@ def calculate_return_rating_values(
         defense_weights=None,
         position=None,
         selected_card_types=None,
+        selected_general_options=None
 ):
     """Calculate ratings and return a dataframe with requested ratings."""
-    columns_to_keep = ['CID', 'Title', 'Val']
+    columns_to_keep = ['CID', 'Title', 'Val', 'owned']
     columns_to_keep.extend(ratings_to_view)
     df1 = df.copy()
     df1 = df1[['Card ID', "//Card Title", 'Card Value', 'Card Type',
@@ -30,7 +31,7 @@ def calculate_return_rating_values(
                'pHR', 'pBABIP', 'Control', 'Stuff vL', 'pHR vL', 'pBABIP vL',
                'Control vL', 'Stuff vR', 'pHR vR', 'pBABIP vR', 'Control vR',
                'LearnC', 'Learn1B', 'Learn2B', 'Learn3B', 'LearnSS', 'LearnLF',
-               'LearnCF', 'LearnRF', 'date']]
+               'LearnCF', 'LearnRF', 'owned', 'date']]
     df1 = df1.rename(columns={'Card ID': 'CID', "//Card Title": "Title",
                               'Card Value': 'Val'})
     df1 = df1[(df1['Val'] >= int(min_rating)) &

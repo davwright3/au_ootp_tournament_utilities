@@ -8,6 +8,7 @@ from utils.view_utils.ratings_menu_frame import RatingsMenuFrame
 from utils.stats_utils.calculate_return_rating_values import (
     calculate_return_rating_values
 )
+from utils.view_utils.general_stat_select_frame import GeneralStatSelectFrame
 
 
 class PlayerRatingToolView(ctk.CTkToplevel):
@@ -108,6 +109,17 @@ class PlayerRatingToolView(ctk.CTkToplevel):
             sticky='ns'
         )
 
+        self.general_stat_select_frame = GeneralStatSelectFrame(
+            self.menu_frame,
+        )
+        self.general_stat_select_frame.grid(
+            row=1,
+            column=0,
+            padx=10,
+            pady=10,
+            sticky='nsew'
+        )
+
         self.update_button = ctk.CTkButton(
             self.menu_frame,
             command=self.update_view,
@@ -153,6 +165,7 @@ class PlayerRatingToolView(ctk.CTkToplevel):
         min_year, max_year = self.ratings_menu.get_min_max_year()
         selected_position = self.ratings_menu.get_selected_position()
         selected_card_type = self.ratings_menu.get_selected_card_type()
+        selected_general_options = self.general_stat_select_frame.get_selected_general_stats()
         ratings_df = calculate_return_rating_values(
             self.card_df,
             ratings_to_view=ratings_to_view,
